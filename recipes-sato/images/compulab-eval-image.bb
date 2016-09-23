@@ -13,10 +13,10 @@ inherit core-image
 
 IMAGE_INSTALL += "\
 	packagegroup-core-x11-sato-games \
+	packagegroup-fsl-gstreamer1.0-full \
+	chromium \
 	firefox \
 	nodejs \
-	packagegroup-fsl-gstreamer1.0-full \
-	\
 	flex \
 	gcc \
 	git \
@@ -24,9 +24,8 @@ IMAGE_INSTALL += "\
 	make \
 	iperf \
 	libtool \
-	nano \
+	libexif \
 	python-compiler \
 	strace \
 	screen \
-	minicom \
 "
