@@ -5,7 +5,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=0507cd7da8e7ad6d6701926ec9b84c95"
 
 SECTION = "bootloader"
-PROVIDES = "u-boot-compulab"
+PROVIDES = "u-boot"
 
 SRCBRANCH = "master"
 SRCREV = "v2015.10"
