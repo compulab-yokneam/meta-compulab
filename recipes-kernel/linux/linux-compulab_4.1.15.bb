@@ -12,11 +12,11 @@ LOCALVERSION = "-cl-1.0"
 
 SRC_URI += "file://0001-platform-add-depends-property-handler.patch"
 
-include linux-compulab_cm-fx6.inc
+include linux-compulab_cm-fx6-evk.inc
 
 include linux-compulab_cl-som-imx6ul.inc
 
-COMPATIBLE_MACHINE = "(cm-fx6|cl-som-imx6ul)"
+COMPATIBLE_MACHINE = "(cm-fx6-evk|cl-som-imx6ul)"
 
 inherit fsl-vivante-kernel-driver-handler
 

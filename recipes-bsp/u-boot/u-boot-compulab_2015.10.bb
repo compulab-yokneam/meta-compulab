@@ -31,4 +31,4 @@ do_compile_append () {
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(cl-som-imx6ul|cm-fx6)"
+COMPATIBLE_MACHINE = "(cl-som-imx6ul|cm-fx6-evk)"
