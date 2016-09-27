@@ -1,7 +1,7 @@
-From 147e898cf0d3d1637bf87a8281fe8d1c8139bff1 Mon Sep 17 00:00:00 2001
+From 01982845dadd07a70ef82c03af44a7265d18a480 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Sun, 26 Jun 2016 11:58:03 +0300
-Subject: [PATCH 13/18] ARM: i.MX6: dts: ldb refactoring
+Subject: [PATCH 13/24] ARM: i.MX6: dts: ldb refactoring
 
 Change the ldb stanza with regards to the latest ldb definitions' requirements.
 
@@ -11,7 +11,7 @@ Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
  1 file changed, 49 insertions(+), 10 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
-index 255b424..b2bf65a 100644
+index 8bc50e4..97fc1af 100644
 --- a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
 @@ -111,6 +111,55 @@

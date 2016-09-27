@@ -1,7 +1,7 @@
 From 6ce85069ce7ec7e91ff258668a0b45cec2a57b64 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Tue, 7 Jun 2016 10:35:37 +0300
-Subject: [PATCH 02/18] ARM: i.MX6: cm-fx6: add cm-fx6 platform driver.
+Subject: [PATCH 02/24] ARM: i.MX6: cm-fx6: add cm-fx6 platform driver.
 
 Add cm-fx6 platform driver.
 

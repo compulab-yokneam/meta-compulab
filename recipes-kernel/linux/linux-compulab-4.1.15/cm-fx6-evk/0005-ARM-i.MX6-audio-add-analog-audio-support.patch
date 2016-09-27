@@ -1,7 +1,7 @@
 From ce88f609303a72131b2534f540a4d363553ee7da Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Mon, 13 Jun 2016 11:29:05 +0300
-Subject: [PATCH 05/18] ARM: i.MX6: audio: add analog audio support
+Subject: [PATCH 05/24] ARM: i.MX6: audio: add analog audio support
 
 Add analog audio support by means of the simple-audio-card.
 This instance provides a simple glue interface between cpu:ssi and codec:wm8731.

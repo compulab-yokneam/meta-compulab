@@ -1,7 +1,7 @@
-From 58d6e50b72fd468eef04e7345c1f34a3de1170bc Mon Sep 17 00:00:00 2001
+From c5c9737bbce1316ec23e95ea7ffc902fecf59ea1 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Sun, 26 Jun 2016 17:22:41 +0300
-Subject: [PATCH 15/18] ARM: i.MX6: pcie refactoring
+Subject: [PATCH 15/24] ARM: i.MX6: pcie refactoring
 
 PCIe refactoring.
 Separate the board specific and the common code.
@@ -62,7 +62,7 @@ index bd08a40..db89991 100644
  
  /* console */
 diff --git a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
-index f98f054..0ab8954 100644
+index e96b732..84934f6 100644
 --- a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
 @@ -93,6 +93,18 @@

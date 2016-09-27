@@ -1,7 +1,7 @@
-From 9f0a215845c461078a1c113d2803041cf951cb24 Mon Sep 17 00:00:00 2001
+From 9e52bd94543068659f6c07242ca99368d3f0eb76 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Tue, 27 Jan 2015 17:39:24 +0200
-Subject: [PATCH 18/18] Bluetooth: btmrvl: disable SD8787 AMP device
+Subject: [PATCH 18/24] Bluetooth: btmrvl: disable SD8787 AMP device
 
 Disable SD8787 AMP device.
 The device probe gets stuck while configuring a 0x911B device.

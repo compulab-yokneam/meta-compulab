@@ -1,7 +1,7 @@
 From 2b565d72ad45c234444538ceeb4d00378bf1833a Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Tue, 7 Jun 2016 10:32:15 +0300
-Subject: [PATCH 01/18] ARM: dts: update support for cm-fx6.
+Subject: [PATCH 01/24] ARM: dts: update support for cm-fx6.
 
 Update the cm-fx6 support.
 Poeted the dts files from the 3.10.17 release.

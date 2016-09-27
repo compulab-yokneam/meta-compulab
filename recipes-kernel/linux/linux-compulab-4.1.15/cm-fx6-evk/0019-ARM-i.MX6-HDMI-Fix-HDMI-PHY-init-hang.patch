@@ -1,7 +1,7 @@
-From d042101a3720d3dfe854f10d8a2eef56b06305e3 Mon Sep 17 00:00:00 2001
+From 77d068850e63be08c3e2ca3a203c35d8190e17db Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Thu, 7 Jul 2016 14:56:16 +0300
-Subject: [PATCH 19/19] ARM: i.MX6: HDMI: Fix HDMI PHY init hang
+Subject: [PATCH 19/24] ARM: i.MX6: HDMI: Fix HDMI PHY init hang
 
 Remove the hdmi_enable_overflow_interrupts() function call from
 the mxc_hdmi_phy_init(). This fix addresses the HDMI PHY init hang.

@@ -1,7 +1,7 @@
-From 16630f075e8bbbff888cd66bccf6db6a9eafd062 Mon Sep 17 00:00:00 2001
+From 8bba089ab7174b6cb06cb81903eb79c117aad9f8 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Mon, 27 Jun 2016 17:06:22 +0300
-Subject: [PATCH 16/18] ARM: i.MX6: dts: clean up unnecesary code
+Subject: [PATCH 16/24] ARM: i.MX6: dts: clean up unnecesary code
 
 Remove:
 1) unnecessary GPRx assignment ( legacy from the 3.10.17_ga )

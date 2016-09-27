@@ -1,7 +1,7 @@
-From 4b158f61a35279a4a7fdf67a3f026f2659620630 Mon Sep 17 00:00:00 2001
+From 7471359617603030ac753aef571ebe2e7299a86c Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Sun, 26 Jun 2016 10:50:42 +0300
-Subject: [PATCH 12/18] ARM: i.MX6: dts: sata refactoring
+Subject: [PATCH 12/24] ARM: i.MX6: dts: sata refactoring
 
 1) enable "target-supply" regulator.
 2) add FreeScale gpr13 values for sata_phy tunning.

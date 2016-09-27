@@ -18,4 +18,9 @@ SRC_URI_append_cm-fx6-evk += "file://cm-fx6-evk/defconfig \
 	file://cm-fx6-evk/0017-ARM-i.MX6-update-defconfig.patch \
 	file://cm-fx6-evk/0018-Bluetooth-btmrvl-disable-SD8787-AMP-device.patch \
 	file://cm-fx6-evk/0019-ARM-i.MX6-HDMI-Fix-HDMI-PHY-init-hang.patch \
+	file://cm-fx6-evk/0020-gpio-reset-Add-gpio-can-sleep-option.patch \
+	file://cm-fx6-evk/0021-ARM-i.MX6-dts-set-gpio-can-sleep-for-mipi_dsi_reset.patch \
+	file://cm-fx6-evk/0022-ARM-i.MX6-dts-configure-all-mxc-UARTs.patch \
+	file://cm-fx6-evk/0023-ARM-i.MX6-dts-add-hdmi-to-fb0-mapping-for-eval-board.patch \
+	file://cm-fx6-evk/0024-ARM-i.MX6-dts-refactoring-hdmi-mipi-configuration.patch \
 "

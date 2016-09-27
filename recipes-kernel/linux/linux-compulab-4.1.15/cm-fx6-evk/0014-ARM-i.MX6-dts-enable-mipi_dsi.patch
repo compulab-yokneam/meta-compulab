@@ -1,7 +1,7 @@
-From 355bfa0f7a9a530f7e836e753410b29ffdb6142e Mon Sep 17 00:00:00 2001
+From 21c6faa9fa294c0fd5199d71fba08abc9ee32f96 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Sun, 26 Jun 2016 15:20:22 +0300
-Subject: [PATCH 14/18] ARM: i.MX6: dts: enable mipi_dsi
+Subject: [PATCH 14/24] ARM: i.MX6: dts: enable mipi_dsi
 
 Enable mipi_dsi.
 Add a separate fx6-sbc dts file with a mipi port enabled.
@@ -64,7 +64,7 @@ index 0000000..c591819
 +	status = "okay";
 +};
 diff --git a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
-index b2bf65a..f98f054 100644
+index 97fc1af..e96b732 100644
 --- a/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-sb-fx6.dtsi
 @@ -183,12 +183,3 @@

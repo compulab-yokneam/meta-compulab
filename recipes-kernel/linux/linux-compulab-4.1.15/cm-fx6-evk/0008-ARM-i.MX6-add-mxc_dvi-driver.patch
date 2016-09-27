@@ -1,7 +1,7 @@
 From aac7024f471b0d24ca14bb2ebfe7cc107bb58377 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Tue, 14 Jun 2016 15:06:31 +0300
-Subject: [PATCH 08/18] ARM: i.MX6: add mxc_dvi driver
+Subject: [PATCH 08/24] ARM: i.MX6: add mxc_dvi driver
 
 Add mxc_dvi driver.
 This driver has been ported from the 3.0.35 kernel tree.

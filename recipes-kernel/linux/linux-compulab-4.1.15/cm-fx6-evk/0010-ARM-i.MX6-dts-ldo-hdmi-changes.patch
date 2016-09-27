@@ -1,7 +1,7 @@
 From 84a684031082d6254345a8cc60237857cccbaff5 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
 Date: Wed, 15 Jun 2016 14:01:54 +0300
-Subject: [PATCH 10/18] ARM: i.MX6: dts: ldo & hdmi changes
+Subject: [PATCH 10/24] ARM: i.MX6: dts: ldo & hdmi changes
 
 Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
 ---
