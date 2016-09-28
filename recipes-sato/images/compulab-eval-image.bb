@@ -28,4 +28,5 @@ IMAGE_INSTALL += "\
 	python-compiler \
 	strace \
 	screen \
+	u-boot-fw-utils \
 "
