@@ -1,0 +1,20 @@
+setenv mmcdev 2
+setenv boot_media mmc ${mmcdev}
+setenv init_media mmc dev ${mmcdev}
+setenv rootdev /dev/mmcblk2p2
+setenv fdt_set 'fdt add ${fdt_addr}; fdt resize'
+setenv mmc2_set 'fdt set mmc2 non-removable'
+setenv mmc2_del 'fdt rm mmc2 cd-gpios; fdt rm mmc2 wp-gpios'
+setenv pre_boot 'run fdt_set; run mmc2_set; run mmc2_del'
+setenv loadaddr 0x10800000
+setenv fdt_high 0xffffffff
+setenv fdt_addr 0x15000000
+setenv fdt_file imx6q-sbc-fx6-hdmi.dtb
+setenv bootm_low 0x15000000
+setenv zimage zimage
+setenv console ttymxc3,115200
+setenv make_args 'setenv bootargs console=${console} root=${rootdev} rootfstype=ext4 rw rootwait'
+setenv load_kernel 'load ${boot_media} ${loadaddr} ${zimage}'
+setenv load_dtb 'load ${boot_media} ${fdt_addr} ${fdt_file}'
+setenv bootcmd 'run make_args; run init_media; run load_kernel; run load_dtb; run pre_boot; bootz ${loadaddr} - ${fdt_addr}'
+boot
