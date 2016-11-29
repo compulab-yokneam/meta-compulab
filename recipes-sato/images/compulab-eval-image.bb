@@ -15,7 +15,6 @@ IMAGE_INSTALL += "\
 	packagegroup-core-x11-sato-games \
 	packagegroup-fsl-gstreamer1.0-full \
 	chromium \
-	firefox \
 	nodejs \
 	flex \
 	gcc \
