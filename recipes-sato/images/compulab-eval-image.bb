@@ -5,7 +5,7 @@ within core-image-sato plus a native toolchain, application development and \
 testing libraries, profiling and debug symbols. \
 Also includes many other packages for a generic CompuLab Devices Evaluation Image"
 
-IMAGE_FEATURES += "splash package-management x11-base x11-sato ssh-server-dropbear hwcodecs dev-pkgs"
+IMAGE_FEATURES += "splash package-management x11-base x11-sato ssh-server-dropbear hwcodecs dev-pkgs nfs-client"
 
 LICENSE = "MIT"
 
@@ -16,16 +16,11 @@ IMAGE_INSTALL += "\
 	packagegroup-fsl-gstreamer1.0-full \
 	chromium \
 	nodejs \
-	flex \
-	gcc \
-	git \
-	m4 \
-	make \
 	iperf \
 	libtool \
 	libexif \
 	python-compiler \
-	strace \
-	screen \
 	u-boot-fw-utils \
+	nfs-utils \
+	nfs-utils-client \
 "
