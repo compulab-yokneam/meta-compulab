@@ -4,7 +4,7 @@
 This layer can be used separatelly.
 
 * Provides
-MACHINE: cm-fx6-evk (kernel,u-boot), cl-som-imx6ul (kernel,u-boot)
+MACHINE: cm-fx6-evk (kernel,u-boot), cl-som-imx6ul (kernel,u-boot), cl-som-imx7 (kernel,u-boot)
 
 ### First install the i.MX NXP BSP repo
 [source,console]

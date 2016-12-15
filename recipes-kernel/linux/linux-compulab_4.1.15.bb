@@ -7,7 +7,7 @@ DESCRIPTION = "Linux kernel for CompuLab imx6(ul) boards."
 DEPENDS += "lzop-native bc-native"
 
 SRCBRANCH = "imx_4.1.15_1.0.0_ga"
-SRCREV = "77f61547834c4f127b44b13e43c59133a35880dc"
+SRCREV ?= "77f61547834c4f127b44b13e43c59133a35880dc"
 LOCALVERSION = "-cl-1.0"
 
 SRC_URI += "file://0001-platform-add-depends-property-handler.patch"
@@ -16,7 +16,9 @@ include linux-compulab_cm-fx6-evk.inc
 
 include linux-compulab_cl-som-imx6ul.inc
 
-COMPATIBLE_MACHINE = "(cm-fx6-evk|cl-som-imx6ul)"
+include linux-compulab_cl-som-imx7.inc
+
+COMPATIBLE_MACHINE = "(cm-fx6-evk|cl-som-imx6ul|cl-som-imx7)"
 
 inherit fsl-vivante-kernel-driver-handler
 
