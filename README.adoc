@@ -18,4 +18,31 @@ $: repo sync
 [source,console]
 $: git clone https://github.com/compulab-yokneam/meta-compulab
 
+### Build Procedure ###
+#### Prepare Build Environment ####
+[source,console]
+$: export MACHINE=cm-fx6-evk
+
+#### X11 ####
+[source,console]
+$: DISTRO=fsl-imx-x11 source fsl-setup-release.sh -b build-${MACHINE}-x11
+
+#### Frame Buffer (FB) ####
+[source,console]
+$: DISTRO=fsl-imx-fb source fsl-setup-release.sh -b build-${MACHINE}-fb
+
+#### XWayland ####
+[source,console]
+$: DISTRO=fsl-imx-xwayland source fsl-setup-release.sh -b build-${MACHINE}-xwayland
+
+#### Wayland-Weston (wayland) ####
+[source,console]
+$: DISTRO=fsl-imx-wayland source fsl-setup-release.sh -b build-${MACHINE}-wayland
+
 NOTE: Add the meta-compulab location to the conf/bblayers.conf manually.
+
+#### Build ####
+[source,console]
+$: bitbake fsl-image-gui
+or
+$: bitbake fsl-image-qt5
