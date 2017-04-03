@@ -10,36 +10,41 @@ MACHINE: cm-fx6-evk (kernel,u-boot), cl-som-imx6ul (kernel,u-boot), cl-som-imx7 
 [source,console]
 $: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b imx-4.1-krogoth
 
-### Download the Yocto Project NXP Layers:
+### Download Yocto Project NXP Layers:
 [source,console]
 $: repo sync
 
-### Clone the meta-compulab layer:
+### Clone meta-compulab layer:
 [source,console]
 $: git clone https://github.com/compulab-yokneam/meta-compulab source/meta-compulab
 
-### Build Procedure ###
-#### Prepare Build Environment ####
+### Build Procedure
+#### Prepare Build Environment
 [source,console]
 $: export MACHINE=cm-fx6-evk
 
-#### X11 ####
+#### Select one disptro from the list: X11, FB, XWayland, Wayland-Weston
+* X11
+
 [source,console]
 $: DISTRO=fsl-imx-x11 source fsl-setup-release.sh -b build-${MACHINE}-x11
 
-#### Frame Buffer (FB) ####
+* Frame Buffer (FB)
+
 [source,console]
 $: DISTRO=fsl-imx-fb source fsl-setup-release.sh -b build-${MACHINE}-fb
 
-#### XWayland ####
+* XWayland
+
 [source,console]
 $: DISTRO=fsl-imx-xwayland source fsl-setup-release.sh -b build-${MACHINE}-xwayland
 
-#### Wayland-Weston (wayland) ####
+* Wayland-Weston (wayland)
+
 [source,console]
 $: DISTRO=fsl-imx-wayland source fsl-setup-release.sh -b build-${MACHINE}-wayland
 
-#### Pre-Build Steps ####
+#### Pre-Build Steps
 * Add the meta-compulab location to the conf/bblayers.conf
 
 [source,console]
@@ -50,7 +55,7 @@ $: [[ -f conf/bblayers.conf ]] && (sed -i '$aBBLAYERS += " ${BSPDIR}/sources/met
 [source,console]
 $: [[ -f conf/local.conf ]] && sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf || echo "Invalid Build Directory"
 
-#### Build ####
+#### Build
 [source,console]
 $: bitbake fsl-image-gui
 or
