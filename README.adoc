@@ -20,8 +20,6 @@ $: git clone https://github.com/compulab-yokneam/meta-compulab source/meta-compu
 
 ### Build Procedure
 #### Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7
-* MACHINE
-
 [source,console]
 $: export MACHINE=cm-fx6-evk
 or
@@ -30,16 +28,14 @@ or
 $: export MACHINE=cl-som-imx7
 
 #### Select an available disptro: x11/fb/xwayland/wayland
-* DISTRO
-
 [source,console]
-$: export DISTRO_NAME=fsl-imx-x11
+$: export DISTRO=fsl-imx-x11
 or
-$: export DISTRO_NAME=fsl-imx-fb
+$: export DISTRO=fsl-imx-fb
 or
-$: export DISTRO_NAME=fsl-imx-xwayland
+$: export DISTRO=fsl-imx-xwayland
 or
-$: export DISTRO_NAME=fsl-imx-wayland
+$: export DISTRO=fsl-imx-wayland
 
 #### Create Build Environment
 [source,console]
