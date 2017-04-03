@@ -19,7 +19,6 @@ $: repo sync
 $: git clone https://github.com/compulab-yokneam/meta-compulab source/meta-compulab
 
 ### Build Procedure
-#### Prepare Build Environment
 #### Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7
 * MACHINE
 
@@ -42,8 +41,7 @@ $: export DISTRO_NAME=fsl-imx-xwayland
 or
 $: export DISTRO_NAME=fsl-imx-wayland
 
-
-#### Create Build Directory
+#### Create Build Environment
 [source,console]
 $: source fsl-setup-release.sh -b build-${MACHINE}-${DISTRO}
 
