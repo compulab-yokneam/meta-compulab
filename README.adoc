@@ -14,9 +14,9 @@ $: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b imx-4.1-kro
 [source,console]
 $: repo sync
 
-### Goto to source directory and clone this meta layer:
+### Clone the meta-compulab layer:
 [source,console]
-$: git clone https://github.com/compulab-yokneam/meta-compulab
+$: git clone https://github.com/compulab-yokneam/meta-compulab source/meta-compulab
 
 ### Build Procedure ###
 #### Prepare Build Environment ####
@@ -39,7 +39,19 @@ $: DISTRO=fsl-imx-xwayland source fsl-setup-release.sh -b build-${MACHINE}-xwayl
 [source,console]
 $: DISTRO=fsl-imx-wayland source fsl-setup-release.sh -b build-${MACHINE}-wayland
 
-NOTE: Add the meta-compulab location to the conf/bblayers.conf manually.
+#### Pre-Build Steps ####
+
+NOTE: Invoke these steps in the build directory.
+
+* Add the meta-compulab location to the conf/bblayers.conf
+
+[source,console]
+$: sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-compulab "' conf/bblayers.conf
+
+* Add the second packaging option to the conf/local.conf
+
+[source,console]
+$: sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf
 
 #### Build ####
 [source,console]
