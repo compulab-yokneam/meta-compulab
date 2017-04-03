@@ -20,29 +20,33 @@ $: git clone https://github.com/compulab-yokneam/meta-compulab source/meta-compu
 
 ### Build Procedure
 #### Prepare Build Environment
+* MACHINE
+
 [source,console]
+or
 $: export MACHINE=cm-fx6-evk
+or
+$: export MACHINE=cl-som-imx6ul
+or
+$: export MACHINE=cl-som-imx7
 
-#### Select one disptro from the list: X11, FB, XWayland, Wayland-Weston
-* X11
-
-[source,console]
-$: DISTRO=fsl-imx-x11 source fsl-setup-release.sh -b build-${MACHINE}-x11
-
-* Frame Buffer (FB)
-
-[source,console]
-$: DISTRO=fsl-imx-fb source fsl-setup-release.sh -b build-${MACHINE}-fb
-
-* XWayland
+#### Select an available disptro: x11/fb/xwayland/wayland 
+* DISTRO
 
 [source,console]
-$: DISTRO=fsl-imx-xwayland source fsl-setup-release.sh -b build-${MACHINE}-xwayland
+or
+$: export DISTRO_NAME=fsl-imx-x11
+or
+$: export DISTRO_NAME=fsl-imx-fb
+or
+$: export DISTRO_NAME=fsl-imx-xwayland
+or
+$: export DISTRO_NAME=fsl-imx-wayland
 
-* Wayland-Weston (wayland)
 
+#### Create Build Directory
 [source,console]
-$: DISTRO=fsl-imx-wayland source fsl-setup-release.sh -b build-${MACHINE}-wayland
+$: source fsl-setup-release.sh -b build-${MACHINE}-${DISTRO}
 
 #### Pre-Build Steps
 * Add the meta-compulab location to the conf/bblayers.conf
