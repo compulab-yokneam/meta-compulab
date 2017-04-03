@@ -40,18 +40,15 @@ $: DISTRO=fsl-imx-xwayland source fsl-setup-release.sh -b build-${MACHINE}-xwayl
 $: DISTRO=fsl-imx-wayland source fsl-setup-release.sh -b build-${MACHINE}-wayland
 
 #### Pre-Build Steps ####
-
-NOTE: Invoke these steps in the build directory.
-
 * Add the meta-compulab location to the conf/bblayers.conf
 
 [source,console]
-$: sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-compulab "' conf/bblayers.conf
+$: [[ -f conf/bblayers.conf ]] && (sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-compulab "' conf/bblayers.conf) || echo "Invalid Build Directory"
 
 * Add the second packaging option to the conf/local.conf
 
 [source,console]
-$: sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf
+$: [[ -f conf/local.conf ]] && sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf || echo "Invalid Build Directory"
 
 #### Build ####
 [source,console]
