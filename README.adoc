@@ -27,7 +27,7 @@ $: export MACHINE=cl-som-imx6ul
 or
 $: export MACHINE=cl-som-imx7
 
-#### Select an available disptro: x11/fb/xwayland/wayland
+#### Select an available distro: x11/fb/xwayland/wayland
 [source,console]
 $: export DISTRO=fsl-imx-x11
 or
