@@ -18,7 +18,9 @@ include linux-compulab_cl-som-imx6ul.inc
 
 include linux-compulab_cl-som-imx7.inc
 
-COMPATIBLE_MACHINE = "(cm-fx6-evk|cl-som-imx6ul|cl-som-imx7)"
+include linux-compulab_cl-som-imx6.inc
+
+COMPATIBLE_MACHINE = "(cm-fx6-evk|cl-som-imx6ul|cl-som-imx7|cl-som-imx6)"
 
 inherit fsl-vivante-kernel-driver-handler
 
