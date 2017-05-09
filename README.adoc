@@ -4,7 +4,7 @@
 This layer can be used separatelly.
 
 * Provides
-MACHINE: cm-fx6-evk (kernel,u-boot), cl-som-imx6ul (kernel,u-boot), cl-som-imx7 (kernel,u-boot)
+MACHINE: cm-fx6-evk (kernel,u-boot), cl-som-imx6ul (kernel,u-boot), cl-som-imx7 (kernel,u-boot), cl-som-imx6 (kernel,u-boot)
 
 ### First install the i.MX NXP BSP repo
 [source,console]
@@ -19,13 +19,15 @@ $: repo sync
 $: git clone https://github.com/compulab-yokneam/meta-compulab source/meta-compulab
 
 ### Build Procedure
-#### Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7
+#### Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7/cl-som-imx6
 [source,console]
 $: export MACHINE=cm-fx6-evk
 or
 $: export MACHINE=cl-som-imx6ul
 or
 $: export MACHINE=cl-som-imx7
+or
+$: export MACHINE=cl-som-imx6
 
 #### Select an available distro: x11/fb/xwayland/wayland
 [source,console]
