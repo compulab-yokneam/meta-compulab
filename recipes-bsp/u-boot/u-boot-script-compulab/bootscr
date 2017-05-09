@@ -12,8 +12,9 @@ setenv fdt_addr 0x15000000
 setenv fdt_file imx6q-sbc-fx6-hdmi.dtb
 setenv bootm_low 0x15000000
 setenv zimage zimage
+setenv vmalloc vmalloc=256M
 setenv console ttymxc3,115200
-setenv make_args 'setenv bootargs console=${console} root=${rootdev} rootfstype=ext4 rw rootwait'
+setenv make_args 'setenv bootargs console=${console} root=${rootdev} rootfstype=ext4 rw rootwait ${vmalloc}'
 setenv load_kernel 'load ${boot_media} ${loadaddr} ${zimage}'
 setenv load_dtb 'load ${boot_media} ${fdt_addr} ${fdt_file}'
 setenv bootcmd 'run make_args; run init_media; run load_kernel; run load_dtb; run pre_boot; bootz ${loadaddr} - ${fdt_addr}'
