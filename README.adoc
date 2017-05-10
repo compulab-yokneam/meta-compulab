@@ -1,20 +1,24 @@
 # meta-compulab 
 
-## NXP Boards
-This layer can be used separatelly.
+## Supported CompuLab Machines
+* cm-fx6-evk
+* cl-som-imx6ul
+* cl-som-imx7
+* cl-som-imx6
 
-* Provides
-MACHINE: cm-fx6-evk (kernel,u-boot), cl-som-imx6ul (kernel,u-boot), cl-som-imx7 (kernel,u-boot), cl-som-imx6 (kernel,u-boot)
+## How To
 
-### First install the i.MX NXP BSP repo
+### Prepare BSP Environment
+
+#### Install i.MX NXP BSP repo
 [source,console]
 $: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b imx-4.1-krogoth
 
-### Download Yocto Project NXP Layers:
+#### Download Yocto Project NXP Layers:
 [source,console]
 $: repo sync
 
-### Clone meta-compulab layer:
+#### Clone meta-compulab layer:
 [source,console]
 $: git clone https://github.com/compulab-yokneam/meta-compulab source/meta-compulab
 
