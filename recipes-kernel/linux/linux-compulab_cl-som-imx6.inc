@@ -57,4 +57,5 @@ SRC_URI_append_cl-som-imx6 += "\
 	file://cl-som-imx6/0056-ARM-i.MX6-cl-som-imx6-defconfig-enable-USB_ACM.patch \
 	file://cl-som-imx6/0057-ARM-i.MX6-dts-fix-ldb-timings.patch \
 	file://cl-som-imx6/0058-ARM-i.MX6-cl-som-imx6-tag-kernel-version-cl-som-imx6.patch \
+	file://cl-som-imx6/0059-ARM-i.MX6-dts-fix-usdhc3-bus-settings.patch \
 "
