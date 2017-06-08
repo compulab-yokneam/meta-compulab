@@ -61,7 +61,16 @@ WARNING: Stop Here if warning shows up
 $: [[ -f conf/local.conf ]] && sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf || echo "Warning: Invalid Build Directory"
 
 #### Build
+##### Image
 [source,console]
 $: bitbake fsl-image-gui
 or
 $: bitbake fsl-image-qt5
+
+##### Kernel Only
+[source,console]
+$: bitbake linux-compulab
+
+##### U-Boot Only
+[source,console]
+$: bitbake u-boot-compulab
