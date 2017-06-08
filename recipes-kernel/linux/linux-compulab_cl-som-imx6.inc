@@ -32,7 +32,7 @@ SRC_URI_append_cl-som-imx6 += "\
 	file://cl-som-imx6/0031-GPU-VIV-Use-the-imx-gpu-viv-5.0.11.p8.6.patch \
 	file://cl-som-imx6/0032-IMX-Serial-from-Mainline-4.6.patch \
 	file://cl-som-imx6/0033-ARM-i.MX6-Disable-uart1-RX-DMA.patch \
-	file://cl-som-imx6/0034-ARM-i.MX6-dts-add-ov564x-mipi-camera-support.patch \
+	file://0034-ARM-i.MX6-dts-add-ov564x-mipi-camera-support.patch \
 	file://cl-som-imx6/0035-ARM-i.MX6-update-defconfig-with-OPTIMIZE_FOR_SIZE.patch \
 	file://cl-som-imx6/0036-ARM-i.MX6-dts-Add-initial-support-for-SOM-iMX6.patch \
 	file://cl-som-imx6/0037-ARM-i.MX6-cl-som-imx6-add-defconfig.patch \
@@ -58,4 +58,6 @@ SRC_URI_append_cl-som-imx6 += "\
 	file://cl-som-imx6/0057-ARM-i.MX6-dts-fix-ldb-timings.patch \
 	file://cl-som-imx6/0058-ARM-i.MX6-cl-som-imx6-tag-kernel-version-cl-som-imx6.patch \
 	file://cl-som-imx6/0059-ARM-i.MX6-dts-fix-usdhc3-bus-settings.patch \
+	file://cl-som-imx6/0063-ARM-i.MX6-cl-som-imx6-dts-Add-parallel-camera-suppor.patch \
+	file://cl-som-imx6/0064-ARM-i.MX6-cl-som-imx6-defconfig-enable-tvp5150.patch \
 "

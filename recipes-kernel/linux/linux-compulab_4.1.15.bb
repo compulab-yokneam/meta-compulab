@@ -10,7 +10,8 @@ SRCBRANCH = "imx_4.1.15_1.0.0_ga"
 SRCREV ?= "77f61547834c4f127b44b13e43c59133a35880dc"
 LOCALVERSION = "-cl-1.0"
 
-SRC_URI += "file://0001-platform-add-depends-property-handler.patch"
+SRC_URI += "file://0001-platform-add-depends-property-handler.patch \ 
+	file://0060-ARM-i.MX6-tvp5150-add-tvp5150-video-decoder-support.patch"
 
 include linux-compulab_cm-fx6-evk.inc
 
