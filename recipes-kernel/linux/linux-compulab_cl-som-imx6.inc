@@ -60,4 +60,5 @@ SRC_URI_append_cl-som-imx6 += "\
 	file://cl-som-imx6/0059-ARM-i.MX6-dts-fix-usdhc3-bus-settings.patch \
 	file://cl-som-imx6/0063-ARM-i.MX6-cl-som-imx6-dts-Add-parallel-camera-suppor.patch \
 	file://cl-som-imx6/0064-ARM-i.MX6-cl-som-imx6-defconfig-enable-tvp5150.patch \
+	file://cl-som-imx6/0066-ARM-i.MX6-cl-som-imx6-defconfig-enable-POSIX_MQUEUE.patch \
 "

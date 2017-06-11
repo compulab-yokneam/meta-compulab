@@ -26,4 +26,5 @@ SRC_URI_append_cm-fx6-evk += "file://cm-fx6-evk/defconfig \
 	file://0034-ARM-i.MX6-dts-add-ov564x-mipi-camera-support.patch \
 	file://cm-fx6-evk/0061-ARM-i.MX6-cm-fx6-dts-Add-parallel-camera-support.patch \
 	file://cm-fx6-evk/0062-ARM-i.MX6-cm-fx6-defconfig-enable-tvp5150.patch \
+	file://cm-fx6-evk/0065-ARM-i.MX6-cm-fx6-defconfig-enable-POSIX_MQUEUE.patch \
 "
