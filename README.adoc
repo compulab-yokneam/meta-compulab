@@ -12,7 +12,7 @@
 
 #### Install i.MX NXP BSP repo
 [source,console]
-$: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b imx-4.1-krogoth
+$: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b imx-morty
 
 #### Download Yocto Project NXP Layers:
 [source,console]
