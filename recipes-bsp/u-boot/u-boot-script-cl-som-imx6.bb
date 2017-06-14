@@ -15,13 +15,13 @@ OBOOTSCRIPT ?= "boot.scr"
 
 do_mkimage () {
 	# allow deploy to use the ${MACHINE} name to simplify things
-	if [ ! -d board/compulab/${MACHINE} ]; then
-		mkdir -p board/compulab/${MACHINE}
+	if [ ! -d ${S}/board/compulab/${MACHINE} ]; then
+		mkdir -p ${S}/board/compulab/${MACHINE}
 	fi
 
 	uboot-mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
-		-n "boot script" -d ${IBOOTSCRIPT} \
-		board/compulab/${MACHINE}/${OBOOTSCRIPT}
+		-n "boot script" -d ${S}/${IBOOTSCRIPT} \
+		${S}/board/compulab/${MACHINE}/${OBOOTSCRIPT}
 }
 
 addtask mkimage after do_compile before do_install
