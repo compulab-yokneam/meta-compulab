@@ -1,5 +1,8 @@
 # meta-compulab 
 
+# !!! It is a BETA !!!
+WARNING: This is a prelimitary branch that fails with ERROR: imx-gpu-viv-1_5.0.11.p8.7-hfp-r0 do_fetch: Fetcher failure See an nxp thread: https://community.nxp.com/thread/452335
+
 ## Supported CompuLab Machines
 * cm-fx6-evk
 * cl-som-imx6ul
