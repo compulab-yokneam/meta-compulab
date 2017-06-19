@@ -4,6 +4,7 @@
 WARNING: This is a prelimitary branch that fails with ERROR: imx-gpu-viv-1_5.0.11.p8.7-hfp-r0 do_fetch: Fetcher failure See an nxp thread: https://community.nxp.com/thread/452335
  Using p8.6 does not help. The build fails with:
 ERROR: Multiple versions of imx-gpu-viv are due to be built (/.../freescale/yocto/morty/sources/meta-fsl-bsp-release/imx/meta-bsp/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.2.0.p4-aarch32.bb /.../freescale/yocto/morty/sources/meta-fsl-bsp-release/imx/meta-bsp/recipes-graphics/imx-gpu-viv/imx-gpu-viv_5.0.11.p8.7-hfp.bb). Only one version of a given PN should be built in any given build. You likely need to set PREFERRED_VERSION_imx-gpu-viv to select the correct version or don't depend on multiple versions.
+In order evaluate Yocto Morty follow this instructions: https://github.com/compulab-yokneam/compulab-bsp/tree/morthy
 
 ## Supported CompuLab Machines
 * cm-fx6-evk
