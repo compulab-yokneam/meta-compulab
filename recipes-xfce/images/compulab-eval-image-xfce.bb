@@ -22,6 +22,7 @@ CORE_IMAGE_BASE_INSTALL += "\
 	u-boot-fw-utils \
 	nfs-utils \
 	nfs-utils-client \
+	bt-start \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_cl-som-imx6 += "chromium"

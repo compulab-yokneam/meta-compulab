@@ -23,4 +23,5 @@ IMAGE_INSTALL += "\
 	u-boot-fw-utils \
 	nfs-utils \
 	nfs-utils-client \
+	bt-start \
 "
