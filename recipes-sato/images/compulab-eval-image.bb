@@ -24,4 +24,5 @@ IMAGE_INSTALL += "\
 	nfs-utils \
 	nfs-utils-client \
 	bt-start \
+	cl-deploy \
 "
