@@ -1,17 +1,50 @@
-setenv mmcdev 2
-setenv boot_media mmc ${mmcdev}
-setenv init_media mmc dev ${mmcdev}
-setenv rootdev /dev/mmcblk2p2
 setenv loadaddr 0x10800000
 setenv fdt_high 0xffffffff
 setenv fdt_addr 0x15000000
 setenv fdt_file imx6qp-sbc-imx6-hdmi.dtb
 setenv bootm_low 0x15000000
-setenv zimage zimage
+setenv kernel_file zImage
 setenv vmalloc vmalloc=256M
 setenv console ttymxc3,115200
+
+setenv make_root 'setenv rootdev /dev/${blockdevice}'
 setenv make_args 'setenv bootargs console=${console} root=${rootdev} rootfstype=ext4 rw rootwait ${vmalloc}'
-setenv load_kernel 'load ${boot_media} ${loadaddr} ${zimage}'
-setenv load_dtb 'load ${boot_media} ${fdt_addr} ${fdt_file}'
-setenv bootcmd 'run make_args; run init_media; run load_kernel; run load_dtb; bootz ${loadaddr} - ${fdt_addr}'
-boot
+
+setenv setup_boot 'setenv bootlinux \"\
+	if load ${bootdev} ${bootdev_id} ${loadaddr} ${kernel_file}; \
+	then; \
+		if load ${bootdev} ${bootdev_id} ${fdtaddr} ${fdt_file}; \
+		then; \
+			run make_root; \
+			run make_args; \
+			bootz ${loadaddr} - ${fdtaddr}; \
+		fi; \
+	fi;\"'
+
+setenv bootdev "usb"
+setenv bootdev_id "0"
+setenv blockdevice sda2
+
+if usb start && usb dev ${bootdev_id}
+then
+	run setup_boot
+	run bootlinux
+fi
+
+setenv bootdev "mmc"
+setenv bootdev_id "2"
+setenv blockdevice mmcblk2p2
+if mmc dev ${bootdev_id} && mmc rescan
+then
+	run setup_boot
+	run bootlinux
+fi
+
+setenv bootdev "mmc"
+setenv bootdev_id "3"
+setenv blockdevice mmcblk3p2
+if mmc dev ${bootdev_id} && mmc rescan
+then
+	run setup_boot
+	run bootlinux
+fi
