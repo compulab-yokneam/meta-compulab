@@ -1,0 +1,99 @@
+#!/bin/bash -xv
+
+source=""
+destination=""
+
+for var in $(cat /proc/cmdline)
+do
+[[ $var =~ "=" ]] && eval $var
+done
+
+if [[ -b ${root} ]];then
+i=1
+[[ ${root} =~ "mmc" ]] && ((i++))
+len=$((${#root}-$i))
+source=${root:0:${len}}
+fi
+
+if [[ ! -z ${source} ]];then
+all_devs=$(ls /sys/class/block/*/size | awk -F"/" '($5~/sd|mmc/)&&($0=$5)')
+avail_devs=""
+min_size_inb=$(df --block-size=512 / | awk '(/^\//)&&($0=$3)')
+for dev in ${all_devs};do
+	# Skip partitions
+	stat /sys/class/block/${dev}/partition &>/dev/null && continue
+	# Device size check
+	size=$(cat /sys/class/block/${dev}/size)
+	[ ${size} -lt ${min_size_inb} ] && continue
+	# Skip source
+	[[ ${source} =~ ${dev} ]] && continue
+	avail_devs=${avail_devs}" "$dev
+done
+
+avail_devs="${avail_devs#"${avail_devs%%[![:space:]]*}"}"
+
+for adev in ${avail_devs};do
+	ddev=$(udevadm info -p /sys/class/block/${adev} | awk '(/ disk\/by-id/)&&(split($2,a,"/")&&($0=a[3]))')
+	rlist=${rlist}"/dev/"${adev}" "${ddev}" OFF "
+done
+dialog --title "Select a destination device" --radiolist "Available Devices:" 12 80 12 $rlist 2>/tmp/.rlist && destination=$(cat /tmp/.rlist)
+
+fi
+
+SRC=${source} DST=${destination}
+
+msrc=/tmp/src
+mdst=/tmp/dst
+
+if [[ -z ${SRC} || -z ${DST} ]];then
+dialog --title "Warning" --msgbox "No destination found\nPess any key for exit." 10 80
+exit 2
+fi
+
+dialog --title "Start Deployment" --yesno "Src: ${SRC} -> Dst: ${DST}\n\nWarning: All data on ${DST} will be destroyed" 10 80 || exit
+
+umount ${DST}* &>/dev/null
+
+sfdisk --dump ${SRC} | sfdisk ${DST}
+echo ",,83" | sfdisk -N 1 ${DST}
+echo ",+" | sfdisk -N 2 ${DST}
+
+[[ ${DST} =~ "mmc" ]] && DST=${DST}p
+[[ ${SRC} =~ "mmc" ]] && SRC=${SRC}p
+
+cat << eom
+
+	SRC=${SRC} ==> DST=${DST}
+
+eom
+
+mkfs.ext2 -F -L boot ${DST}1
+mkfs.ext4 -F -L rootfs ${DST}2
+sleep 1
+umount ${DST}* &>/dev/null
+
+mkdir -p ${msrc} ${mdst}
+
+mount ${SRC}2 ${msrc}
+mount ${SRC}1 ${msrc}/boot
+
+mount ${DST}2 ${mdst}
+mkdir -p ${mdst}/boot
+mount ${DST}1 ${mdst}/boot
+
+tar -C ${msrc} -cf - . | pv | tar -C ${mdst} -xf -
+
+for m in ${msrc}/boot ${msrc} ${mdst}/boot ${mdst}
+do
+	sleep 1
+cat << eom
+	Unmounting ${m} ....
+eom
+	umount -l ${m}
+done
+
+[[ ${DST} =~ "mmc" ]] && DST=${DST:0:$((${#DST}-1))}
+
+dialog --title "Finished with success" --yesno "Boot media has been deployed on ${DST}\n\nWould you like to reboot the device now?" 10 80 && reboot
+
+exit

@@ -1,0 +1,5 @@
+#!/bin/bash -xv
+
+WORK=/usr/local/bin/cl-deploy.work
+export DISPLAY=:0
+xterm -e ${WORK}

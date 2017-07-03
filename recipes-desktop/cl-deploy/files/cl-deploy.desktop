@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=CompuLab Deployment Tool
+Comment=Boot Media Cloning
+Exec=/usr/local/bin/cl-deploy
+Icon=/usr/local/bin/cl-deploy.png
+Terminal=true
+Type=Application
+Categories=Utilities;tools;
