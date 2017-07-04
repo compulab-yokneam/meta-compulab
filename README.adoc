@@ -69,7 +69,7 @@ WARNING: Stop Here if warning shows up
 [source,console]
 $: [[ -f conf/local.conf ]] && sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf || echo "Warning: Invalid Build Directory"
 
-#### Build Instryction
+#### Build Instruction
  * Select an available image: fsl-image-gui/fsl-image-qt5/compulab-eval-image/compulab-eval-image-xfce
  * Set IMAGE environment variable:
 [source,console]
