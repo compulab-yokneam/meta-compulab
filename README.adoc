@@ -108,3 +108,7 @@ $: xz -dc tmp/deploy/images/${MACHINE}/${IMAGE}-${MACHINE}.sdcard.xz | sudo dd o
 # reset
 . Let the device boot up
 . Evaluate this Yocto Release
+
+## How to Deploy on an internal media.
+`compulab-eval-image` comes with a tool that allows cloning the boot media.
+Detailed information at https://github.com/compulab-yokneam/Documentation/tree/master/cl-deploy
