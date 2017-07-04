@@ -1,11 +1,5 @@
 # meta-compulab 
 
-# !!! It is a BETA !!!
-WARNING: This is a prelimitary branch that fails with ERROR: imx-gpu-viv-1_5.0.11.p8.7-hfp-r0 do_fetch: Fetcher failure See an nxp thread: https://community.nxp.com/thread/452335
- Using p8.6 does not help. The build fails with:
-ERROR: Multiple versions of imx-gpu-viv are due to be built (/.../freescale/yocto/morty/sources/meta-fsl-bsp-release/imx/meta-bsp/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.2.0.p4-aarch32.bb /.../freescale/yocto/morty/sources/meta-fsl-bsp-release/imx/meta-bsp/recipes-graphics/imx-gpu-viv/imx-gpu-viv_5.0.11.p8.7-hfp.bb). Only one version of a given PN should be built in any given build. You likely need to set PREFERRED_VERSION_imx-gpu-viv to select the correct version or don't depend on multiple versions.
-In order evaluate Yocto Morty follow this instructions: https://github.com/compulab-yokneam/compulab-bsp/tree/morthy
-
 ## Supported CompuLab Machines
 * cm-fx6-evk
 * cl-som-imx6ul
@@ -17,11 +11,18 @@ In order evaluate Yocto Morty follow this instructions: https://github.com/compu
 ### Prepare BSP Environment
 
 #### Install i.MX NXP BSP repo
+* Select an available NXP branch: imx-4.1-krogoth/imx-morty
+* Set IMX_BRANCH environment variable.
 [source,console]
-$: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b imx-morty
+$: export IMX_BRANCH=imx-4.1-krogoth
+or
+$: export IMX_BRANCH=imx-morty
+
+WARNING: In order evaluate Yocto Morty follow this instructions: https://github.com/compulab-yokneam/compulab-bsp/tree/morthy 
 
 #### Download Yocto Project NXP Layers:
 [source,console]
+$: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b ${IMX_BRANCH}
 $: repo sync
 
 #### Clone meta-compulab layer:
@@ -29,7 +30,8 @@ $: repo sync
 $: git clone https://github.com/compulab-yokneam/meta-compulab sources/meta-compulab
 
 ### Build Procedure
-#### Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7/cl-som-imx6
+* Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7/cl-som-imx6
+* Set MACHINE environment variable:
 [source,console]
 $: export MACHINE=cm-fx6-evk
 or
@@ -39,7 +41,8 @@ $: export MACHINE=cl-som-imx7
 or
 $: export MACHINE=cl-som-imx6
 
-#### Select an available distro: x11/fb/xwayland/wayland
+* Select an available distro: x11/fb/xwayland/wayland
+* Set DISTRO environment variable:
 [source,console]
 $: export DISTRO=fsl-imx-x11
 or
@@ -66,17 +69,32 @@ WARNING: Stop Here if warning shows up
 [source,console]
 $: [[ -f conf/local.conf ]] && sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf || echo "Warning: Invalid Build Directory"
 
-#### Build
-##### Image
+#### Build Instryction
+ * Select an available image: fsl-image-gui/fsl-image-qt5/compulab-eval-image/compulab-eval-image-xfce
+ * Set IMAGE environment variable:
 [source,console]
-$: bitbake fsl-image-gui
+$: export IMAGE=fsl-image-gui
 or
-$: bitbake fsl-image-qt5
+$: export IMAGE=fsl-image-qt5
+or
+$: export IMAGE=compulab-eval-image
+or
+$: export IMAGE=compulab-eval-image-xfce
 
-##### Kernel Only
+* Image buld command:
+
+ This commad builds entire image.
+[source,console]
+$: bitbake ${IMAGE}
+
+* Kernel buld command:
+
+ This commad builds CompuLab kernel only.
 [source,console]
 $: bitbake linux-compulab
 
-##### U-Boot Only
+* U-Boot buld command:
+
+ This commad builds CompuLab U-Boot only.
 [source,console]
 $: bitbake u-boot-compulab
