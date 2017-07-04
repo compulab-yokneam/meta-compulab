@@ -16,7 +16,7 @@ $: export IMX_BRANCH=imx-4.1-krogoth
 or
 $: export IMX_BRANCH=imx-morty
 
-WARNING: In order evaluate Yocto Morty follow this instructions: https://github.com/compulab-yokneam/compulab-bsp/tree/morthy 
+WARNING: In order to evaluate Yocto Morty follow this instructions: https://github.com/compulab-yokneam/compulab-bsp/tree/morthy#compulab-devices-bsp[CompuLab Morty BSP]
 
 #### Download the NXP BSP source:
 [source,console]
@@ -110,5 +110,5 @@ $: xz -dc tmp/deploy/images/${MACHINE}/${IMAGE}-${MACHINE}.sdcard.xz | sudo dd o
 . Evaluate this Yocto Release
 
 ## How to Deploy on an internal media.
-`compulab-eval-image` comes with a tool that allows cloning the boot media.
-Detailed information at https://github.com/compulab-yokneam/Documentation/tree/master/cl-deploy
+`compulab-eval-image` and `compulab-eval-image-xfce` come with a tool that allows cloning the boot media. +
+Detailed information at: https://github.com/compulab-yokneam/Documentation/blob/master/cl-deploy/README.adoc#compulab-deployment-tool[CompuLab Deployment Tool]
