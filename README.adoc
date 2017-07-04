@@ -1,6 +1,7 @@
 # meta-compulab 
 
-## Supported CompuLab Machines
+ Supported CompuLab Machines
+
 * cm-fx6-evk
 * cl-som-imx6ul
 * cl-som-imx7
@@ -9,10 +10,7 @@
 ## How To
 
 ### Prepare BSP Environment
-
-#### Install i.MX NXP BSP repo
-* Select an available NXP branch: imx-4.1-krogoth/imx-morty
-* Set IMX_BRANCH environment variable.
+#### Select an available NXP branch: imx-4.1-krogoth/imx-morty
 [source,console]
 $: export IMX_BRANCH=imx-4.1-krogoth
 or
@@ -20,7 +18,7 @@ $: export IMX_BRANCH=imx-morty
 
 WARNING: In order evaluate Yocto Morty follow this instructions: https://github.com/compulab-yokneam/compulab-bsp/tree/morthy 
 
-#### Download Yocto Project NXP Layers:
+#### Download the NXP BSP source:
 [source,console]
 $: repo init -u git://git.freescale.com/imx/fsl-arm-yocto-bsp.git -b ${IMX_BRANCH}
 $: repo sync
@@ -30,8 +28,7 @@ $: repo sync
 $: git clone https://github.com/compulab-yokneam/meta-compulab sources/meta-compulab
 
 ### Build Procedure
-* Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7/cl-som-imx6
-* Set MACHINE environment variable:
+#### Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7/cl-som-imx6
 [source,console]
 $: export MACHINE=cm-fx6-evk
 or
@@ -41,8 +38,7 @@ $: export MACHINE=cl-som-imx7
 or
 $: export MACHINE=cl-som-imx6
 
-* Select an available distro: x11/fb/xwayland/wayland
-* Set DISTRO environment variable:
+#### Select an available distro: x11/fb/xwayland/wayland
 [source,console]
 $: export DISTRO=fsl-imx-x11
 or
@@ -70,8 +66,7 @@ WARNING: Stop Here if warning shows up
 $: [[ -f conf/local.conf ]] && sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' conf/local.conf || echo "Warning: Invalid Build Directory"
 
 #### Build Instruction
- * Select an available image: fsl-image-gui/fsl-image-qt5/compulab-eval-image/compulab-eval-image-xfce
- * Set IMAGE environment variable:
+##### Select an available image: fsl-image-gui/fsl-image-qt5/compulab-eval-image/compulab-eval-image-xfce
 [source,console]
 $: export IMAGE=fsl-image-gui
 or
@@ -81,20 +76,35 @@ $: export IMAGE=compulab-eval-image
 or
 $: export IMAGE=compulab-eval-image-xfce
 
-* Image buld command:
-
- This commad builds entire image.
+##### Build Evaluation Image
 [source,console]
 $: bitbake ${IMAGE}
 
-* Kernel buld command:
-
- This commad builds CompuLab kernel only.
+##### Build kernel only
 [source,console]
 $: bitbake linux-compulab
 
-* U-Boot buld command:
-
- This commad builds CompuLab U-Boot only.
+##### Build U-Boot only
 [source,console]
 $: bitbake u-boot-compulab
+
+## How to Deploy:
+[%hardbreaks]
+To deploy the image file to an sdcard, issue this command. 
+Assuming the sdcard device file is *_/dev/sdg_*
+
+[source,console]
+$: xz -dc tmp/deploy/images/${MACHINE}/${IMAGE}-${MACHINE}.sdcard.xz | sudo dd of=/dev/sdg
+
+## How to Evaluate:
+. Insert the sd-card into the SB-FX6 P6 slot
+. Power up the device
+. Stop in U-Boot
+. Issue:
+[%hardbreaks]
+[source,console]
+# env default -a
+# savenv
+# reset
+. Let the device boot up
+. Evaluate this Yocto Release
