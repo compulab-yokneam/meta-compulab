@@ -2,4 +2,6 @@
 
 WORK=/usr/local/bin/cl-deploy.work
 export DISPLAY=:0
-xterm -e ${WORK}
+
+[[ -d /usr/share/matchbox ]] && EXEC="xterm -e" || EXEC="source"
+${EXEC} ${WORK}

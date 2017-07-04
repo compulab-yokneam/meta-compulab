@@ -5,4 +5,4 @@ Exec=/usr/local/bin/cl-deploy
 Icon=/usr/local/bin/cl-deploy.png
 Terminal=true
 Type=Application
-Categories=Utilities;tools;
+Categories=GTK;System;CompuLab Deployment Tool;
