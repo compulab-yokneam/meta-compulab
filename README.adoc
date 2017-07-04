@@ -25,7 +25,7 @@ $: repo sync
 
 #### Clone meta-compulab layer:
 [source,console]
-$: git clone https://github.com/compulab-yokneam/meta-compulab sources/meta-compulab
+$: git clone -b devel --single-branch https://github.com/compulab-yokneam/meta-compulab sources/meta-compulab
 
 ### Build Procedure
 #### Select an available machine: cm-fx6-evk/cl-som-imx6ul/cl-som-imx7/cl-som-imx6
