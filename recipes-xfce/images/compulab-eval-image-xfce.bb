@@ -23,6 +23,7 @@ CORE_IMAGE_BASE_INSTALL += "\
 	nfs-utils \
 	nfs-utils-client \
 	bt-start \
+	cl-deploy \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_cl-som-imx6 += "chromium"
