@@ -14,6 +14,7 @@ inherit core-image
 IMAGE_INSTALL += "\
 	packagegroup-core-x11-sato-games \
 	packagegroup-fsl-gstreamer1.0-full \
+	gstreamer1.0-plugins-imx \
 	chromium \
 	nodejs \
 	iperf \

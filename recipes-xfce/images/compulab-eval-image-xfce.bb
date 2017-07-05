@@ -15,6 +15,7 @@ CORE_IMAGE_BASE_INSTALL += "\
 	packagegroup-xfce-base \
 	nodejs \
 	packagegroup-fsl-gstreamer1.0-full \
+	gstreamer1.0-plugins-imx \
 	iperf \
 	libtool \
 	libexif \
