@@ -22,7 +22,7 @@ do_install_cl-som-imx6() {
 	mkdir -p ${D}/usr/share/applications/
 	cp ${S}/cl-deploy ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.work ${D}/usr/local/bin/
-	cp ${S}/cl-deploy.png ${D}/usr/local/bin/
+	cp ${S}/cl-deploy.png ${D}/usr/share/applications/
 	cp ${S}/cl-deploy.desktop ${D}/usr/share/applications/
 }
 
