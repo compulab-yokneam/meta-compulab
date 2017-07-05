@@ -26,4 +26,5 @@ IMAGE_INSTALL += "\
 	nfs-utils-client \
 	bt-start \
 	cl-deploy \
+	video-input \
 "
