@@ -7,6 +7,9 @@ setenv kernel_file zImage
 setenv vmalloc vmalloc=256M
 setenv console ttymxc3,115200
 
+test ! -z "$cpu_type" && test $cpu_type = 'MX6QP' && setenv fdt_file imx6qp-sbc-imx6-hdmi.dtb
+test ! -z "$cpu_type" && test $cpu_type = 'MX6Q' && setenv fdt_file imx6q-sbc-imx6-hdmi.dtb
+
 setenv make_root 'setenv rootdev /dev/${blockdevice}'
 setenv make_args 'setenv bootargs console=${console} root=${rootdev} rootfstype=ext4 rw rootwait ${vmalloc}'
 
@@ -17,9 +20,20 @@ setenv setup_boot 'setenv bootlinux \"\
 		then; \
 			run make_root; \
 			run make_args; \
+			echo "Booting " ${bootdev}"["${bootdev_id}"]=>"${kernel_file}":"${fdt_file}; \
 			bootz ${loadaddr} - ${fdtaddr}; \
 		fi; \
 	fi;\"'
+
+setenv bootdev "sata"
+setenv bootdev_id "0"
+setenv blockdevice sda2
+
+if sata init && sata dev ${bootdev_id}
+then
+	run setup_boot
+	run bootlinux
+fi
 
 setenv bootdev "usb"
 setenv bootdev_id "0"
