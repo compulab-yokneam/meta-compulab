@@ -52,6 +52,8 @@ fi
 
 dialog --title "Start Deployment" --yesno "Src: ${SRC} -> Dst: ${DST}\n\nWarning: All data on ${DST} will be destroyed" 10 80 || exit
 
+[ -f /etc/init.d/udev ] && /etc/init.d/udev stop
+
 umount ${DST}* &>/dev/null
 
 sfdisk --dump ${SRC} | sfdisk ${DST}
