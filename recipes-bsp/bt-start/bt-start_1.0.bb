@@ -16,35 +16,56 @@ python __anonymous() {
         d.setVar("INHIBIT_UPDATERCD_BBCLASS", "1")
 }
 
-inherit update-rc.d
+inherit update-rc.d systemd
 
 SRC_URI = "file://bt-start.sh \
+	   file://bt-start.service \
 	   file://GPLv2.patch"
 
-INITSCRIPT_NAME = "bt-start.sh"
+INIT_NAME = "bt-start.sh"
+SERVICE_NAME = "bt-start.service"
+INITSCRIPT_NAME = "bt-start"
 INITSCRIPT_PARAMS = "start 2 3 4 5"
 
 S = "${WORKDIR}"
 
+ALLOW_EMPTY_${PN} = "1"
+RDEPENDS_${PN} = "bash"
+FILES_${PN} += "${systemd_unitdir}/system/* ${sysconfdir}/init.d/* "
+
 do_install () {
-    # Only install the script if 'sysvinit' is in DISTRO_FEATURES
-    # THe ulitity this script provides could be achieved by systemd-vconsole-setup.service
-    if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
-	install -d ${D}${sysconfdir}/init.d/
-	install -m 0755 ${WORKDIR}/${INITSCRIPT_NAME} ${D}${sysconfdir}/init.d/
-	update-rc.d -r ${D} ${INITSCRIPT_NAME} defaults
+
+    install -d ${D}${sysconfdir}/init.d/
+    install -m 0755 ${WORKDIR}/${INIT_NAME} ${D}${sysconfdir}/init.d/${INITSCRIPT_NAME}
+
+    if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+        install -d ${D}${systemd_unitdir}/system/
+        install -m 644 ${WORKDIR}/${SERVICE_NAME} ${D}/${systemd_unitdir}/system/
     fi
+
 }
 
-DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES','systemd','systemd-systemctl-native','',d)}"
+#DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES','systemd','systemd-systemctl-native','',d)}"
 pkg_postinst_${PN} () {
-	if ${@bb.utils.contains('DISTRO_FEATURES','systemd sysvinit','true','false',d)}; then
-		if [ -n "$D" ]; then
-			OPTS="--root=$D"
-		fi
-		systemctl $OPTS mask bt-start.service
+	if [ -n "$D" ]; then
+		OPTS="--root=$D"
+	fi
+	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+		systemctl $OPTS enable bt-start.service
+	fi
+	if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
+		update-rc.d $OPTS bt-start defaults
 	fi
 }
 
-ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash"
+pkg_postrm_${PN} () {
+	if [ -n "$D" ]; then
+		OPTS="--root=$D"
+	fi
+	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+		systemctl $OPTS disable bt-start.service
+	fi
+	if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
+		update-rc.d $OPTS bt-start remove
+	fi
+}
