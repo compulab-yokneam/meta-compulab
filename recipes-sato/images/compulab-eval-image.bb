@@ -17,14 +17,12 @@ IMAGE_INSTALL += "\
 	gstreamer1.0-plugins-imx \
 	chromium \
 	nodejs \
-	iperf \
 	libtool \
 	libexif \
 	python-compiler \
 	u-boot-fw-utils \
 	nfs-utils \
 	nfs-utils-client \
-	bt-start \
 	cl-deploy \
 	video-input \
 "

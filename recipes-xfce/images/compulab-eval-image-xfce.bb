@@ -10,20 +10,17 @@ REQUIRED_DISTRO_FEATURES = "x11"
 
 CORE_IMAGE_BASE_INSTALL += "\
 	packagegroup-core-boot \
-	${ROOTFS_PKGMANAGE_BOOTSTRAP} \
 	packagegroup-core-x11 \
 	packagegroup-xfce-base \
 	nodejs \
 	packagegroup-fsl-gstreamer1.0-full \
 	gstreamer1.0-plugins-imx \
-	iperf \
 	libtool \
 	libexif \
 	python-compiler \
 	u-boot-fw-utils \
 	nfs-utils \
 	nfs-utils-client \
-	bt-start \
 	cl-deploy \
 	video-input \
 "
