@@ -53,12 +53,17 @@ $: export DISTRO=fsl-imx-wayland
 $: source fsl-setup-release.sh -b build-${MACHINE}-${DISTRO}
 
 #### Pre-Build Steps
-* Add the meta-compulab location to the conf/bblayers.conf
+* Add the `meta-compulab` location to the conf/bblayers.conf
 
 [source,console]
 $: [[ -f conf/bblayers.conf ]] && (sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-compulab "' conf/bblayers.conf) || echo "Warning: Invalid Build Directory"
 
-WARNING: Stop Here if warning shows up
+* Add the `meta-xfce` location to the conf/bblayers.conf
+
+[source,console]
+$: [[ -f conf/bblayers.conf ]] && (sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-xfce "' conf/bblayers.conf) || echo "Warning: Invalid Build Directory"
+
+WARNING: Stop Here if the warning shows up
 
 * Add the second packaging option to the conf/local.conf
 
