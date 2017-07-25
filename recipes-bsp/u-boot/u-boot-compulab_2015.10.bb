@@ -22,6 +22,8 @@ SRC_URI_append_cl-som-imx6ul += "file://cl_som_imx6ul_defconfig \
 	file://0005-arm-imx6ul-enable-nand-for-cl-som-imx6ul.patch \
 	file://0006-arm-imx6ul-add-memory-size-detection-for-cl-som-imx6.patch \
 	file://0007-arm-imx6ul-tag-U-Boot-version-cl-som-imx6ul-1.0.patch \
+	file://0008-arm-imx6ul-fec-Fix-fec-phy-settings.patch \
+	file://0009-arm-imx6ul-tag-U-Boot-version-cl-som-imx6ul-1.1.patch \
 "
 
 S = "${WORKDIR}/git"
