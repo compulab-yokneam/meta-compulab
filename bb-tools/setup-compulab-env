@@ -1,0 +1,76 @@
+#!/bin/bash
+
+CWD=$(pwd)
+PROGNAME=${BASH_SOURCE[0]}
+[ $(basename -- $BASH_SOURCE) == $(basename -- $0) ] && EXIT="exit" || EXIT="return"
+
+if [ "$(whoami)" = "root" ]; then
+    echo "ERROR: do not use the BSP as root. Exiting..."
+    ${EXIT}
+fi
+
+BBLAYERS_CONF=conf/bblayers.conf
+LOCAL_CONF=conf/local.conf
+
+if ([ ! -f ${BBLAYERS_CONF} ] || [ ! -f ${LOCAL_CONF} ]);then
+cat << eom
+    Warning: Files ${BBLAYERS_CONF} and ${LOCAL_CONF} not found.
+    Make sure that the scritp issued at a correct location.
+eom
+    ${EXIT} 2
+fi
+
+BB_CL_CONF_DONE=conf/bb_cl_conf.done
+if [ -f ${BB_CL_CONF_DONE} ];then
+cat << eom
+    Note: Already issued.
+    Nothing to be done.
+eom
+    ${EXIT} 0
+fi
+
+var=$(awk '(/MACHINE|DISTRO/)&&(gsub(/'"'"'/,"")&&($0=$1"="$NF))' ORS=" " ${LOCAL_CONF})
+for v in ${var};do eval ${v}; done
+
+cat << eom
+    Prepare: ${MACHINE}:${DISTRO} ...
+eom
+
+# Miachine's independent stuff
+sed -i '$aBBLAYERS += " \\\n\t${BSPDIR}/sources/meta-compulab \\\n\t${BSPDIR}/sources/meta-openembedded/meta-xfce \\\n"' ${BBLAYERS_CONF}
+sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
+sed -i '$ a LICENSE_FLAGS_WHITELIST="commercial"' ${LOCAL_CONF}
+
+
+EXTRA_INSTALL="cl-deploy"
+
+case ${MACHINE} in
+    'cl-som-imx6ul')
+    meta_ti_dir="../sources/meta-ti"
+    if [ ! -d ${meta_ti_dir} ];then
+        git clone git://git.yoctoproject.org/meta-ti ${meta_ti_dir}
+    else
+        git -C ${meta_ti_dir} remote update
+    fi
+    sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
+    EXTRA_INSTALL+=" uim"
+    ;;
+    'cl-som-imx6')
+    EXTRA_INSTALL+=" video-input chromium libexif"
+    [[ ${DISTRO} =~ "x11" ]] && EXTRA_INSTALL+=" gstreamer1.0-plugins-imx"
+    ;;
+    *)
+    ;;
+esac
+
+sed -i "$ a CORE_IMAGE_EXTRA_INSTALL += \" ${EXTRA_INSTALL}\"" ${LOCAL_CONF}
+
+cat << eom
+    Note: Files ${BBLAYERS_CONF} and ${LOCAL_CONF} updated successfully.
+eom
+
+cat << eom > ${BB_CL_CONF_DONE}
+"`date`"
+eom
+
+${EXIT} 0
