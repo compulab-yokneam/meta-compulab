@@ -17,7 +17,7 @@ SRC_URI = " \
 
 S = "${WORKDIR}"
 
-do_install_cl-som-imx6() {
+do_install() {
 	mkdir -p ${D}/usr/local/bin/
 	mkdir -p ${D}/usr/share/applications/
 	cp ${S}/cl-deploy ${D}/usr/local/bin/
@@ -26,7 +26,7 @@ do_install_cl-som-imx6() {
 	cp ${S}/cl-deploy.desktop ${D}/usr/share/applications/
 }
 
-FILES_${PN}_cl-som-imx6 = " \
+FILES_${PN} = " \
 	/usr/local/bin/* \
 	/usr/share/applications/* \
 "
