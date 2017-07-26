@@ -7,13 +7,12 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 SRC_URI_append_use-mainline-bsp = " file://Environment-variable-enabling-the-workaround-FBO-rea.patch"
 SRC_URI_append_imxgpu2d = " \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'file://0014-Add-IMX-GPU-support-x11.patch', \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'x11', '', \
                                                    'file://0014-Add-IMX-GPU-support.patch', d)} \
 "
 SRC_URI_append_imxgpu3d = " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'x11', '', \
-                                                   'file://0015-Add-eglfs-to-IMX-GPU.patch \
-                                                    file://0016-Configure-eglfs-with-egl-pkg-config.patch', d)} \
+                                                   'file://0015-Add-eglfs-to-IMX-GPU.patch', d)} \
 "
 
 PACKAGECONFIG_GL_imxpxp   = "gles2"
