@@ -3,4 +3,7 @@
 WORK=/usr/local/bin/cl-deploy.work
 
 [[ ! -z ${DISPLAY} ]] && EXEC="xterm -e" || EXEC="source"
+# Prevent spanning another xterm if we in
+[[ ${TERM} = "xterm" ]] && EXEC="source"
+
 ${EXEC} ${WORK}
