@@ -96,6 +96,9 @@ done
 
 [[ ${DST} =~ "mmc" ]] && DST=${DST:0:$((${#DST}-1))}
 
+UPDATE_ENV="/usr/local/bin/cl-deploy.env"
+[[ -e ${UPDATE_ENV} ]] && source ${UPDATE_ENV}
+
 dialog --title "Finished with success" --yesno "Boot media has been deployed on ${DST}\n\nWould you like to reboot the device now?" 10 80 && reboot
 
 exit

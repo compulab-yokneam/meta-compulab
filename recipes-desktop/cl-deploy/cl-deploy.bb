@@ -15,6 +15,10 @@ SRC_URI = " \
 	file://COPYING \
 "
 
+SRC_URI_append_cl-som-imx6ul = " \
+	file://cl-deploy.env_cl-som-imx6ul \
+"
+
 S = "${WORKDIR}"
 
 do_install() {
@@ -24,6 +28,10 @@ do_install() {
 	cp ${S}/cl-deploy.work ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.png ${D}/usr/share/applications/
 	cp ${S}/cl-deploy.desktop ${D}/usr/share/applications/
+}
+
+do_install_append_cl-som-imx6ul() {
+	cp ${S}/cl-deploy.env_cl-som-imx6ul ${D}/usr/local/bin/cl-deploy.env
 }
 
 FILES_${PN} = " \
