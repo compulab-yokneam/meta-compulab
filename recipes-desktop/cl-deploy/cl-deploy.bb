@@ -32,4 +32,4 @@ FILES_${PN} = " \
 "
 
 ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash xterm pv dialog"
+RDEPENDS_${PN} = "bash xterm pv dialog u-boot-fw-utils"
