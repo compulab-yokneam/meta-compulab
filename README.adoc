@@ -1,1 +1,1 @@
-# https://github.com/compulab-yokneam/Documentation/tree/master/meta-compulab#meta-compulab[meta-compulab]
+# https://github.com/compulab-yokneam/meta-compulab/wiki[meta-compulab wiki]
