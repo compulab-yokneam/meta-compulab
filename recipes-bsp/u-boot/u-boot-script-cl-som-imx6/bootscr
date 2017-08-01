@@ -6,6 +6,8 @@ setenv bootm_low 0x15000000
 setenv kernel_file zImage
 setenv video vmalloc=256M cma=384M dmfc=3
 setenv console ttymxc3,115200
+setenv env_addr 0x10500000
+setenv env_file boot.env
 
 test ! -z "$cpu_type" && test $cpu_type = 'MX6QP' && setenv fdt_file imx6qp-sbc-imx6-hdmi.dtb
 test ! -z "$cpu_type" && test $cpu_type = 'MX6Q' && setenv fdt_file imx6q-sbc-imx6-hdmi.dtb
@@ -14,6 +16,7 @@ setenv make_root 'setenv rootdev /dev/${blockdevice}'
 setenv make_args 'setenv bootargs console=${console} root=${rootdev} rootfstype=ext4 rw rootwait ${video}'
 
 setenv setup_boot 'setenv bootlinux \"\
+	load ${bootdev} ${bootdev_id} ${env_addr} ${env_file} && env import -t ${env_addr} ${filesize}; \
 	if load ${bootdev} ${bootdev_id} ${loadaddr} ${kernel_file}; \
 	then; \
 		if load ${bootdev} ${bootdev_id} ${fdtaddr} ${fdt_file}; \
