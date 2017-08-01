@@ -24,6 +24,7 @@ SRC_URI_append_cm-fx6-evk += "file://cm-fx6-evk/defconfig \
 	file://cm-fx6-evk/0023-ARM-i.MX6-dts-add-hdmi-to-fb0-mapping-for-eval-board.patch \
 	file://cm-fx6-evk/0024-ARM-i.MX6-dts-refactoring-hdmi-mipi-configuration.patch \
 	file://0034-ARM-i.MX6-dts-add-ov564x-mipi-camera-support.patch \
+	file://0057-ARM-i.MX6-dts-fix-ldb-timings.patch \
 	file://cm-fx6-evk/0061-ARM-i.MX6-cm-fx6-dts-Add-parallel-camera-support.patch \
 	file://cm-fx6-evk/0062-ARM-i.MX6-cm-fx6-defconfig-enable-tvp5150.patch \
 	file://cm-fx6-evk/0065-ARM-i.MX6-cm-fx6-defconfig-enable-POSIX_MQUEUE.patch \
