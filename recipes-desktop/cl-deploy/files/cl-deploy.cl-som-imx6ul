@@ -5,7 +5,7 @@ com1=$(which fw_setenv)
 mtd_dev=/dev/mtd2
 
 if [[ $DST =~ 'mmcblk1' ]];then
-mmcdev=1; dtb="-wifi"
+mmcdev=1; dtb="-wilink"
 else
 mmcdev=0; dtb=""
 fi
