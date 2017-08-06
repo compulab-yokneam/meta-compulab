@@ -23,6 +23,7 @@ CORE_IMAGE_BASE_INSTALL += "\
 	nfs-utils-client \
 	cl-deploy \
 	video-input \
+	can-utils \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_cl-som-imx6 += "chromium"

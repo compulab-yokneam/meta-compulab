@@ -25,4 +25,5 @@ IMAGE_INSTALL += "\
 	nfs-utils-client \
 	cl-deploy \
 	video-input \
+	can-utils \
 "

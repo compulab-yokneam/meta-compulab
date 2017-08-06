@@ -42,10 +42,10 @@ sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
 sed -i '$ a LICENSE_FLAGS_WHITELIST="commercial"' ${LOCAL_CONF}
 
 
-EXTRA_INSTALL="cl-deploy"
+EXTRA_INSTALL="cl-deploy can-utils"
 
 case ${MACHINE} in
-    'cl-som-imx6ul')
+    cl-som-imx6ul)
     meta_ti_dir="../sources/meta-ti"
     if [ ! -d ${meta_ti_dir} ];then
         git clone git://git.yoctoproject.org/meta-ti ${meta_ti_dir}
@@ -55,7 +55,7 @@ case ${MACHINE} in
     sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
     EXTRA_INSTALL+=" uim"
     ;;
-    'cl-som-imx6')
+    cl-som-imx6|cm-fx6-evk)
     EXTRA_INSTALL+=" video-input chromium libexif"
     [[ ${DISTRO} =~ "x11" ]] && EXTRA_INSTALL+=" gstreamer1.0-plugins-imx"
     ;;
