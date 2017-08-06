@@ -33,6 +33,7 @@ SRC_URI_append_cl-som-imx6 += " \
 	file://0016-arm-mx6-cl-som-imx6-Add-ATP-support.patch \
 	file://0017-arm-mx6-cl_som_mx6-Tag-u-boot-version-cl-som-imx6-1..patch \
 	file://0018-arm-mx6qp-cl_som_mx6-update-mmdc-settings.patch \
+	file://0020-arm-mx6-cl-som-imx6-change-boot-device-order.patch \
 "
 
 S = "${WORKDIR}/u-boot-2015.07-cm-fx6-3"
