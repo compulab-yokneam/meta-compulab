@@ -9,14 +9,14 @@ do
 done
 
 if [[ -b ${root} ]];then
-i=1
-[[ ${root} =~ "mmc" ]] && ((i++))
-len=$((${#root}-$i))
-source=${root:0:${len}}
+source=$(udevadm info -n ${root} | awk -F "block" '(/DEVPATH/)&&(split($2,a,"/"))&&($0=a[2])')
+else
+dialog --title "Warning" --msgbox "No soucre device availabe\nSelect will be available soon\nExiting ..." 10 40
+exit 0
 fi
 
 if [[ ! -z ${source} ]];then
-all_devs=$(ls /sys/class/block/*/size | awk -F"/" '($5~/sd|mmc/)&&($0=$5)')
+all_devs=$(ls /sys/class/block/*/size | awk -v var=${source} -F"/" '(($0!~var)&&(/mmc|sd/)&&($0=$5))')
 avail_devs=""
 min_size_inb=$(df --block-size=512 / | awk '(/^\//)&&($0=$3)')
 for dev in ${all_devs};do
@@ -25,8 +25,6 @@ for dev in ${all_devs};do
 	# Device size check
 	size=$(cat /sys/class/block/${dev}/size)
 	[ ${size} -lt ${min_size_inb} ] && continue
-	# Skip source
-	[[ ${source} =~ ${dev} ]] && continue
 	avail_devs=${avail_devs}" "$dev
 done
 
@@ -38,6 +36,7 @@ for adev in ${avail_devs};do
 done
 dialog --title "Select a destination device" --radiolist "Available Devices:" 12 80 12 $rlist 2>/tmp/.rlist && destination=$(cat /tmp/.rlist)
 
+source="/dev/"${source}
 fi
 
 SRC=${source} DST=${destination}
