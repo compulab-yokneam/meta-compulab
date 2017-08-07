@@ -24,6 +24,8 @@ IMAGE_INSTALL += "\
 	nfs-utils \
 	nfs-utils-client \
 	cl-deploy \
+	cl-uboot \
 	video-input \
 	can-utils \
+	u-boot-compulab \
 "

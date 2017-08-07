@@ -22,8 +22,10 @@ CORE_IMAGE_BASE_INSTALL += "\
 	nfs-utils \
 	nfs-utils-client \
 	cl-deploy \
+	cl-uboot \
 	video-input \
 	can-utils \
+	u-boot-compulab \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_cl-som-imx6 += "chromium"
