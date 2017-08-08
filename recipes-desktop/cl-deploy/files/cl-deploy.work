@@ -11,7 +11,7 @@ done
 if [[ -b ${root} ]];then
 source=$(udevadm info -n ${root} | awk -F "block" '(/DEVPATH/)&&(split($2,a,"/"))&&($0=a[2])')
 else
-dialog --title "Warning" --msgbox "No soucre device availabe\nSelect will be available soon\nExiting ..." 10 40
+dialog --backtitle "No source device available" --title " WARNING " --msgbox "No soucre device availabe\nExiting ..." 10 60
 exit 0
 fi
 
@@ -28,28 +28,32 @@ for dev in ${all_devs};do
 	avail_devs=${avail_devs}" "$dev
 done
 
+if [[ ! -z "${avail_devs}" ]];then
 avail_devs="${avail_devs#"${avail_devs%%[![:space:]]*}"}"
-
+rlist=''
 for adev in ${avail_devs};do
 	ddev=$(udevadm info -p /sys/class/block/${adev} | awk '(/ disk\/by-id/)&&(split($2,a,"/")&&($0=a[3]))')
+	[[ -z "${ddev}" ]] && ddev=${adev}
 	rlist=${rlist}"/dev/"${adev}" "${ddev}" OFF "
 done
-dialog --title "Select a destination device" --radiolist "Available Devices:" 12 80 12 $rlist 2>/tmp/.rlist && destination=$(cat /tmp/.rlist)
+dialog --backtitle "Select a destination device" --radiolist "Available Devices:" 12 80 12 ${rlist} 2>/tmp/.rlist && destination=$(cat /tmp/.rlist) || exit 0
+fi
 
 source="/dev/"${source}
 fi
 
-SRC=${source} DST=${destination}
+SRC=${source}
+DST=${destination}
 
 msrc=/tmp/src
 mdst=/tmp/dst
 
 if [[ -z ${SRC} || -z ${DST} ]];then
-dialog --title "Warning" --msgbox "No destination found\nPess any key for exit." 10 80
+dialog --backtitle "No destination found" --title " WARNING " --msgbox "No destination found\nPess any key for exit." 10 80
 exit 2
 fi
 
-dialog --title "Start Deployment" --yesno "Src: ${SRC} -> Dst: ${DST}\n\nWarning: All data on ${DST} will be destroyed" 10 80 || exit
+dialog --backtitle "Start Deployment" --title " WARNING " --yesno "Src: ${SRC} -> Dst: ${DST}\n\nAll data on ${DST} will be destroyed" 10 80 || exit
 
 [ -f /etc/init.d/udev ] && /etc/init.d/udev stop
 
@@ -59,14 +63,14 @@ sfdisk --dump ${SRC} | sfdisk ${DST}
 echo ",,83" | sfdisk -N 1 ${DST}
 echo ",+" | sfdisk -N 2 ${DST}
 
-[[ ${DST} =~ "mmc" ]] && DST=${DST}p
-[[ ${SRC} =~ "mmc" ]] && SRC=${SRC}p
-
 cat << eom
 
-	SRC=${SRC} ==> DST=${DST}
+	Started: ${SRC} ==> ${DST}
 
 eom
+
+[[ ${DST} =~ "mmc" ]] && DST=${DST}p
+[[ ${SRC} =~ "mmc" ]] && SRC=${SRC}p
 
 mkfs.ext2 -F -L boot ${DST}1
 mkfs.ext4 -F -L rootfs ${DST}2
@@ -75,29 +79,28 @@ umount ${DST}* &>/dev/null
 
 mkdir -p ${msrc} ${mdst}
 
-mount ${SRC}2 ${msrc}
-mount ${SRC}1 ${msrc}/boot
+declare -a parts='1 2'
 
-mount ${DST}2 ${mdst}
-mkdir -p ${mdst}/boot
-mount ${DST}1 ${mdst}/boot
-
-tar -C ${msrc} -cf - . | pv | tar -C ${mdst} -xf -
-
-for m in ${msrc}/boot ${msrc} ${mdst}/boot ${mdst}
-do
-	sleep 1
-cat << eom
-	Unmounting ${m} ....
-eom
-	umount -l ${m}
+for P in $parts; do
+mount ${SRC}${P} ${msrc}
+mount ${DST}${P} ${mdst}
+prompt="[ ${SRC}${P} => ${DST}${P} ]"
+tar -C ${msrc} -cf - . | pv -N "${prompt}"| tar -C ${mdst} -xf -
+umount ${DST}${P}
+umount ${SRC}${P}
 done
+
+cat << eom
+
+	Done: ${SRC} ==> ${DST}
+
+eom
 
 [[ ${DST} =~ "mmc" ]] && DST=${DST:0:$((${#DST}-1))}
 
 CL_DEPLOY_PLATFORM="/usr/local/bin/cl-deploy.platform"
 [[ -e ${CL_DEPLOY_PLATFORM} ]] && source ${CL_DEPLOY_PLATFORM}
 
-dialog --title "Finished with success" --yesno "Boot media has been deployed on ${DST}\n\nWould you like to reboot the device now?" 10 80 && reboot
+dialog --backtitle "Finished with success" --yesno "Boot media has been deployed on ${DST}\n\nWould you like to reboot the device now?" 10 80 && reboot
 
 exit
