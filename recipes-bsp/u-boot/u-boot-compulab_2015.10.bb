@@ -24,6 +24,7 @@ SRC_URI_append_cl-som-imx6ul += "file://cl_som_imx6ul_defconfig \
 	file://0007-arm-imx6ul-tag-U-Boot-version-cl-som-imx6ul-1.0.patch \
 	file://0008-arm-imx6ul-fec-Fix-fec-phy-settings.patch \
 	file://0009-arm-imx6ul-tag-U-Boot-version-cl-som-imx6ul-1.1.patch \
+	file://0010-arm-imx6ul-Enable-CONFIG_OF_BOARD_SETUP.patch \
 "
 
 S = "${WORKDIR}/git"
