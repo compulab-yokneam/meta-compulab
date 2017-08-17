@@ -1,9 +1,19 @@
 #!/bin/bash -xv
 
+get_cmdline_device() {
+for var in $(cat /proc/cmdline);do [[ $var =~ "=" ]] && eval $var;done
+[[ -b ${root} ]] && block_boot_dev=$(udevadm info -n ${root} | awk -F "block" '(/DEVPATH/)&&(split($2,a,"/"))&&($0="/dev/"a[2])')
+}
+
+block_boot_dev=''
 WORK=/usr/local/bin/cl-deploy.work
 
 [[ ! -z ${DISPLAY} ]] && EXEC="xterm -e" || EXEC="source"
 # Prevent spanning another xterm if we in
 [[ ${TERM} = "xterm" ]] && EXEC="source"
+
+get_cmdline_device
+export SRC=${block_boot_dev}
+export SCAN_ALL=0
 
 ${EXEC} ${WORK}

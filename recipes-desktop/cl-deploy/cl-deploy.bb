@@ -10,6 +10,7 @@ PR = "r1"
 SRC_URI = " \
 	file://cl-deploy \
 	file://cl-deploy.work \
+	file://cl-deploy.mtd \
 	file://cl-deploy.desktop \
 	file://cl-deploy.png \
 	file://COPYING \
@@ -26,6 +27,7 @@ do_install() {
 	mkdir -p ${D}/usr/share/applications/
 	cp ${S}/cl-deploy ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.work ${D}/usr/local/bin/
+	cp ${S}/cl-deploy.mtd ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.png ${D}/usr/share/applications/
 	cp ${S}/cl-deploy.desktop ${D}/usr/share/applications/
 }
@@ -40,4 +42,4 @@ FILES_${PN} = " \
 "
 
 ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash xterm pv dialog u-boot-fw-utils"
+RDEPENDS_${PN} = "bash xterm pv dialog u-boot-fw-utils file gzip bzip2 dosfstools"
