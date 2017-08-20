@@ -30,4 +30,6 @@ SRC_URI_append_cm-fx6-evk += "file://cm-fx6-evk/defconfig \
 	file://cm-fx6-evk/0065-ARM-i.MX6-cm-fx6-defconfig-enable-POSIX_MQUEUE.patch \
 	file://0067-ARM-i.MX6-dts-disable-tvp5150-by-default.patch \
 	file://cm-fx6-evk/0068-ARM-i.MX6-cm-fx6-dts-tvp5150-to-enable-uart5-to-disa.patch \
+	file://0070-ARM-i.MX6-dts-enable-snvs_poweroff.patch \
+	file://cm-fx6-evk/0072-ARM-i.MX6-cm-fx6-Update-defconfig-for-snvs_poweroff.patch \
 "

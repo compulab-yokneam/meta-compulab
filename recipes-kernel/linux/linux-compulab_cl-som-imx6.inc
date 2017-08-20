@@ -63,4 +63,6 @@ SRC_URI_append_cl-som-imx6 += "\
 	file://cl-som-imx6/0066-ARM-i.MX6-cl-som-imx6-defconfig-enable-POSIX_MQUEUE.patch \
 	file://0067-ARM-i.MX6-dts-disable-tvp5150-by-default.patch \
 	file://cl-som-imx6/0069-ARM-i.MX6-cl-som-imx6-dts-tvp5150-to-enable-uart5-to.patch \
+	file://0070-ARM-i.MX6-dts-enable-snvs_poweroff.patch \
+	file://cl-som-imx6/0071-ARM-i.MX6-cl-som-imx6-Update-defconfig-for-snvs_powe.patch \
 "
