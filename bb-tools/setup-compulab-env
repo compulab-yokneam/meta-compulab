@@ -29,8 +29,7 @@ eom
     ${EXIT} 0
 fi
 
-var=$(awk '(/MACHINE|DISTRO/)&&(gsub(/'"'"'/,"")&&($0=$1"="$NF))' ORS=" " ${LOCAL_CONF})
-for v in ${var};do eval ${v}; done
+eval $(awk '(/MACHINE|DISTRO/)&&(gsub(/'"'"'/,"")&&($0=$1"="$NF))' ORS=";" ${LOCAL_CONF})
 
 cat << eom
     Prepare: ${MACHINE}:${DISTRO} ...
@@ -45,14 +44,14 @@ sed -i '$ a LICENSE_FLAGS_WHITELIST="commercial"' ${LOCAL_CONF}
 EXTRA_INSTALL="cl-deploy cl-uboot u-boot-compulab can-utils"
 
 case ${MACHINE} in
-    cl-som-imx6ul)
+    cl-som-imx6ul|cl-som-imx7)
     meta_ti_dir="../sources/meta-ti"
     if [ ! -d ${meta_ti_dir} ];then
         git clone git://git.yoctoproject.org/meta-ti ${meta_ti_dir}
     else
         git -C ${meta_ti_dir} remote update
     fi
-    sed -i '$aBBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
+    sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
     EXTRA_INSTALL+=" uim"
     ;;
     cl-som-imx6|cm-fx6-evk)
@@ -70,7 +69,7 @@ cat << eom
 eom
 
 cat << eom > ${BB_CL_CONF_DONE}
-"`date`"
+$(date)
 eom
 
 ${EXIT} 0
