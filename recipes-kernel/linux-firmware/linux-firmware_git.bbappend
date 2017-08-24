@@ -11,6 +11,8 @@ SRC_URI[TIInit_11.8.32.sha256sum] = "26ab0608e39fab95a6a55070c2f8364c92aad34442e
 
 do_install_append() {
     cp ${WORKDIR}/TIInit_11.8.32.bts ${D}/lib/firmware/ti-connectivity/
+
+    rm -rf ${D}/lib/firmware/ti-connectivity/wl1271-nvs.bin ${D}/lib/firmware/wl1271-nvs.bin
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
