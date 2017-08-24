@@ -8,7 +8,7 @@ for var in $(cat /proc/cmdline);do [[ $var =~ "=" ]] && eval $var;done
 block_boot_dev=''
 WORK=/usr/local/bin/cl-deploy.work
 
-[[ ! -z ${DISPLAY} ]] && EXEC="xterm -e" || EXEC="source"
+[[ ! -t 0 ]] && EXEC="xterm -e" || EXEC="source"
 # Prevent spanning another xterm if we in
 [[ ${TERM} = "xterm" ]] && EXEC="source"
 
