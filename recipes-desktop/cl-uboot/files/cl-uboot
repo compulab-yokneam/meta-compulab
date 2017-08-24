@@ -1,8 +1,8 @@
-#!/bin/bash -xv
+#!/bin/bash
 
 WORK=/usr/local/bin/cl-uboot.work
 
-[[ ! -z ${DISPLAY} ]] && EXEC="xterm -e" || EXEC="source"
+[[ ! -t 0 ]] && EXEC="xterm -e" || EXEC="source"
 # Prevent spanning another xterm if we in
 [[ ${TERM} = "xterm" ]] && EXEC="source"
 
