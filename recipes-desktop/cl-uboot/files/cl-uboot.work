@@ -41,7 +41,7 @@ mtd_dev_size=$(awk -v dev=${device} '($0~dev)&&($0="0x"$2)' /proc/mtd)
 mtd_read_file=/tmp/mtd-read-${offset}-${Size}
 mtd_debug read ${device_file} ${offset} ${Size} ${mtd_read_file} &>/dev/null
 
-version1=$(strings ${File} | awk '(/^U-Boot.*\(/)&&(gsub(/SPL /,""))')
+version1=$(strings ${File} | awk '(/^U-Boot.*\(/)')
 if [ -z "${version1}" ];then
 TITLE="WARNING"
 DIALOG="Source File:\n"
@@ -71,7 +71,7 @@ exit 0
 fi
 fi
 
-version2=$(strings ${mtd_read_file} | awk '(/^U-Boot.*\(/)&&(gsub(/SPL /,""))')
+version2=$(strings ${mtd_read_file} | awk '(/^U-Boot.*\(/)')
 [ -z "${version2}" ] && version2="--N/A--"
 
 TITLE="Start U-Boot Update"
