@@ -50,7 +50,7 @@ for P in ${part_info};do
     mount ${DST}${DPART}${part} ${mdst}
     mount ${SRC}${SPART}${part} ${msrc}
     prompt="[ ${SRC}${SPART}${part} => ${DST}${DPART}${part} ]"
-    tar -C ${msrc} -cf - . | pv -N "${prompt}"| tar -C ${mdst} -xf -
+    tar -C ${msrc} -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
     umount ${msrc}
     umount ${mdst}
 done
@@ -79,7 +79,7 @@ eom
 
     mount ${DST}${DPART}2 ${mdst}
     prompt="[ ${SRC} => ${DST}${DPART}2 ]"
-    pv ${SRC} | tar -C ${mdst} -x${filter}f -
+    pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null
 
     if [[ -d ${mdst}/boot ]];then
         local boot_dir=$(mktemp -d)
@@ -118,7 +118,7 @@ eom
         if [[ $? -eq 0 ]];then
             mount ${DST}${DPART}${P} ${mdst}
             prompt="[ ${SRC}${SPART}${src_parts[P]} => ${DST}${DPART}${P} ]"
-            tar -C ${msrc} -cf - . | pv -N "${prompt}"| tar -C ${mdst} -xf -
+            tar -C ${msrc} -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
             umount ${mdst}
             umount ${msrc}
         else
