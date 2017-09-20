@@ -41,7 +41,7 @@ sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
 sed -i '$ a LICENSE_FLAGS_WHITELIST="commercial"' ${LOCAL_CONF}
 
 
-EXTRA_INSTALL="cl-deploy cl-uboot u-boot-compulab can-utils"
+EXTRA_INSTALL="cl-deploy cl-uboot u-boot-compulab can-utils ntp dhcp-client"
 
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
@@ -53,6 +53,7 @@ case ${MACHINE} in
     fi
     sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
     EXTRA_INSTALL+=" uim"
+    EXTRA_INSTALL+=" crda hostapd"
     ;;
     cl-som-imx6|cm-fx6-evk)
     EXTRA_INSTALL+=" video-input chromium libexif"
