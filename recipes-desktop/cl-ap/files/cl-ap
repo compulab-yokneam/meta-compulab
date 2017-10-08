@@ -1,0 +1,10 @@
+#!/bin/bash -xv
+
+WORK=/usr/local/bin/cl-ap.work
+
+[[ ! -t 0 ]] && EXEC="xterm -e" || EXEC="source"
+# Prevent spanning another xterm if we in
+[[ ${TERM} = "xterm" ]] && EXEC="source"
+[[ ${EXEC} = "source" ]] || PARAMS="$@"
+
+${EXEC} ${WORK} ${PARAMS}

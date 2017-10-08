@@ -1,0 +1,125 @@
+#!/bin/bash
+
+########## variables ##########
+
+WLAN=wlan0
+HOSTAPD_CONF=/etc/hostapd-cl.conf
+UDHCPD_CONF=/etc/udhcpd-cl.conf
+AP_NET=172.16.43
+IP_ADDR=${AP_NET}.1
+SSID=compulabssid
+WPA_PASSPHRASE=compulabpassword
+
+hostapd_conf() {
+cat << eof > ${HOSTAPD_CONF}
+interface=${WLAN}
+hw_mode=a
+channel=36
+ieee80211d=1
+country_code=US
+ieee80211n=1
+#ieee80211ac=1
+wmm_enabled=1
+ssid=${SSID}
+auth_algs=1
+wpa=2
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+wpa_passphrase=${WPA_PASSPHRASE}
+eof
+}
+
+udhcpd_conf() {
+cat << eof > ${UDHCPD_CONF}
+start           ${AP_NET}.10
+end             ${AP_NET}.254
+interface       ${WLAN}
+opt     dns     8.8.8.8 8.8.4.4 #public google dns servers
+option  subnet  255.255.255.0
+opt     router  ${AP_NET}.1
+option  lease   864000          # default: 10 days
+option  0x08    01020304        # option 8: "cookie server IP addr: 1.2.3.4"
+eof
+}
+
+get_daemon_pids() {
+unset HOSTAPD_PID
+unset UDHCPD_PID
+eval $(ps -eo comm,pid | awk '/hostapd/&&($0="HOSTAPD_PID="$2)')
+eval $(ps -eo comm,pid | awk '/udhcpd/&&($0="UDHCPD_PID="$2)')
+}
+########## body ##########
+
+ap_config() {
+### check for configuration file
+### hostapd
+[ ! -f ${HOSTAPD_CONF} ] && hostapd_conf
+
+### udhcpd
+[ ! -f ${UDHCPD_CONF} ] && udhcpd_conf
+}
+
+ap_reconfig() {
+[ -f ${HOSTAPD_CONF} ] && rm -rf ${HOSTAPD_CONF}
+[ -f ${UDHCPD_CONF} ] && rm -rf ${UDHCPD_CONF}
+ap_config
+}
+
+ap_start() {
+
+ap_config
+
+### configure ip forewarding
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+get_daemon_pids
+### start a hostapd interface, if not present
+if [ -z "${HOSTAPD_PID}" ]; then
+ hostapd -B ${HOSTAPD_CONF}
+ sleep 1 
+fi
+
+### configure ip
+ifconfig ${WLAN} ${IP_ADDR} netmask 255.255.255.0 up
+
+### start udhcpd server, if not started
+if [ -z "${UDHCPD_PID}" ]; then
+ udhcpd ${UDHCPD_CONF}
+fi
+
+### configure nat
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+}
+
+ap_stop() {
+get_daemon_pids
+### stop a hostapd interface, if present
+[ ! -z "${HOSTAPD_PID}" ] && kill -9 ${HOSTAPD_PID}
+
+### stop udhcpd server, if started
+[ ! -z "${UDHCPD_PID}" ] && kill -9 ${UDHCPD_PID}
+
+### disable ip forewarding
+echo 0 > /proc/sys/net/ipv4/ip_forward
+
+### unconfigure ip
+ifconfig ${WLAN} down
+}
+
+case "$1" in
+start)
+	ap_start
+	;;
+stop)
+	ap_stop
+	;;
+reconfig)
+	ap_reconfig
+	;;
+
+*)
+	echo "Usage: $0 {start|stop|reconfig}"
+	exit 1
+esac
+
+exit 0
