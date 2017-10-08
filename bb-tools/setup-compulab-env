@@ -52,8 +52,7 @@ case ${MACHINE} in
         git -C ${meta_ti_dir} remote update
     fi
     sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
-    EXTRA_INSTALL+=" uim"
-    EXTRA_INSTALL+=" crda hostapd"
+    EXTRA_INSTALL+=" uim crda hostapd cl-ap"
     ;;
     cl-som-imx6|cm-fx6-evk)
     EXTRA_INSTALL+=" video-input chromium libexif"
