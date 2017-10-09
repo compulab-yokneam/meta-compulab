@@ -10,6 +10,7 @@ PR = "r1"
 SRC_URI = " \
 	file://cl-ap \
 	file://cl-ap.work \
+	file://cl-ap-inter.work \
 	file://cl-ap.desktop \
 	file://cl-ap.png \
 	file://COPYING \
@@ -22,6 +23,7 @@ do_install() {
 	mkdir -p ${D}/usr/share/applications/
 	cp ${S}/cl-ap ${D}/usr/local/bin/
 	cp ${S}/cl-ap.work ${D}/usr/local/bin/
+	cp ${S}/cl-ap-inter.work ${D}/usr/local/bin/
 	cp ${S}/cl-ap.png ${D}/usr/share/applications/
 	cp ${S}/cl-ap.desktop ${D}/usr/share/applications/
 }
@@ -32,4 +34,4 @@ FILES_${PN} = " \
 "
 
 ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash xterm crda hostapd dhcpcd iptables"
+RDEPENDS_${PN} = "dialog bash xterm crda hostapd dhcpcd iptables"

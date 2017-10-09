@@ -6,9 +6,13 @@ WLAN=wlan0
 HOSTAPD_CONF=/etc/hostapd-cl.conf
 UDHCPD_CONF=/etc/udhcpd-cl.conf
 AP_NET=172.16.43
-IP_ADDR=${AP_NET}.1
 SSID=compulabssid
 WPA_PASSPHRASE=compulabpassword
+
+CONF_FILE=/etc/cl-ap.conf
+[ -f ${CONF_FILE} ] && source ${CONF_FILE}
+
+IP_ADDR=${AP_NET}.1
 
 hostapd_conf() {
 cat << eof > ${HOSTAPD_CONF}
