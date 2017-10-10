@@ -28,11 +28,11 @@ setenv setup_boot 'run load_env; \
 	setenv bootlinux \"\
 	if load ${bootdev} ${bootdev_id} ${loadaddr} ${kernel_file}; \
 	then; \
-		if load ${bootdev} ${bootdev_id} ${fdtaddr} ${fdt_file}; \
+		if load ${bootdev} ${bootdev_id} ${fdt_addr} ${fdt_file}; \
 		then; \
 			run setup_ext; run setup_args; \
 			echo "Booting " ${bootdev}"["${bootdev_id}"]=>"${kernel_file}":"${fdt_file}; \
-			bootz ${loadaddr} - ${fdtaddr}; \
+			bootz ${loadaddr} - ${fdt_addr}; \
 		fi; \
 	fi;\"'
 
