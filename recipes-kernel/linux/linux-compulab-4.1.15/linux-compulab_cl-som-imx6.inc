@@ -29,7 +29,6 @@ SRC_URI_append_cl-som-imx6 += "\
 	file://cl-som-imx6/0027-ARM-i.MX6-update-defconfig.patch \
 	file://cl-som-imx6/0029-ARM-i.MX6-cm-fx6-disable-FSL-CAAM.patch \
 	file://cl-som-imx6/0030-ARM-i.MX6-Enable-MXC-Vivante-GPU-as-a-module.patch \
-	file://cl-som-imx6/0031-GPU-VIV-Use-the-imx-gpu-viv-5.0.11.p8.6.patch \
 	file://cl-som-imx6/0032-IMX-Serial-from-Mainline-4.6.patch \
 	file://cl-som-imx6/0033-ARM-i.MX6-Disable-uart1-RX-DMA.patch \
 	file://0034-ARM-i.MX6-dts-add-ov564x-mipi-camera-support.patch \
