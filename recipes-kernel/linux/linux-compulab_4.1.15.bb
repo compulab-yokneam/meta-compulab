@@ -15,13 +15,13 @@ SRC_URI += "file://0001-platform-add-depends-property-handler.patch \
 	file://Fix-the-compile-issue-under-gcc6.patch \
 	file://Fix-gcc6-build-error-in-Vivante-driver.patch"
 
-include linux-compulab_cm-fx6-evk.inc
+include linux-compulab-4.1.15/linux-compulab_cm-fx6-evk.inc
 
-include linux-compulab_cl-som-imx6ul.inc
+include linux-compulab-4.1.15/linux-compulab_cl-som-imx6ul.inc
 
-include linux-compulab_cl-som-imx7.inc
+include linux-compulab-4.1.15/linux-compulab_cl-som-imx7.inc
 
-include linux-compulab_cl-som-imx6.inc
+include linux-compulab-4.1.15/linux-compulab_cl-som-imx6.inc
 
 COMPATIBLE_MACHINE = "(cm-fx6-evk|cl-som-imx6ul|cl-som-imx7|cl-som-imx6)"
 
