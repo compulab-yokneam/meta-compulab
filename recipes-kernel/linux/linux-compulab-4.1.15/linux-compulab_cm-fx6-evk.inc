@@ -32,4 +32,8 @@ SRC_URI_append_cm-fx6-evk += "file://cm-fx6-evk/defconfig \
 	file://cm-fx6-evk/0068-ARM-i.MX6-cm-fx6-dts-tvp5150-to-enable-uart5-to-disa.patch \
 	file://0070-ARM-i.MX6-dts-enable-snvs_poweroff.patch \
 	file://cm-fx6-evk/0072-ARM-i.MX6-cm-fx6-Update-defconfig-for-snvs_poweroff.patch \
+	file://cm-fx6-evk/0075-ARM-i.MX6-sb-fx6-dts-Change-lvds-timing-field-name.patch \
+	file://cm-fx6-evk/0076-ARM-i.MX6-dts-Add-extended-display-settings.patch \
+	file://cm-fx6-evk/0077-ARM-i.MX6-dts-Add-available-mode-string.patch \
+	file://cm-fx6-evk/0078-ARM-i.MX6-dts-Configure-the-parallel-interface-a-the.patch \
 "
