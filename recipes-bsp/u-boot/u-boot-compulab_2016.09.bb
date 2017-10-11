@@ -12,7 +12,7 @@ SRCREV = "v2016.09"
 SRC_URI = "git://git.denx.de/u-boot.git;branch=${SRCBRANCH}"
 #SRC_URI[md5sum] = "fd8234c5b3a460430689848c1f16acef"
 
-include u-boot-compulab_cl-som-imx7.inc
+include u-boot-compulab-2016.09/u-boot-compulab_cl-som-imx7.inc
 
 S = "${WORKDIR}/git"
 
