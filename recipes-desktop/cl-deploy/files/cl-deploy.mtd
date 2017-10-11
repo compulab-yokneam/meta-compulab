@@ -1,5 +1,7 @@
 #!/bin/bash -xv
 
+MTD_DEPLOY_STATUS=""
+
 zimage=zImage
 
 fdt_file_cl_som_imx6ul=imx6ul=imx6ul-sbc-imx6ul-wilink.dtb
@@ -12,10 +14,15 @@ fdt_file_cm_fx6_evk_dl=imx6dl-sbc-fx6-hdmi.dtb
 
 eval $(udevadm info -ap /sys/devices/soc0 | awk '(/revision|soc_id/)&&(gsub(/ |ATTR{|}=/,""))' ORS=";")
 
-fdt_file=${fdt_file_cl_som_imx6ul}
+fdt_file=''
+
 [[ ${soc_id} = 'i.MX6QP' && ${revision} = '2.0' ]] && fdt_file=${fdt_file_cl_som_imx6_qp}
 [[ ${soc_id} = 'i.MX6Q' && ${revision} = '1.5' ]] && fdt_file=${fdt_file_cl_som_imx6_q}
 [[ ${soc_id} = 'i.MX6Q' && ${revision} = '1.2' ]] && fdt_file=${fdt_file_cm_fx6_evk_q}
+
+if [[ -z ${fdt_file} ]];then
+eval $(fw_printenv | awk -F"=" '(/dtb$/)&&($0="fdt_file="$2)')
+fi
 
 msrc=/tmp/src
 mdst=/tmp/dst
@@ -40,7 +47,7 @@ main_init() {
 _deploy_block_dir() {
 
     prompt="[ ${SRC} => ${DST} ]"
-    tar -C ${msrcroot} -cf - . | pv -N "${prompt}"| tar -C ${mdst} -xf -
+    tar -C ${msrcroot} -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
 
 }
 
@@ -48,7 +55,7 @@ _deploy_tar() {
 
     eval $(file ${SRC} | awk '(/bzip|gzip/)&&($0="filter=--"$2)')
     prompt="[ ${SRC} => ${DST} ]"
-    pv ${SRC} | tar -C ${mdst} ${filter} -xf -
+    pv ${SRC} | tar -C ${mdst} ${filter} -xf - 2>/dev/null
 
 }
 
@@ -68,7 +75,7 @@ _source_mount() {
     return
     fi
 
-    if [[ ! -e ${msrcboot}/${zimage} || ! -e ${msrcboot}/${fdt_file} ]];then
+    if [[ ! -f ${msrcboot}/${zimage} || ! -f ${msrcboot}/${fdt_file} ]];then
     DIALOG="Kernel or device tree file is not found on the device: ${SRC}${SPART}${BOOT}  ... "
     dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nPess any key to exit." 10 80
     return
@@ -84,7 +91,7 @@ _source_mount() {
 _source_block_device() {
 
     DO_MOUNT='mount'
-    BOOT=1;ROOTFS=2
+    BOOT=1;ROOT=2
     _source_mount
 
 }
@@ -92,7 +99,7 @@ _source_block_device() {
 _source_directory() {
 
     DO_MOUNT='mount -B -o ro '
-    BOOT=/boot;ROOTFS=/
+    BOOT=/boot;ROOT=/
     _source_mount
 
 }
@@ -128,6 +135,9 @@ ubi_linux() {
     return
     fi
 
+    # Layout#1
+    [[ -n ${kernel} ]] && linux=${kernel}
+
     flash_erase /dev/${linux} 0 0; if [[ $? -ne 0 ]];then
     DIALOG="flash_erase /dev/${linux} failed ..."
     dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nPess any key to exit." 10 80
@@ -140,11 +150,29 @@ ubi_linux() {
     return
     fi
 
+if [[ -n ${dtb} ]]; then
+
+    flash_erase /dev/${dtb} 0 0; if [[ $? -ne 0 ]];then
+    DIALOG="flash_erase /dev/${dtb} failed ..."
+    dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nPess any key to exit." 10 80
+    return
+    fi
+
+    nandwrite -p /dev/${dtb} ${fdt_file}; if [[ $? -ne 0 ]];then
+    DIALOG="nandwrite -p /dev/${dtb} ${fdt_file} failed ..."
+    dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nPess any key to exit." 10 80
+    return
+    fi
+
+else
     nandwrite -p /dev/${linux} -s 0x780000 ${fdt_file}; if [[ $? -ne 0 ]];then
     DIALOG="nandwrite -p /dev/${linux} -s 0x780000 ${fdt_file} failed ..."
     dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nPess any key to exit." 10 80
     return
     fi
+fi
+
+MTD_DEPLOY_STATUS="Done"
 
 }
 

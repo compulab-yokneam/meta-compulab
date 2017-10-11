@@ -179,8 +179,11 @@ target_block_device() {
 }
 
 target_mtd_device () {
-    if [[ -e ${CL_DEPLOY_MTD} ]];then
+    if [[ -f ${CL_DEPLOY_MTD} ]];then
         source ${CL_DEPLOY_MTD}
+	if [[ -z ${MTD_DEPLOY_STATUS} ]];then
+	SUCCESS_EXIT=''
+	fi
     else
         local DIALOG="MTD deployment method is not provided."
         dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nExiting ..." 10 60
@@ -190,7 +193,7 @@ target_mtd_device () {
 
 success_exit() {
     # Issue a platfor specific script
-    [[ -e ${CL_DEPLOY_PLATFORM} ]] && source ${CL_DEPLOY_PLATFORM}
+    [[ -f ${CL_DEPLOY_PLATFORM} ]] && source ${CL_DEPLOY_PLATFORM}
 
     local DIALOG="Finished with success"
     local MESSAGE="Boot media has been deployed on ${DST}\n\nWould you like to reboot the device now?"
@@ -234,9 +237,11 @@ get_all_device() {
 
     if [[ ${MTD} = 'YES' ]];then
         # Figure out whether an mtd device is available
-        res=$(awk '(/rootfs|linux/)&&(gsub(/:/,""))&&(gsub(/\"/,"")&&($0=$NF"="$1))' ORS="; " /proc/mtd)
+        # res=$(awk '(/rootfs|linux/)&&(gsub(/:/,""))&&(gsub(/\"/,"")&&($0=$NF"="$1))' ORS="; " /proc/mtd)
+        res=$(awk '(/rootfs|linux|kernel|dtb/)&&(gsub(/:/,""))&&(gsub(/\"/,"")&&($0=$NF"="$1))' ORS="; " /proc/mtd)
         eval ${res}
         [[ -n ${rootfs} && -n ${linux} ]] && avail_devs[${rootfs}]="/dev/${rootfs} "
+        [[ -n ${rootfs} && -n ${kernel} && -n {dtb} ]] && avail_devs[${rootfs}]="/dev/${rootfs} "
     fi
 
     if [[ ${#avail_devs[@]} -ne 0 ]];then
@@ -277,7 +282,7 @@ fi
 if [[ -z ${DST} ]];then
     _SELECT=''
     ignore=$([[ -b ${SRC} ]] && basename ${SRC} || echo -n "-")
-    [[ -e ${CL_DEPLOY_MTD} ]] && MTD='YES' || MTD='NO'
+    [[ -f ${CL_DEPLOY_MTD} ]] && MTD='YES' || MTD='NO'
     type="destination"; get_all_device ${ignore}
     DST=${_SELECT}
 fi
