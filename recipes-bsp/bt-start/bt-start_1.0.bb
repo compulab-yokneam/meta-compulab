@@ -18,11 +18,10 @@ python __anonymous() {
 
 inherit update-rc.d systemd
 
-SRC_URI = "file://bt-start.sh \
+SRC_URI = "file://bt-start \
 	   file://bt-start.service \
 	   file://GPLv2.patch"
 
-INIT_NAME = "bt-start.sh"
 SERVICE_NAME = "bt-start.service"
 INITSCRIPT_NAME = "bt-start"
 INITSCRIPT_PARAMS = "start 2 3 4 5"
@@ -36,7 +35,7 @@ FILES_${PN} += "${systemd_unitdir}/system/* ${sysconfdir}/init.d/* "
 do_install () {
 
     install -d ${D}${sysconfdir}/init.d/
-    install -m 0755 ${WORKDIR}/${INIT_NAME} ${D}${sysconfdir}/init.d/${INITSCRIPT_NAME}
+    install -m 0755 ${WORKDIR}/${INITSCRIPT_NAME} ${D}${sysconfdir}/init.d/${INITSCRIPT_NAME}
 
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         install -d ${D}${systemd_unitdir}/system/
