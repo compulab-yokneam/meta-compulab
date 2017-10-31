@@ -36,12 +36,22 @@ cat << eom
 eom
 
 # Miachine's independent stuff
+# bblayers.conf
 sed -i '$aBBLAYERS += " \\\n\t${BSPDIR}/sources/meta-compulab \\\n\t${BSPDIR}/sources/meta-openembedded/meta-xfce \\\n"' ${BBLAYERS_CONF}
-sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
+
+if [[ -d ../sources/meta-compulab-dev ]];then
+sed -i '$aBBLAYERS += " \\\n\t${BSPDIR}/sources/meta-compulab-dev \\\n"' ${BBLAYERS_CONF}
+fi
+
+# local.conf
 sed -i '$ a LICENSE_FLAGS_WHITELIST="commercial"' ${LOCAL_CONF}
 
+if [[ -n ${ADD_DEB} ]];then
+sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
+fi
 
-EXTRA_INSTALL="cl-deploy cl-uboot u-boot-compulab can-utils ntp dhcp-client"
+
+EXTRA_INSTALL=" u-boot-compulab can-utils ntp dhcp-client"
 
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
@@ -55,7 +65,8 @@ case ${MACHINE} in
     EXTRA_INSTALL+=" uim crda hostapd cl-ap"
     ;;
     cl-som-imx6|cm-fx6-evk)
-    EXTRA_INSTALL+=" video-input chromium libexif"
+    EXTRA_INSTALL+=" video-input"
+    [[ ${DISTRO} =~ "fb" ]] || EXTRA_INSTALL+=" chromium libexif cl-deploy cl-uboot"
     [[ ${DISTRO} =~ "x11" ]] && EXTRA_INSTALL+=" gstreamer1.0-plugins-imx"
     ;;
     *)
