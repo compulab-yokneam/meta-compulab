@@ -144,19 +144,22 @@ create_cl_layout() {
     local _size=32
     # Start offset 1M
     local _start=1
+    local _start1=0
 
     # Mega -> Block
     _size=$(($_size << 11))
     _start=$(($_start << 11))
+    _start1=$(($_start + $_size))
 
-sfdisk --force ${DST} << eosfdisk
+unit_opt=$(sfdisk --help | awk '(/unit/&&!/deprecated/)&&($0=$2" S")')
+
+sfdisk --force ${unit_opt} ${DST} << eosfdisk
 ${_start},${_size},0x83
-,,0x83
+${_start1},,0x83
 eosfdisk
 
     mkfs.ext2 -F -L boot ${DST}${DPART}1
     mkfs.ext4 -F -L rootfs ${DST}${DPART}2
-
 }
 
 unmount_destination() {
