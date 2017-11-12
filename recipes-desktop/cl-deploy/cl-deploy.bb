@@ -27,7 +27,7 @@ do_install() {
 	mkdir -p ${D}/usr/share/applications/
 	cp ${S}/cl-deploy ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.work ${D}/usr/local/bin/
-	cp ${S}/cl-deploy.mtd ${D}/usr/local/bin/
+	[[ -f ${S}/cl-deploy.mtd ]] && cp ${S}/cl-deploy.mtd ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.png ${D}/usr/share/applications/
 	cp ${S}/cl-deploy.desktop ${D}/usr/share/applications/
 }
@@ -43,3 +43,4 @@ FILES_${PN} = " \
 
 ALLOW_EMPTY_${PN} = "1"
 RDEPENDS_${PN} = "bash xterm pv dialog u-boot-fw-utils file gzip bzip2 dosfstools"
+PACKAGE_ARCH = "all"
