@@ -309,6 +309,7 @@ mkdir -p ${msrc} ${mdst}
 SUCCESS_EXIT=success_exit
 
 [ -f /etc/init.d/udev ] && /etc/init.d/udev stop
+which systemctl >/dev/null && systemctl stop systemd-udevd*
 
 DIALOG="Start Deployment"
 MESSAGE="Src: ${SRC} -> Dst: ${DST}\n\nAll data on ${DST} will be destroyed"
