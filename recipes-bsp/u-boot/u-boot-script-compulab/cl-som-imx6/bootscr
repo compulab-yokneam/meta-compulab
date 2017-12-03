@@ -14,6 +14,7 @@ setenv ext_env ext_env=empty
 setenv soc -wrong
 test ! -z "$cpu_type" && test $cpu_type = 'MX6QP' && setenv soc qp
 test ! -z "$cpu_type" && test $cpu_type = 'MX6Q' && setenv soc q
+test ! -z "$cpu_type" && test $cpu_type = 'MX6D' && setenv soc q
 
 setenv fdt_file imx6${soc}-sbc-imx6-hdmi.dtb
 
