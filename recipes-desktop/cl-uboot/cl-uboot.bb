@@ -33,3 +33,4 @@ FILES_${PN} = " \
 
 ALLOW_EMPTY_${PN} = "1"
 RDEPENDS_${PN} = "bash xterm pv dialog mtd-utils u-boot-compulab"
+PACKAGE_ARCH = "all"
