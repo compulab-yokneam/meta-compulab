@@ -3,8 +3,7 @@ Description=CompuLab BLueThooth Start Script
 
 [Service]
 Type=forking
-ExecStart=/etc/init.d/bt-start --start
-PIDFile=/var/run/bt-start.pid
+ExecStart=/usr/sbin/bt-start start
 
 [Install]
 WantedBy=multi-user.target

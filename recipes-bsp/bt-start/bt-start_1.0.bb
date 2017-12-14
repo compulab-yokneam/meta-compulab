@@ -30,21 +30,25 @@ S = "${WORKDIR}"
 
 ALLOW_EMPTY_${PN} = "1"
 RDEPENDS_${PN} = "bash"
-FILES_${PN} += "${systemd_unitdir}/system/* ${sysconfdir}/init.d/* "
+FILES_${PN} += "${systemd_unitdir}/* ${sysconfdir}/* ${sbindir}/*"
 
 do_install () {
 
-    install -d ${D}${sysconfdir}/init.d/
-    install -m 0755 ${WORKDIR}/${INITSCRIPT_NAME} ${D}${sysconfdir}/init.d/${INITSCRIPT_NAME}
+    install -d ${D}${sbindir}
+    install -m 0755 ${WORKDIR}/${INITSCRIPT_NAME} ${D}${sbindir}
+
+    if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
+            install -d ${D}${sysconfdir}/init.d
+            ln -s ${sbindir}/${INITSCRIPT_NAME} ${D}${sysconfdir}/init.d/
+    fi
 
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
-        install -d ${D}${systemd_unitdir}/system/
+        install -d ${D}${systemd_unitdir}/system
         install -m 644 ${WORKDIR}/${SERVICE_NAME} ${D}/${systemd_unitdir}/system/
     fi
 
 }
 
-#DEPENDS_append = " ${@bb.utils.contains('DISTRO_FEATURES','systemd','systemd-systemctl-native','',d)}"
 pkg_postinst_${PN} () {
 	if [ -n "$D" ]; then
 		OPTS="--root=$D"
