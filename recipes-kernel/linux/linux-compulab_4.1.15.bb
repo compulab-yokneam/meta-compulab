@@ -13,7 +13,9 @@ LOCALVERSION = "-cl-1.0"
 SRC_URI += "file://0001-platform-add-depends-property-handler.patch \ 
 	file://0060-ARM-i.MX6-tvp5150-add-tvp5150-video-decoder-support.patch \
 	file://Fix-the-compile-issue-under-gcc6.patch \
-	file://Fix-gcc6-build-error-in-Vivante-driver.patch"
+	file://Fix-gcc6-build-error-in-Vivante-driver.patch \
+	file://0090-imx-vpu-vpu_alloc_dma_buffer-add-__GFP_NOFAIL-flag.patch \
+"
 
 include linux-compulab-4.1.15/linux-compulab_cm-fx6-evk.inc
 

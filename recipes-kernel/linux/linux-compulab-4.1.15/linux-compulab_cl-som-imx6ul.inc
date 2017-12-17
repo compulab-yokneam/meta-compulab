@@ -37,4 +37,6 @@ SRC_URI_append_cl-som-imx6ul += "file://cl-som-imx6ul/defconfig \
 	file://cl-som-imx6ul/0036-ARM-i.MX6UL-audio-3-update-defconfig-for-analog-audi.patch \
 	file://cl-som-imx6ul/0037-ARM-i.MX6UL-fix-gpmi-depends-string.patch \
 	file://cl-som-imx6ul/0038-ARM-i.MX6UL-add-a-missing-cpu0-definition.patch \
+	file://cl-som-imx6ul/0090-cl-som-imx6ul-dts-Disable-snvs_rtc.patch \
+	file://cl-som-imx6ul/0091-cl-som-imx6ul-config-Update-network-settings.patch \
 "

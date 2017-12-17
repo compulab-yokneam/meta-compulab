@@ -36,4 +36,5 @@ SRC_URI_append_cm-fx6-evk += "file://cm-fx6-evk/defconfig \
 	file://cm-fx6-evk/0076-ARM-i.MX6-dts-Add-extended-display-settings.patch \
 	file://cm-fx6-evk/0077-ARM-i.MX6-dts-Add-available-mode-string.patch \
 	file://cm-fx6-evk/0078-ARM-i.MX6-dts-Configure-the-parallel-interface-a-the.patch \
+	file://cm-fx6-evk/0092-ARM-i.MX6-cm-fx6-config-Enable-DMA_CMA.patch \
 "
