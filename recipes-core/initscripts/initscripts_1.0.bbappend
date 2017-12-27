@@ -16,9 +16,3 @@ do_install_append_cl-som-imx6 () {
 	update-rc.d -r ${D} fb-unblank defaults
 	update-rc.d -r ${D} buffdrop defaults
 }
-
-MASKED_SCRIPTS += " \
-  bt-start \
-  fb-unblank \
-  buffdrop \
-"
