@@ -251,7 +251,7 @@ get_all_device() {
         local rlist=''
         local ddev=''
         for adev in ${avail_devs[@]};do
-            ddev=$(udevadm info -p /sys/class/block/$(basename ${adev}) | awk '(/ disk\/by-id/)&&(split($2,a,"/")&&($0=a[3]))')
+            ddev=$(udevadm info -p /sys/class/block/$(basename ${adev}) | awk '(/ disk\/by-id/)&&(split($2,a,"/")&&($0=a[3]))' ORS=":")
             ddev=${ddev:-${adev}}
             rlist+=${adev}" "${ddev}" OFF "
         done
