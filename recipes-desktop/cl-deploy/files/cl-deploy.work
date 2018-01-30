@@ -7,10 +7,6 @@ SCAN_ALL=${SCAN_ALL:=1}
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
 
-declare -a MKFS=''
-MKFS[0xC]="mkfs.vfat"
-MKFS[0x83]="mkfs.ext4 -F"
-
 source_block_device() {
 
 # Make sure that the source device does not have
@@ -41,12 +37,12 @@ sfdisk --dump ${SRC} | sfdisk ${DST}
 last_part=$(sfdisk -l ${SRC} | awk -v var=${SRC}${SPART} ' END { gsub(var,"",$1); print $1 }')
 echo ",+" | sfdisk -N ${last_part} ${DST}
 
-part_info=$(sfdisk -l ${SRC} | awk -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&($0="part="$1";type=0x"$6";")' ORS=" ")
+part_info=$(blkid ${SRC}* | awk -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&(gsub(/:/,"",$1))&&($0="part="$1";"$NF)')
 
 for P in ${part_info};do
     eval ${P}
-    _MKFS=${MKFS[${type}]:-mkfs.ext2 -F}
-    ${_MKFS} ${DST}${DPART}${part}
+    [[ ${TYPE} = "ext"* ]] && OPT=" -F" || OPT=""
+    mkfs.${TYPE} ${OPT} ${DST}${DPART}${part}
     mount ${DST}${DPART}${part} ${mdst}
     mount ${SRC}${SPART}${part} ${msrc}
     prompt="[ ${SRC}${SPART}${part} => ${DST}${DPART}${part} ]"

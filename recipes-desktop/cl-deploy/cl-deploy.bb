@@ -42,5 +42,5 @@ FILES_${PN} = " \
 "
 
 ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash xterm pv dialog u-boot-fw-utils file gzip bzip2 dosfstools"
+RDEPENDS_${PN} = "bash xterm pv dialog u-boot-fw-utils file gzip bzip2 dosfstools util-linux"
 PACKAGE_ARCH = "all"
