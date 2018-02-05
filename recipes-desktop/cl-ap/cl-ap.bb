@@ -34,4 +34,4 @@ FILES_${PN} = " \
 "
 
 ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "dialog bash xterm crda hostapd dhcpcd iptables"
+RDEPENDS_${PN} = "dialog bash xterm crda hostapd dnsmasq iptables"

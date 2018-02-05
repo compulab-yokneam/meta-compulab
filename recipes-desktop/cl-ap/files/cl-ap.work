@@ -4,7 +4,7 @@
 
 WLAN=wlan0
 HOSTAPD_CONF=/etc/hostapd-cl.conf
-UDHCPD_CONF=/etc/udhcpd-cl.conf
+DNSMASQ_CONF=/etc/dnsmasq-cl.conf
 AP_NET=172.16.43
 SSID=compulabssid
 WPA_PASSPHRASE=compulabpassword
@@ -33,24 +33,22 @@ wpa_passphrase=${WPA_PASSPHRASE}
 eof
 }
 
-udhcpd_conf() {
-cat << eof > ${UDHCPD_CONF}
-start           ${AP_NET}.10
-end             ${AP_NET}.254
-interface       ${WLAN}
-opt     dns     8.8.8.8 8.8.4.4 #public google dns servers
-option  subnet  255.255.255.0
-opt     router  ${AP_NET}.1
-option  lease   864000          # default: 10 days
-option  0x08    01020304        # option 8: "cookie server IP addr: 1.2.3.4"
+dnsmasq_conf() {
+cat << eof > ${DNSMASQ_CONF}
+interface=${WLAN}
+bind-interfaces
+domain=cl-ap.com
+dhcp-option=3,${AP_NET}.1
+dhcp-option=6,8.8.8.8,8.8.4.4
+dhcp-range=${AP_NET}.10,${AP_NET}.254,12h
 eof
 }
 
 get_daemon_pids() {
 unset HOSTAPD_PID
-unset UDHCPD_PID
+unset DNSMASQ_PID
 eval $(ps -eo comm,pid | awk '/hostapd/&&($0="HOSTAPD_PID="$2)')
-eval $(ps -eo comm,pid | awk '/udhcpd/&&($0="UDHCPD_PID="$2)')
+eval $(ps -eo comm,pid | awk '/dnsmasq/&&($0="DNSMASQ_PID="$2)')
 }
 ########## body ##########
 
@@ -59,13 +57,13 @@ ap_config() {
 ### hostapd
 [ ! -f ${HOSTAPD_CONF} ] && hostapd_conf
 
-### udhcpd
-[ ! -f ${UDHCPD_CONF} ] && udhcpd_conf
+### dnsmasq
+[ ! -f ${DNSMASQ_CONF} ] && dnsmasq_conf
 }
 
 ap_reconfig() {
 [ -f ${HOSTAPD_CONF} ] && rm -rf ${HOSTAPD_CONF}
-[ -f ${UDHCPD_CONF} ] && rm -rf ${UDHCPD_CONF}
+[ -f ${DNSMASQ_CONF} ] && rm -rf ${DNSMASQ_CONF}
 ap_config
 }
 
@@ -86,9 +84,9 @@ fi
 ### configure ip
 ifconfig ${WLAN} ${IP_ADDR} netmask 255.255.255.0 up
 
-### start udhcpd server, if not started
-if [ -z "${UDHCPD_PID}" ]; then
- udhcpd ${UDHCPD_CONF}
+### start dnsmasq server, if not started
+if [ -z "${DNSMASQ_PID}" ]; then
+ dnsmasq --conf-file=${DNSMASQ_CONF}
 fi
 
 ### configure nat
@@ -100,8 +98,8 @@ get_daemon_pids
 ### stop a hostapd interface, if present
 [ ! -z "${HOSTAPD_PID}" ] && kill -9 ${HOSTAPD_PID}
 
-### stop udhcpd server, if started
-[ ! -z "${UDHCPD_PID}" ] && kill -9 ${UDHCPD_PID}
+### stop dnsmasq server, if started
+[ ! -z "${DNSMASQ_PID}" ] && kill -9 ${DNSMASQ_PID}
 
 ### disable ip forewarding
 echo 0 > /proc/sys/net/ipv4/ip_forward
