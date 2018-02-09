@@ -51,10 +51,11 @@ sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
 fi
 
 
-EXTRA_INSTALL=" u-boot-compulab can-utils ntp dhcp-client"
+EXTRA_INSTALL=" ntp dhcp-client"
 
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
+    EXTRA_INSTALL+=" can-utils "
     meta_ti_dir="../sources/meta-ti"
     if [ ! -d ${meta_ti_dir} ];then
         git clone git://git.yoctoproject.org/meta-ti ${meta_ti_dir}
@@ -65,6 +66,7 @@ case ${MACHINE} in
     EXTRA_INSTALL+=" uim crda hostapd cl-ap"
     ;;
     cl-som-imx6|cm-fx6-evk)
+    EXTRA_INSTALL+=" can-utils "
     EXTRA_INSTALL+=" video-input"
     [[ ${DISTRO} =~ "fb" ]] || EXTRA_INSTALL+=" chromium libexif cl-deploy cl-uboot"
     [[ ${DISTRO} =~ "x11" ]] && EXTRA_INSTALL+=" gstreamer1.0-plugins-imx"
