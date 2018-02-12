@@ -80,7 +80,7 @@ eom
     pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null
 
     if [[ -d ${mdst}/boot ]];then
-        local boot_dir=$(mktemp -d)
+        local boot_dir=$(mktemp --tmpdir=/var/local -d)
         mount ${DST}${DPART}1 ${boot_dir}
         cp -a ${mdst}/boot/* ${boot_dir}
         umount ${boot_dir}
@@ -149,7 +149,7 @@ create_cl_layout() {
     _start=$(($_start << 11))
     _start1=$(($_start + $_size))
 
-unit_opt=$(sfdisk --help | awk '(/unit/&&!/deprecated/)&&($0=$2" S")')
+unit_opt=$(sfdisk --help | awk '(/unit/&&!/deprecated/)&&($0=" -uS")')
 
 sfdisk --force ${unit_opt} ${DST} << eosfdisk
 ${_start},${_size},0x83
@@ -312,10 +312,8 @@ fi
 [[ ${DST} =~ "mmc" || ${DST} =~ "loop" ]] && DPART='p' || DPART=''
 [[ ${SRC} =~ "mmc" || ${SRC} =~ "loop" ]] && SPART='p' || SPART=''
 
-msrc=/tmp/src
-mdst=/tmp/dst
-
-mkdir -p ${msrc} ${mdst}
+msrc=$(mktemp --tmpdir=/var/local -d)
+mdst=$(mktemp --tmpdir=/var/local -d)
 
 SUCCESS_EXIT=success_exit
 
