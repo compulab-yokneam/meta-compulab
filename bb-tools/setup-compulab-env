@@ -51,7 +51,7 @@ sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
 fi
 
 
-EXTRA_INSTALL=" ntp dhcp-client"
+EXTRA_INSTALL=" ntp dhcp-client cl-cleanup "
 
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
