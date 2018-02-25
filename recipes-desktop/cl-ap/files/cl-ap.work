@@ -1,16 +1,10 @@
 #!/bin/bash
 
 ########## variables ##########
+. /usr/share/cl-ap/cl-ap.env
 
-WLAN=wlan0
-HOSTAPD_CONF=/etc/hostapd-cl.conf
-DNSMASQ_CONF=/etc/dnsmasq-cl.conf
-AP_NET=172.16.43
-SSID=compulabssid
-WPA_PASSPHRASE=compulabpassword
-
-CONF_FILE=/etc/cl-ap.conf
-[ -f ${CONF_FILE} ] && source ${CONF_FILE}
+########## custom configuration  ##########
+[ -f ${CLAP_CONF} ] && source ${CLAP_CONF}
 
 IP_ADDR=${AP_NET}.1
 
@@ -67,6 +61,10 @@ ap_reconfig() {
 ap_config
 }
 
+ap_clean() {
+rm -rf /usr/share/cl-ap/*.conf
+}
+
 ap_start() {
 
 ap_config
@@ -118,9 +116,12 @@ stop)
 reconfig)
 	ap_reconfig
 	;;
+clean)
+	ap_clean
+	;;
 
 *)
-	echo "Usage: $0 {start|stop|reconfig}"
+	echo "Usage: $0 {start|stop|reconfig|clean}"
 	exit 1
 esac
 

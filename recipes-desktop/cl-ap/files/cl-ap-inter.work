@@ -1,11 +1,10 @@
 #!/bin/bash -xv
 
-CONF_FILE=/etc/cl-ap.conf
-WORK=/usr/local/bin/cl-ap.work
+. /usr/share/cl-ap/cl-ap.env
 
 do_mkconf() {
-if [ ! -f ${CONF_FILE} ];then
-cat << eof > ${CONF_FILE}
+if [ ! -f ${CLAP_CONF} ];then
+cat << eof > ${CLAP_CONF}
 SSID=compulabssid
 WPA_PASSPHRASE=compulabpassword
 AP_NET=172.16.43
@@ -16,7 +15,7 @@ fi
 do_reconf() {
 
 do_mkconf
-declare -a vars=($(cat ${CONF_FILE}))
+declare -a vars=($(cat ${CLAP_CONF}))
 
 d=""
 L="12 60 0 "
@@ -56,7 +55,7 @@ D="
 "
 done
 
-cat << eof > ${CONF_FILE}
+cat << eof > ${CLAP_CONF}
 $L
 eof
 }
