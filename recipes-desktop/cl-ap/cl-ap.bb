@@ -91,5 +91,6 @@ FILES_${PN} = " \
     /usr/share/cl-ap/* \
 "
 
-RDEPENDS_${PN} = "dialog bash xterm crda hostapd dnsmasq iptables"
+RDEPENDS_${PN} = "dialog bash crda hostapd dnsmasq iptables"
+RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"

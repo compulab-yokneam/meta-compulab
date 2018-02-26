@@ -41,6 +41,6 @@ FILES_${PN} = " \
 	/usr/share/applications/* \
 "
 
-ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash xterm pv dialog u-boot-fw-utils file gzip bzip2 dosfstools util-linux"
+RDEPENDS_${PN} = "bash pv dialog u-boot-fw-utils file gzip bzip2 dosfstools util-linux"
+RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"

@@ -31,6 +31,6 @@ FILES_${PN} = " \
 	/usr/share/applications/* \
 "
 
-ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash xterm pv dialog mtd-utils u-boot-compulab"
+RDEPENDS_${PN} = "bash pv dialog mtd-utils u-boot-compulab"
+RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"
