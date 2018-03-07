@@ -96,6 +96,39 @@ cat << eom
 eom
 }
 
+source_diskimage() {
+cat << eom
+
+    Deploying diskimage
+    Started: ${SRC} ==> ${DST}
+
+eom
+
+    prompt="[ ${SRC} => ${DST} ]"
+    xz -dc ${SRC} | pv -N "${prompt}" | dd of=${DST} bs=1M
+
+cat << eom
+
+    Done: ${SRC} ==> ${DST}
+
+eom
+}
+
+source_file() {
+eval $(file ${SRC} | awk '($0=tolower($0))&&($0="arc="$2)')
+case $arc in
+	bzip|gzip)
+	source_tar_ball
+	;;
+	xz)
+	source_diskimage
+	;;
+	*)
+	echo "Invalid file type $arc ..."
+	;;
+esac
+}
+
 source_directory() {
 cat << eom
 
@@ -176,7 +209,7 @@ target_block_device() {
     unmount_destination
     [[ -b ${SRC} ]] && source_block_device
     [[ -d ${SRC} ]] && source_directory
-    [[ -f ${SRC} ]] && source_tar_ball
+    [[ -f ${SRC} ]] && source_file
 }
 
 target_mtd_device () {
@@ -236,19 +269,37 @@ select_tarball() {
 	done
 }
 
+select_diskimage() {
+	local DIALOG="Select a disk image:"
+	while [ 1 ];do
+	_SELECT=$(${dialog_app} --backtitle "${DIALOG}" --fselect / 15 80  --stdout)
+	# Empty=Cancel, then exit
+	[[ -z ${_SELECT} ]] && break;
+
+	if [[ ! -f ${_SELECT} ]];then
+		DIALOG="Invalid selection ${_SELECT} : try again ..."
+	else
+		eval $(file ${_SELECT} | awk '($0=tolower($0))&&(/xz/)&&($0="arc="$2)')
+		[[ -n ${arc} ]] && break;
+		DIALOG="Invalid file format ${_SELECT}: try again ..."
+	fi
+	done
+}
+
 get_all_device() {
     local ignored=${1:--na-}
     local min_size_inb=${2:-2048}
-    local all_devs=$(ls /sys/class/block/*/size | awk -v var=${ignored} -F"/" '(($0!~var)&&(/mmc|sd/)&&($0=$5))')
+    local all_devs=$(ls /sys/class/block/*/size | awk -F"/" '((/mmc|sd/)&&($0=$5))')
     unset avail_devs; declare -a avail_devs
     local i=0
     for dev in ${all_devs};do
+	[[ -e /sys/class/block/${dev}/partition ]] && continue
 	block_dev=$(udevadm info -n "/dev/"${dev} | awk -F "block" '(/DEVPATH/)&&(split($2,a,"/"))&&($0=a[2])')
+	[[ ${ignore} =~ ${block_dev} ]] && continue
 	[[ ${avail_devs[@]} =~ ${block_dev} ]] && continue
 	avail_devs[${i}]="/dev/${block_dev} "
 	((i++))
     done
-
     if [[ ${MTD} = 'YES' ]];then
         # Figure out whether an mtd device is available
         # res=$(awk '(/rootfs|linux/)&&(gsub(/:/,""))&&(gsub(/\"/,"")&&($0=$NF"="$1))' ORS="; " /proc/mtd)
@@ -260,15 +311,14 @@ get_all_device() {
 
     if [[ ${#avail_devs[@]} -ne 0 ]];then
         local rlist=''
-        local ddev=''
         for adev in ${avail_devs[@]};do
-            ddev=$(udevadm info -p /sys/class/block/$(basename ${adev}) | awk '(/ disk\/by-id/)&&(split($2,a,"/")&&($0=a[3]))' ORS=":")
-            ddev=${ddev:-${adev}}
-            rlist+=${adev}" "${ddev}" OFF "
+            rlist+=${adev}" OFF "
         done
-        [[ ! -z "${3}" ]] && rlist+=${3}" "${3}" OFF "
-        [[ ! -z "${4}" ]] && rlist+=${4}" "${4}" OFF "
-        _SELECT=$(${dialog_app} --backtitle "Select a ${type} device" --radiolist "Available Devices:" 12 80 12 ${rlist} --stdout)
+        for i in $(seq 3 $#);do
+            eval j=\$${i}
+            rlist+=${j}" OFF "
+        done
+        _SELECT=$(${dialog_app} --backtitle "Select a ${type} device" --no-items --radiolist "Available Devices:" 12 80 12 ${rlist} --stdout)
     fi
 }
 
@@ -277,9 +327,9 @@ get_all_device() {
 if [[ -z ${SRC} ]];then
     _SELECT=''
     ignore=$([[ -n ${DST} ]] && basename ${DST} || echo -n "-")
-    type="source"; MTD='NO'; get_all_device ${ignore} 0 directory tarball
+    type="source"; MTD='NO'; get_all_device ${ignore} 0 directory tarball diskimage
     SRC=${_SELECT}
-    [[ ${SRC} = 'directory' || ${SRC} = 'tarball' ]] && select_${SRC}
+    [[ ${SRC} = 'directory' || ${SRC} = 'tarball' || ${SRC} = 'diskimage' ]] && select_${SRC}
     SRC=${_SELECT}
 fi
 
@@ -295,7 +345,11 @@ fi
 # then use it. Skip this select ${dialog_app}.
 if [[ -z ${DST} ]];then
     _SELECT=''
-    ignore=$([[ -b ${SRC} ]] && basename ${SRC} || echo -n "-")
+
+    for ign in ${SRC} ${BOOT}; do
+    ignore+=$([[ -b ${ign} ]] && basename ${ign})":"
+    done
+
     [[ -f ${CL_DEPLOY_MTD} ]] && MTD='YES' || MTD='NO'
     type="destination"; get_all_device ${ignore}
     DST=${_SELECT}

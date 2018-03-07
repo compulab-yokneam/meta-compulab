@@ -13,7 +13,8 @@ WORK=/usr/local/bin/cl-deploy.work
 [[ ${TERM} = "xterm" ]] && EXEC="source"
 
 get_cmdline_device
-export SRC=${block_boot_dev}
+export BOOT=${block_boot_dev}
+[[ -z "${SRC}" ]] && export SRC=${BOOT}
 export SCAN_ALL=0
 
 ${EXEC} ${WORK}
