@@ -33,7 +33,7 @@ exit 2
 fi
 
 # This creates File/Size variables
-eval $(stat 2>/dev/null $(readlink -f ${file} ) | awk '(/File|Size/)&&(gsub(/:/,"",$0))&&($0=$1"="$2)' ORS=";")
+eval $(stat -c Size=%s";"File=%n 2>/dev/null $(readlink -f ${file}))
 
 mtd_dev_size=$(awk -v dev=${device} '($0~dev)&&($0="0x"$2)' /proc/mtd)
 
