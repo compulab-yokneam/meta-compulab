@@ -71,9 +71,10 @@ eom
 
     create_cl_layout
 
-    tar_info=$(file ${SRC} | awk '(/bzip2|gzip/)&&($0=$2)')
+    tar_info=$(file ${SRC} | awk '(/bzip2|gzip|zx/)&&($0=$2)')
     [[ ${tar_info} = bzip2 ]] && filter=j
     [[ ${tar_info} = gzip ]] && filter=z
+    [[ ${tar_info} = xz ]] && filter=J
 
     mount ${DST}${DPART}2 ${mdst}
     prompt="[ ${SRC} => ${DST}${DPART}2 ]"
@@ -96,6 +97,12 @@ cat << eom
 eom
 }
 
+last_part_x() {
+    LAST=$(sfdisk -l ${DST} | awk -v var=${DST}${DPART} ' END { gsub(var,"",$1); print $1 }')
+    echo ",+" | sfdisk -N ${LAST} ${DST}
+    resize2fs ${DST}${DPART}${LAST}
+}
+
 source_diskimage() {
 cat << eom
 
@@ -105,7 +112,9 @@ cat << eom
 eom
 
     prompt="[ ${SRC} => ${DST} ]"
-    xz -dc ${SRC} | pv -N "${prompt}" | dd of=${DST} bs=1M
+    ${DECOMPRESSOR} -dc ${SRC} | pv -N "${prompt}" | dd of=${DST} bs=1M
+
+    [[ -n ${LPLUS} ]] && last_part_x
 
 cat << eom
 
@@ -117,11 +126,10 @@ eom
 source_file() {
 eval $(file ${SRC} | awk '($0=tolower($0))&&($0="arc="$2)')
 case $arc in
-	bzip|gzip)
-	source_tar_ball
-	;;
-	xz)
-	source_diskimage
+	bzip2|gzip|xz)
+	export DECOMPRESSOR=${arc}
+	type=$(${arc} -dc ${SRC} | file - | awk '(/archive/)&&($0="tar_ball")||($0="diskimage")')
+	source_${type}
 	;;
 	*)
 	echo "Invalid file type $arc ..."
@@ -252,8 +260,8 @@ select_directory() {
 	_SELECT=$(${dialog_app} --backtitle "${DIALOG}" --dselect / 15 80 --stdout)
 }
 
-select_tarball() {
-	local DIALOG="Select a tarball:"
+select_file() {
+	local DIALOG="Select a ${1}:"
 	while [ 1 ];do
 	_SELECT=$(${dialog_app} --backtitle "${DIALOG}" --fselect / 15 80  --stdout)
 	# Empty=Cancel, then exit
@@ -262,28 +270,19 @@ select_tarball() {
 	if [[ ! -f ${_SELECT} ]];then
 		DIALOG="Invalid selection ${_SELECT} : try again ..."
 	else
-		eval $(file ${_SELECT} | awk '(/bzip|gzip/)&&($0="arc="$2)')
+		eval $(file ${_SELECT} | awk '($0=tolower($0))&&(/bzip2|gzip|xz/)&&($0="arc="$2)')
 		[[ -n ${arc} ]] && break;
 		DIALOG="Invalid file format ${_SELECT}: try again ..."
 	fi
 	done
 }
 
-select_diskimage() {
-	local DIALOG="Select a disk image:"
-	while [ 1 ];do
-	_SELECT=$(${dialog_app} --backtitle "${DIALOG}" --fselect / 15 80  --stdout)
-	# Empty=Cancel, then exit
-	[[ -z ${_SELECT} ]] && break;
+select_tarball() {
+	select_file "tarball"
+}
 
-	if [[ ! -f ${_SELECT} ]];then
-		DIALOG="Invalid selection ${_SELECT} : try again ..."
-	else
-		eval $(file ${_SELECT} | awk '($0=tolower($0))&&(/xz/)&&($0="arc="$2)')
-		[[ -n ${arc} ]] && break;
-		DIALOG="Invalid file format ${_SELECT}: try again ..."
-	fi
-	done
+select_diskimage() {
+	select_file "diskimage"
 }
 
 get_all_device() {
@@ -365,6 +364,11 @@ fi
 
 [[ ${DST} =~ "mmc" || ${DST} =~ "loop" ]] && DPART='p' || DPART=''
 [[ ${SRC} =~ "mmc" || ${SRC} =~ "loop" ]] && SPART='p' || SPART=''
+
+if [[ ${SRC} = "-" && ${LPLUS} = "+" && -n ${DST} ]]; then
+	last_part_x
+	exit 0
+fi
 
 msrc=$(mktemp --tmpdir=/var/local -d)
 mdst=$(mktemp --tmpdir=/var/local -d)

@@ -5,7 +5,7 @@ DESCRIPTION = "CompuLab Deployment Tool"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4a0e2a2916052068a420bbc50873f515"
 
-PR = "r1"
+PR = "r2"
 
 SRC_URI = " \
 	file://cl-deploy \
@@ -41,6 +41,6 @@ FILES_${PN} = " \
 	/usr/share/applications/* \
 "
 
-RDEPENDS_${PN} = "bash pv dialog u-boot-fw-utils file gzip bzip2 dosfstools util-linux xz"
+RDEPENDS_${PN} = "bash pv dialog u-boot-fw-utils file gzip bzip2 dosfstools util-linux xz e2fsprogs"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"
