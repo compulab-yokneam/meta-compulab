@@ -1,0 +1,37 @@
+From 324a9e73b7560fd2078cb8131f2caf96ec74e2a8 Mon Sep 17 00:00:00 2001
+From: Valentin Raevsky <valentin@compulab.co.il>
+Date: Tue, 13 Mar 2018 13:58:35 +0200
+Subject: [PATCH 1/2] Makefile: add u-boot.imx target
+
+Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
+---
+ Makefile | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 119ad49..bd5dfa0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -760,7 +760,7 @@ DO_STATIC_RELA =
+ endif
+ 
+ # Always append ALL so that arch config.mk's can add custom ones
+-ALL-y += u-boot.srec u-boot.bin u-boot.sym System.map binary_size_check
++ALL-y += u-boot.srec u-boot.bin u-boot.sym System.map binary_size_check u-boot.imx
+ 
+ ALL-$(CONFIG_ONENAND_U_BOOT) += u-boot-onenand.bin
+ ifeq ($(CONFIG_SPL_FSL_PBL),y)
+@@ -1019,6 +1019,10 @@ else
+ SPL_PAYLOAD := u-boot.bin
+ endif
+ 
++u-boot.imx: SPL u-boot.img FORCE
++	@dd if=SPL of=$@ bs=1K seek=0 conv=notrunc 2>/dev/null
++	@dd if=u-boot.img of=$@ bs=1K seek=63 conv=notrunc 2>/dev/null
++
+ OBJCOPYFLAGS_u-boot-with-spl.bin = -I binary -O binary \
+ 				   --pad-to=$(CONFIG_SPL_PAD_TO)
+ u-boot-with-spl.bin: spl/u-boot-spl.bin $(SPL_PAYLOAD) FORCE
+-- 
+1.9.1
+
