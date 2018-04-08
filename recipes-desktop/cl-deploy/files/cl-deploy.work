@@ -81,7 +81,7 @@ eom
     pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null
 
     if [[ -d ${mdst}/boot ]];then
-        local boot_dir=$(mktemp --tmpdir=/var/local -d)
+        local boot_dir=$(mktemp -p /var/local -d)
         mount ${DST}${DPART}1 ${boot_dir}
         cp -a ${mdst}/boot/* ${boot_dir}
         umount ${boot_dir}
@@ -370,8 +370,8 @@ if [[ ${SRC} = "-" && ${LPLUS} = "+" && -n ${DST} ]]; then
 	exit 0
 fi
 
-msrc=$(mktemp --tmpdir=/var/local -d)
-mdst=$(mktemp --tmpdir=/var/local -d)
+msrc=$(mktemp -p /var/local -d)
+mdst=$(mktemp -p /var/local -d)
 
 SUCCESS_EXIT=success_exit
 
