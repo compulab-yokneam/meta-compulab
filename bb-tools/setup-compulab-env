@@ -50,8 +50,8 @@ if [[ -n ${ADD_DEB} ]];then
 sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
 fi
 
-
-EXTRA_INSTALL=" ntp dhcp-client cl-cleanup "
+EXTRA_INSTALL=" ntp dhcp-client"
+EXTRA_INSTALL+=" cl-deploy cl-uboot cl-cleanup"
 
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
@@ -63,12 +63,12 @@ case ${MACHINE} in
         git -C ${meta_ti_dir} remote update
     fi
     sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
-    EXTRA_INSTALL+=" uim crda hostapd cl-ap"
+    EXTRA_INSTALL+=" uim cl-ap"
     ;;
     cl-som-imx6|cm-fx6-evk)
     EXTRA_INSTALL+=" can-utils "
     EXTRA_INSTALL+=" video-input"
-    [[ ${DISTRO} =~ "fb" ]] || EXTRA_INSTALL+=" chromium libexif cl-deploy cl-uboot"
+    [[ ${DISTRO} =~ "fb" ]] || EXTRA_INSTALL+=" chromium libexif"
     [[ ${DISTRO} =~ "x11" ]] && EXTRA_INSTALL+=" gstreamer1.0-plugins-imx"
     ;;
     *)
