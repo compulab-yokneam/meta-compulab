@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set +o history
+set +o history; history -c
 
 YESNO="Files to be removed:"
 i=1
