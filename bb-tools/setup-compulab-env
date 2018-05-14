@@ -56,14 +56,18 @@ EXTRA_INSTALL+=" cl-deploy cl-uboot cl-cleanup"
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
     EXTRA_INSTALL+=" can-utils "
+    meta_cpl_dir="../sources/meta-compulab"
     meta_ti_dir="../sources/meta-ti"
+    meta_uim_dir="../sources/meta-uim"; mkdir -p ${meta_uim_dir}
     if [ ! -d ${meta_ti_dir} ];then
         git clone git://git.yoctoproject.org/meta-ti ${meta_ti_dir}
     else
         git -C ${meta_ti_dir} remote update
     fi
-    sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/meta-ti "' ${BBLAYERS_CONF}
-    EXTRA_INSTALL+=" uim cl-ap"
+    tar -C ${meta_ti_dir} --transform='flags=r;s|uim_|uim-ti_|' -cf - recipes-connectivity/uim conf/layer.conf | tar -C ${meta_uim_dir} -xf -
+    sed 's/compulab/uim/g' ${meta_cpl_dir}/conf/layer.conf > ${meta_uim_dir}/conf/layer.conf
+    sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/'${meta_uim_dir}' "' ${BBLAYERS_CONF}
+    EXTRA_INSTALL+=" uim-ti cl-ap"
     ;;
     cl-som-imx6|cm-fx6-evk)
     EXTRA_INSTALL+=" can-utils "
