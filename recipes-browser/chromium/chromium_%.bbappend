@@ -7,3 +7,5 @@ CHROMIUM_EXTRA_ARGS += "--ignore-gpu-blacklist --enable-gpu-rasterization --enab
 DEPENDS += "gperf-native"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+
+PNBLACKLIST[chromium]=""
