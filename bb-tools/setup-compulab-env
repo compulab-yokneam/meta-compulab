@@ -11,6 +11,7 @@ fi
 
 BBLAYERS_CONF=conf/bblayers.conf
 LOCAL_CONF=conf/local.conf
+BB_CL_CONF_DONE=conf/bb_cl_conf.done
 
 if ([ ! -f ${BBLAYERS_CONF} ] || [ ! -f ${LOCAL_CONF} ]);then
 cat << eom
@@ -22,7 +23,6 @@ fi
 
 [[ -n ${FORCE} ]] && rm -rf ${BB_CL_CONF_DONE}
 
-BB_CL_CONF_DONE=conf/bb_cl_conf.done
 if [ -f ${BB_CL_CONF_DONE} ];then
 cat << eom
     Note: Already issued.
