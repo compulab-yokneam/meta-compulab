@@ -66,4 +66,5 @@ SRC_URI_append_cl-som-imx6 += "\
 	file://cl-som-imx6/0071-ARM-i.MX6-cl-som-imx6-Update-defconfig-for-snvs_powe.patch \
 	file://cl-som-imx6/0091-ARM-i.MX6-cl-som-imx6-config-Enable-DMA_CMA.patch \
 	file://cl-som-imx6/0093-cl-som-imx6-config-Update-network-settings.patch \
+	file://cl-som-imx6/0094-cl-som-imx6-Enable-UART2.patch \
 "
