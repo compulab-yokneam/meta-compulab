@@ -15,6 +15,7 @@ SRC_URI += "file://0001-platform-add-depends-property-handler.patch \
 	file://Fix-the-compile-issue-under-gcc6.patch \
 	file://Fix-gcc6-build-error-in-Vivante-driver.patch \
 	file://0090-imx-vpu-vpu_alloc_dma_buffer-add-__GFP_NOFAIL-flag.patch \
+	file://0095-imx6-sata-Performance-fix.patch \
 "
 
 include linux-compulab-4.1.15/linux-compulab_cm-fx6-evk.inc
