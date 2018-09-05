@@ -55,6 +55,18 @@ fi
 EXTRA_INSTALL=" ntp dhcp-client"
 EXTRA_INSTALL+=" cl-deploy cl-uboot cl-cleanup"
 
+set -x
+eval $(awk '(/^DISTRO_VERSION /)&&(gsub(/ /,""))' ../sources/poky/meta-poky/conf/distro/poky.conf)
+
+case ${DISTRO_VERSION} in
+    2.1.1|2.2.1)
+    ;;
+    *)
+    rm -rf ../sources/meta-compulab/recipes-browser/
+    ;;
+esac
+set +x
+
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
     EXTRA_INSTALL+=" can-utils "
