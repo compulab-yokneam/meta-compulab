@@ -15,6 +15,7 @@ SRC_URI[md5sum] = "df76d5ae2436ea9c126ed769e060ebee"
 SRC_URI_append_cl-som-imx6 += " \
 	file://cl_som_imx6_defconfig \
 	file://Fix-the-compile-issue-under-gcc6.patch \
+	file://Fix-the-compile-issue-under-gcc7.patch \
 	file://0001-arm-imx6-add-SPL-to-u-boot.imx.patch \
 	file://0002-arm-mx6-cl_som_mx6-Add-basic-support.patch \
 	file://0003-arm-mx6-cl_som_mx6-Fix-fec-phy-connecttivity-issue.patch \
