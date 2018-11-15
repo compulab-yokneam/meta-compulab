@@ -18,7 +18,6 @@ CORE_IMAGE_BASE_INSTALL += "\
 	libtool \
 	libexif \
 	python-compiler \
-	u-boot-fw-utils \
 	nfs-utils \
 	nfs-utils-client \
 	cl-deploy \
