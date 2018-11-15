@@ -14,6 +14,7 @@ SRC_URI[md5sum] = "fd8234c5b3a460430689848c1f16acef"
 
 SRC_URI += "file://0003-arm-imx6ul-add-u-boot-with-spl-cl.imx-target-for-cl-.patch \
 	file://Fix-the-compile-issue-under-gcc6.patch \
+	file://Fix-the-compile-issue-under-gcc7.patch \
 "
 
 SRC_URI_append_cl-som-imx6ul += "file://cl_som_imx6ul_defconfig \
