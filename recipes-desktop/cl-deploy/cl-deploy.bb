@@ -42,6 +42,5 @@ FILES_${PN} = " \
 "
 
 RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz e2fsprogs"
-RDEPENDS_${PN}_append_cl-som-imx6ul = "u-boot-fw-utils"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"
