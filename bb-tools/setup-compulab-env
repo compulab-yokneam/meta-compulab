@@ -37,7 +37,7 @@ cat << eom
     Prepare: ${MACHINE}:${DISTRO} ...
 eom
 
-# Miachine's independent stuff
+# Machine's independent stuff
 # bblayers.conf
 sed -i '$aBBLAYERS += " \\\n\t${BSPDIR}/sources/meta-compulab \\\n\t${BSPDIR}/sources/meta-openembedded/meta-xfce \\\n"' ${BBLAYERS_CONF}
 
@@ -54,18 +54,9 @@ fi
 
 EXTRA_INSTALL=" ntp dhcp-client"
 EXTRA_INSTALL+=" cl-deploy cl-uboot cl-cleanup"
+declare -a bbmask=(recipes-security/optee-imx/optee-os-imx_git.bb recipes-browser/chromium/chromium_%.bbappend)
 
-set -x
 eval $(awk '(/^DISTRO_VERSION /)&&(gsub(/ /,""))' ../sources/poky/meta-poky/conf/distro/poky.conf)
-
-case ${DISTRO_VERSION} in
-    2.1.1|2.2.1)
-    ;;
-    *)
-    rm -rf ../sources/meta-compulab/recipes-browser/
-    ;;
-esac
-set +x
 
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
@@ -94,6 +85,19 @@ case ${MACHINE} in
 esac
 
 sed -i "$ a CORE_IMAGE_EXTRA_INSTALL += \" ${EXTRA_INSTALL}\"" ${LOCAL_CONF}
+
+case ${DISTRO_VERSION} in
+    2.1.1|2.2.1)
+    ;;
+    *)
+    for i in  ${bbmask[@]}; do
+cat << eof >> ${LOCAL_CONF}
+BBMASK += "${i}"
+eof
+
+done
+    ;;
+esac
 
 cat << eom
     Note: Files ${BBLAYERS_CONF} and ${LOCAL_CONF} updated successfully.
