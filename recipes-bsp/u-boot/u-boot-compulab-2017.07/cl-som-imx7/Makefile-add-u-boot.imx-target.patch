@@ -1,7 +1,7 @@
-From 324a9e73b7560fd2078cb8131f2caf96ec74e2a8 Mon Sep 17 00:00:00 2001
+From ee8123634e5d7911a9cca449c5863ec944cf61f5 Mon Sep 17 00:00:00 2001
 From: Valentin Raevsky <valentin@compulab.co.il>
-Date: Tue, 13 Mar 2018 13:58:35 +0200
-Subject: [PATCH 1/2] Makefile: add u-boot.imx target
+Date: Sun, 9 Dec 2018 09:45:22 +0200
+Subject: [PATCH] Makefile: add u-boot.imx target
 
 Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
 ---
@@ -9,7 +9,7 @@ Signed-off-by: Valentin Raevsky <valentin@compulab.co.il>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 119ad49..bd5dfa0 100644
+index 95b1b89..97d2f83 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -760,7 +760,7 @@ DO_STATIC_RELA =
@@ -33,5 +33,5 @@ index 119ad49..bd5dfa0 100644
  				   --pad-to=$(CONFIG_SPL_PAD_TO)
  u-boot-with-spl.bin: spl/u-boot-spl.bin $(SPL_PAYLOAD) FORCE
 -- 
-1.9.1
+2.7.4
 
