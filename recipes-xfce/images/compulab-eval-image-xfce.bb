@@ -16,15 +16,7 @@ CORE_IMAGE_BASE_INSTALL += "\
 	packagegroup-fsl-gstreamer1.0-full \
 	gstreamer1.0-plugins-imx \
 	libtool \
-	libexif \
 	python-compiler \
 	nfs-utils \
 	nfs-utils-client \
-	cl-deploy \
-	cl-uboot \
-	video-input \
-	can-utils \
-	u-boot-compulab \
 "
-
-CORE_IMAGE_BASE_INSTALL_append_cl-som-imx6 += "chromium"
