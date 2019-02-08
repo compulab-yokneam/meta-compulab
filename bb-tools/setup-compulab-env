@@ -39,28 +39,33 @@ eom
 
 # Machine's independent stuff
 # bblayers.conf
-sed -i '$aBBLAYERS += " \\\n\t${BSPDIR}/sources/meta-compulab \\\n\t${BSPDIR}/sources/meta-openembedded/meta-xfce \\\n"' ${BBLAYERS_CONF}
+cat << eof | tee -a ${BBLAYERS_CONF} > /dev/null
+BBLAYERS += " \\
+	\${BSPDIR}/sources/meta-compulab \\
+	\${BSPDIR}/sources/meta-openembedded/meta-xfce \\
+"
+eof
 
 if [[ -d ../sources/meta-compulab-dev ]];then
-sed -i '$aBBLAYERS += " \\\n\t${BSPDIR}/sources/meta-compulab-dev \\\n"' ${BBLAYERS_CONF}
+cat << eof | tee -a ${BBLAYERS_CONF} > /dev/null
+BBLAYERS += " \\
+	\${BSPDIR}/sources/meta-compulab-dev \\
+eof
 fi
 
 # local.conf
-sed -i '$ a LICENSE_FLAGS_WHITELIST="commercial"' ${LOCAL_CONF}
-
 if [[ -n ${ADD_DEB} ]];then
 sed -i '/PACKAGE_CLASSES/ a PACKAGE_CLASSES += " package_deb"' ${LOCAL_CONF}
 fi
 
-EXTRA_INSTALL=" ntp dhcp-client"
-EXTRA_INSTALL+=" cl-deploy cl-uboot cl-cleanup"
+EXTRA_INSTALL=" can-utils ntp dhcp-client memtester"
+EXTRA_INSTALL+=" cl-deploy cl-uboot cl-cleanup u-boot-fw-utils"
 declare -a bbmask=(recipes-security/optee-imx/optee-os-imx_git.bb recipes-browser/chromium/chromium_%.bbappend)
 
 eval $(awk '(/^DISTRO_VERSION /)&&(gsub(/ /,""))' ../sources/poky/meta-poky/conf/distro/poky.conf)
 
 case ${MACHINE} in
     cl-som-imx6ul|cl-som-imx7)
-    EXTRA_INSTALL+=" can-utils "
     meta_cpl_dir="../sources/meta-compulab"
     meta_ti_dir="../sources/meta-ti"
     meta_uim_dir="../sources/meta-uim"; mkdir -p ${meta_uim_dir}
@@ -75,16 +80,16 @@ case ${MACHINE} in
     EXTRA_INSTALL+=" uim-ti cl-ap"
     ;;
     cl-som-imx6|cm-fx6-evk)
-    EXTRA_INSTALL+=" can-utils "
     EXTRA_INSTALL+=" video-input"
-    [[ ${DISTRO} =~ "fb" ]] || EXTRA_INSTALL+=" chromium libexif"
-    [[ ${DISTRO} =~ "x11" ]] && EXTRA_INSTALL+=" gstreamer1.0-plugins-imx"
     ;;
     *)
     ;;
 esac
 
-sed -i "$ a CORE_IMAGE_EXTRA_INSTALL += \" ${EXTRA_INSTALL}\"" ${LOCAL_CONF}
+cat << eof | tee -a ${LOCAL_CONF} > /dev/null
+CORE_IMAGE_EXTRA_INSTALL += "${EXTRA_INSTALL}"
+LICENSE_FLAGS_WHITELIST = "commercial"
+eof
 
 case ${DISTRO_VERSION} in
     2.1.1|2.2.1)
