@@ -1,22 +1,19 @@
-DESCRIPTION = "A XFCE desktop demo image."
-
-IMAGE_FEATURES += "splash package-management ssh-server-dropbear hwcodecs dev-pkgs nfs-client"
-
+DESCRIPTION = "CompuLab XFCE desktop demo image."
 LICENSE = "MIT"
 
-inherit core-image distro_features_check
+require recipes-fsl/images/fsl-image-qt5-validation-imx.bb
+
+inherit distro_features_check
+
+IMAGE_FEATURES_remove = "x11-sato"
 
 REQUIRED_DISTRO_FEATURES = "x11"
 
 CORE_IMAGE_BASE_INSTALL += "\
-	packagegroup-core-boot \
-	packagegroup-core-x11 \
-	packagegroup-xfce-base \
-	nodejs \
-	packagegroup-fsl-gstreamer1.0-full \
-	gstreamer1.0-plugins-imx \
-	libtool \
-	python-compiler \
-	nfs-utils \
-	nfs-utils-client \
+    packagegroup-core-x11 \
+    packagegroup-xfce-base \
+    packagegroup-xfce-multimedia \
+    packagegroup-xfce-extended \
 "
+
+PACKAGE_EXCLUDE = "xfce-polkit"
