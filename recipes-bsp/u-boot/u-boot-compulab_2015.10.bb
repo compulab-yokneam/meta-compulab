@@ -17,6 +17,11 @@ SRC_URI += "file://0003-arm-imx6ul-add-u-boot-with-spl-cl.imx-target-for-cl-.pat
 	file://Fix-the-compile-issue-under-gcc7.patch \
 "
 
+SRC_URI_append_cm-fx6-evk += " \
+	file://0200-cm-fx6-Update-mmdc-settings-with-the-lates-mst3.0-va.patch \
+	file://0201-cm-fx6-config-Enable-memimfo-memtest.patch \
+"
+
 SRC_URI_append_cl-som-imx6ul += "file://cl_som_imx6ul_defconfig \
 	file://cl_som_imx6ul_nospl_defconfig \
 	file://0001-arm-imx6ul-add-support-for-Compulab-cl-som-imx6ul.patch \
