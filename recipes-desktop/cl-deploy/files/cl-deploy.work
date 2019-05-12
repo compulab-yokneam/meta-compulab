@@ -39,7 +39,7 @@ sfdisk --dump ${SRC} | sfdisk ${DST}
 last_part=$(sfdisk -l ${SRC} | awk -v var=${SRC}${SPART} ' END { gsub(var,"",$1); print $1 }')
 echo ",+" | sfdisk -N ${last_part} ${DST}
 
-part_info=$(blkid ${SRC}* | awk -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&(gsub(/:/,"",$1))&&($0="part="$1";"$NF)')
+part_info=$(blkid ${SRC}* | awk -F":" -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&(gsub(/ /,";",$2))&&(gsub(/ /,"",$0))&&($0="part="$0)')
 
 for P in ${part_info};do
     eval ${P}
