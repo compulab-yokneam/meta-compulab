@@ -77,7 +77,7 @@ case ${MACHINE} in
     tar -C ${meta_ti_dir} --transform='flags=r;s|uim_|uim-ti_|' -cf - recipes-connectivity/uim conf/layer.conf | tar -C ${meta_uim_dir} -xf -
     sed 's/compulab/uim/g' ${meta_cpl_dir}/conf/layer.conf > ${meta_uim_dir}/conf/layer.conf
     sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/'${meta_uim_dir}' "' ${BBLAYERS_CONF}
-    EXTRA_INSTALL+=" uim-ti cl-ap u-boot-fw-utils"
+    EXTRA_INSTALL+=" uim-ti "
     ;;
     cl-som-imx6|cm-fx6-evk)
     EXTRA_INSTALL+=" video-input u-boot-fw-utils"
