@@ -16,3 +16,5 @@ do_install_append() {
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+RDEPENDS_${PN}_append = " perl "
