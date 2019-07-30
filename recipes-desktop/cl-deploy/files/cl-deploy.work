@@ -185,6 +185,19 @@ create_cl_layout() {
     local _size=32
     # Start offset 1M
     local _start=1
+    local soc=$(udevadm info -ap /sys/devices/soc0 | awk -F"\"" '(/soc_id/)&&($0=tolower($2))')
+    # mx8 soc must have 8M offset in order to provide a room for the u-boot environment
+    # storred at 4M offest
+    # increased boot partition size as well (the same as in the yocto machine conf file)
+    case $soc in
+        i.mx8mq|i.mx8mm)
+        _start=8
+        _size=64
+        ;;
+        *)
+        ;;
+    esac
+
     local _start1=0
 
     # Mega -> Block
