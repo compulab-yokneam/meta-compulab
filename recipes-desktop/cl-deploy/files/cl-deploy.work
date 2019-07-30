@@ -8,6 +8,7 @@ dialog_app=dialog
 
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
+MKTEMP=/var/run
 
 source_block_device() {
 
@@ -81,7 +82,7 @@ eom
     pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null
 
     if [[ -d ${mdst}/boot ]];then
-        local boot_dir=$(mktemp -p /var/local -d)
+        local boot_dir=$(mktemp -p ${MKTEMP} -d)
         mount ${DST}${DPART}1 ${boot_dir}
         cp -a ${mdst}/boot/* ${boot_dir}
         umount ${boot_dir}
@@ -370,8 +371,8 @@ if [[ ${SRC} = "-" && ${LPLUS} = "+" && -n ${DST} ]]; then
 	exit 0
 fi
 
-msrc=$(mktemp -p /var/local -d)
-mdst=$(mktemp -p /var/local -d)
+msrc=$(mktemp -p ${MKTEMP} -d)
+mdst=$(mktemp -p ${MKTEMP} -d)
 
 SUCCESS_EXIT=success_exit
 
