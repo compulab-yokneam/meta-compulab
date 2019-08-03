@@ -24,3 +24,5 @@ do_install_append_ucm-imx8m-mini() {
     WESTON_INI_DEST_DIR=${D}${sysconfdir}/xdg/weston
     cat ${WORKDIR}/weston.ini-ucm-imx8m-mini >> ${WESTON_INI_DEST_DIR}/weston.ini
 }
+
+RDEPENDS_${PN} += "cl-launcher"
