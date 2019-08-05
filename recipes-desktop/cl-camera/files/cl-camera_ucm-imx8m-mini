@@ -1,0 +1,23 @@
+#!/bin/bash
+
+PID_FILE=/var/run/cl-camera.pid
+
+if [[ -f ${PID_FILE} ]];then
+PID=$(cat ${PID_FILE})
+kill -9 ${PID}
+rm -rf ${PID_FILE}
+exit 0
+fi
+
+gst-launch-1.0 v4l2src device=/dev/video0 !  "video/x-raw, framerate=(fraction)30/1" ! waylandsink window-width=1280 window-height=720 &
+PID=$!
+
+sleep 1
+# start another sink if wayland is not available
+
+if [[ ! -d /proc/${PID} ]];then
+gst-launch-1.0 v4l2src device=/dev/video0 ! "video/x-raw, framerate=(fraction)30/1" ! autovideosink &
+PID=$!
+fi
+
+echo ${PID} > ${PID_FILE}
