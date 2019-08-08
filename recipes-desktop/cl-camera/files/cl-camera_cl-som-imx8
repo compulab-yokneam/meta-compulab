@@ -9,7 +9,19 @@ rm -rf ${PID_FILE}
 exit 0
 fi
 
-gst-launch-1.0 -v v4l2src ! "video/x-raw, framerate=(fraction)30/1" ! autovideosink &
+if [ -d /sys/class/video4linux/video0 ];then
+SRC="v4l2src device=/dev/video0"
+eval $(udevadm info -ap /sys/devices/soc0 | awk '/=/' | sed 's/ATTR{\(.*\)}/\1/g;s/==/=/g')
+TEXT=${machine}
+OVERP=""
+else
+SRC="videotestsrc pattern=snow"
+TEXT="Make sure that the camera is connected to the board...."
+OVERP="color=0 valignment=center halignment=left font-desc=Sans,48"
+fi
+
+SINK="autovideosink"
+gst-launch-1.0 ${SRC} !  "video/x-raw, framerate=(fraction)30/1" ! textoverlay text="'${TEXT}'" ${OVERP} ! ${SINK} &
 
 PID=$!
 echo ${PID} > ${PID_FILE}
