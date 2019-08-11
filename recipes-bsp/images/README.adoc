@@ -1,23 +1,23 @@
-# Yocto SDK with QT5 support for CompuLab Boards
+= Yocto SDK with QT5 support for CompuLab Boards =
 
-## Overview
+# Overview
 
 The purpouse of this manual is to provide a step-by-step instruction for creating the 
 Yocto SDK with QT5 support for CompuLab Boards.
 
-## Supported CompuLab Machines
+# Supported CompuLab Machines
 
 * `cl-som-imx8`
 * `ucm-imx8m-mini`
 
-## Options
+# Options
 
 This manual offers one of two options. Choose the one:
 
 * Simple: Use <<README.adoc#pre-built-sdk-with-qt5-support>>
-* Complicated (for developers): <<README.adoc#prepare-nxp-bsp>>
+* Complicated (for developers): <<README.adoc#build-sdk-with-qt5-suppor>>
 
-## Pre-built SDK with Qt5 support
+# Pre-built SDK with Qt5 support
 
 NOTE: :information_source: The image works on both `machines`
 
@@ -39,7 +39,8 @@ sudo mount -B ${PATH_TO_SDK}/opt/fsl-imx-xwayland/4.14-sumo /opt/fsl-imx-xwaylan
 
 * Continue with: <<README.adoc#make-use-of-the-build-environment>>
 
-# Prepare NXP BSP
+# Build SDK with Qt5 suppor
+## Prepare NXP BSP
 [source,console]
 repo init -u git://source.codeaurora.org/external/imx/imx-manifest.git -b imx-linux-sumo -m imx-4.14.98-2.0.0_ga.xml
 repo sync
@@ -93,7 +94,7 @@ Extracting SDK..................................................................
 Setting it up...done
 SDK has been successfully set up and is ready to be used.
 
-## Make use of the build environment
+# Make use of the build environment
 Each time you wish to use the SDK in a new shell session, you need to source the environment setup script e.g.
 [source,console]
 . /opt/fsl-imx-xwayland/4.14-sumo/environment-setup-aarch64-poky-linux
