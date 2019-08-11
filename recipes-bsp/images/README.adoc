@@ -1,4 +1,6 @@
-# Quick Start Guide
+# Yocto SDK with QT5 support for CompuLab Boards
+
+## Quick Start Guide
 
 This manual offers one of two options. Choose the one:
 
