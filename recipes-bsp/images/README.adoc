@@ -1,16 +1,21 @@
 # Yocto SDK with QT5 support for CompuLab Boards
 
-## Quick Start Guide
+## Overview
 
-This manual offers one of two options. Choose the one:
-
-* Simple: Use <<README.adoc#pre-built-sdk-with-qt5-support>>
-* Complicated (for developers): <<README.adoc#prepare-nxp-bsp>>
+The purpouse of this manual is to provide a step-by-step instruction for creating the 
+Yocto SDK with QT5 support for CompuLab Boards.
 
 ## Supported CompuLab Machines
 
 * `cl-som-imx8`
 * `ucm-imx8m-mini`
+
+## Options
+
+This manual offers one of two options. Choose the one:
+
+* Simple: Use <<README.adoc#pre-built-sdk-with-qt5-support>>
+* Complicated (for developers): <<README.adoc#prepare-nxp-bsp>>
 
 ## Pre-built SDK with Qt5 support
 
