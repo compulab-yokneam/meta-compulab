@@ -80,6 +80,6 @@ Setting it up...done
 SDK has been successfully set up and is ready to be used.
 
 # Make use of the build environment
-Each time you wish to use the SDK in a new shell session, you need to source the environment setup script e.g.
+Each time you wish to use the SDK in a new shell session, source the environment setup script e.g.
 [source,console]
 . /opt/fsl-imx-xwayland/4.14-sumo/environment-setup-aarch64-poky-linux
