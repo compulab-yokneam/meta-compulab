@@ -1,45 +1,42 @@
-= Yocto SDK with QT5 support for CompuLab Boards =
+= Setting up Yocto SDK with Qt5 support =
 
 # Overview
 
-The purpouse of this manual is to provide a step-by-step instruction for creating the 
-Yocto SDK with QT5 support for CompuLab Boards.
+The following document provides step-by-step instructions for setting up Yocto SDK with QT5 support for CompuLab boards.
 
-# Supported CompuLab Machines
+## Supported CompuLab Machines
 
 * `cl-som-imx8`
 * `ucm-imx8m-mini`
 
-# Options
+## SDK setup options
 
-This manual offers one of two options. Choose the one:
+This document offers two SDK setup options. Choose one:
 
-* Simple: Use <<README.adoc#pre-built-sdk-with-qt5-support>>
-* Complicated (for developers): <<README.adoc#build-sdk-with-qt5-suppor>>
+* <<README.adoc#using-pre-built-sdk-with-qt5-support>>
+* <<README.adoc#building-sdk-with-qt5-support>> (for developers)
 
-# Pre-built SDK with Qt5 support
-
-NOTE: :information_source: The image works on both `machines`
+# Using pre-built SDK with Qt5 support
 
 * Download the https://drive.google.com/open?id=14nEqaVNputvIwf5rw9Hv_kAxjfaiFbpX[SDK with Qt5 support image]
-* Find a location where at least 12G is available
+* Find a location with at least 12GB of available space
 * Set the `PATH_TO_SDK` environment variable to the location that has enough free space:
 [source,console]
 export PATH_TO_SDK=/path/to/sdk
 
-* Deploy the SDK tarball this way:
+* Deploy the SDK tarball:
 [source,console]
 sudo tar -C ${PATH_TO_SDK} -xf /path/to/qt5-build-env.tar.bz2
 
 * Remount the deployed SDK to the default installation path:
-** If ${PATH_TO_SDK} is not equal to `/`, then issue next two steps:
+** If ${PATH_TO_SDK} is not equal to `/`, then issue following steps:
 [source,console]
 sudo mkdir -p /opt/fsl-imx-xwayland/4.14-sumo
 sudo mount -B ${PATH_TO_SDK}/opt/fsl-imx-xwayland/4.14-sumo /opt/fsl-imx-xwayland/4.14-sumo
 
 * Continue with: <<README.adoc#make-use-of-the-build-environment>>
 
-# Build SDK with Qt5 suppor
+# Building SDK with Qt5 support
 ## Prepare NXP BSP
 [source,console]
 repo init -u git://source.codeaurora.org/external/imx/imx-manifest.git -b imx-linux-sumo -m imx-4.14.98-2.0.0_ga.xml
