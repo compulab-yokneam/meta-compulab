@@ -14,11 +14,11 @@ SRC_URI = " \
 	file://COPYING \
 "
 
-SRC_URI_cl-som-imx8 = " \
+SRC_URI_append_cl-som-imx8 = " \
 	file://cl-camera_cl-som-imx8 \
 "
 
-SRC_URI_ucm-imx8m-mini = " \
+SRC_URI_append_ucm-imx8m-mini = " \
 	file://cl-camera_ucm-imx8m-mini \
 "
 
