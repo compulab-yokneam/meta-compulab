@@ -18,6 +18,10 @@ SRC_URI_append_cl-som-imx8 = " \
 	file://cl-camera_cl-som-imx8 \
 "
 
+SRC_URI_append_cl-som-imx8x = " \
+	file://cl-camera_cl-som-imx8x \
+"
+
 SRC_URI_append_ucm-imx8m-mini = " \
 	file://cl-camera_ucm-imx8m-mini \
 "
