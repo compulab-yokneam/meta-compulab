@@ -14,6 +14,10 @@ SRC_URI = " \
 	file://COPYING \
 "
 
+SRC_URI_append_cl-som-imx7 = " \
+	file://cl-camera_cl-som-imx7 \
+"
+
 SRC_URI_append_cl-som-imx8 = " \
 	file://cl-camera_cl-som-imx8 \
 "
