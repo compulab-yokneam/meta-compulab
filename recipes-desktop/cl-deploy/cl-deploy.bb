@@ -41,6 +41,6 @@ FILES_${PN} = " \
 	/usr/share/applications/* \
 "
 
-RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz e2fsprogs"
+RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz e2fsprogs parted"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"

@@ -10,6 +10,23 @@ CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
 MKTEMP=/var/run
 
+declare -a sw_array='dialog pv bunzip2 gunzip xz sfdisk partprobe'
+
+validate_sw() {
+for sw in $sw_array; do
+    command -v ${sw} &>/dev/null
+    if [ $? -ne 0 ]; then
+cat << eom
+    Make sure that all required tools: "${sw_array[@]}" are installed.
+    ${sw} is missing
+eom
+    exit 2
+    fi
+done
+}
+
+validate_sw
+
 source_block_device() {
 
 # Make sure that the source device does not have
@@ -39,6 +56,7 @@ sfdisk --dump ${SRC} | sfdisk ${DST}
 # Get & Expand last partition
 last_part=$(sfdisk -l ${SRC} | awk -v var=${SRC}${SPART} ' END { gsub(var,"",$1); print $1 }')
 echo ",+" | sfdisk -N ${last_part} ${DST}
+partprobe ${DST}
 
 part_info=$(blkid ${SRC}* | awk -F":" -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&(gsub(/ /,";",$2))&&(gsub(/ /,"",$0))&&($0="part="$0)')
 
@@ -102,6 +120,7 @@ eom
 last_part_x() {
     LAST=$(sfdisk -l ${DST} | awk -v var=${DST}${DPART} ' END { gsub(var,"",$1); print $1 }')
     echo ",+" | sfdisk -N ${LAST} ${DST}
+    partprobe ${DST}
     resize2fs ${DST}${DPART}${LAST}
 }
 
@@ -115,6 +134,7 @@ eom
 
     prompt="[ ${SRC} => ${DST} ]"
     ${DECOMPRESSOR} -dc ${SRC} | pv -N "${prompt}" | dd of=${DST} bs=1M
+    partprobe ${DST}
 
     [[ -n ${LPLUS} ]] && last_part_x
 
@@ -211,6 +231,7 @@ sfdisk --force ${unit_opt} ${DST} << eosfdisk
 ${_start},${_size},0x83
 ${_start1},,0x83
 eosfdisk
+partprobe ${DST}
 
     mkfs.ext2 -F -L boot ${DST}${DPART}1
     mkfs.ext4 -F -L rootfs ${DST}${DPART}2
@@ -390,8 +411,10 @@ mdst=$(mktemp -p ${MKTEMP} -d)
 
 SUCCESS_EXIT=success_exit
 
+if [ -z ${UDEV}  ];then
 [ -f /etc/init.d/udev ] && /etc/init.d/udev stop
 which systemctl >/dev/null && systemctl stop systemd-udevd*
+fi
 
 DIALOG="Start Deployment"
 MESSAGE="Src: ${SRC} -> Dst: ${DST}\n\nAll data on ${DST} will be destroyed"
