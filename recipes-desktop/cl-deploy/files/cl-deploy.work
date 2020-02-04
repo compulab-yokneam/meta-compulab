@@ -1,10 +1,11 @@
-#!/bin/bash -xv
+#!/bin/bash
 
 SRC=${SRC:=''}
 DST=${DST:=''}
 SCAN_ALL=${SCAN_ALL:=1}
 dialog_app=dialog
 [[ -n ${QUIET} ]] && dialog_app='true || '${dialog_app}
+[[ -n ${DEBUG} ]] && set -x
 
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
@@ -291,6 +292,14 @@ success_exit() {
     ${dialog_app} --backtitle "${DIALOG}" --yesno "${MESSAGE}" 10 80 && success_reboot
 }
 
+msg_exit() {
+# 1-message, 2-exit code
+cat << eom
+$1
+eom
+exit $2
+}
+
 select_directory() {
 	local DIALOG="Select a directory:"
 	_SELECT=$(${dialog_app} --backtitle "${DIALOG}" --dselect / 15 80 --stdout)
@@ -405,6 +414,9 @@ if [[ ${SRC} = "-" && ${LPLUS} = "+" && -n ${DST} ]]; then
 	last_part_x
 	exit 0
 fi
+
+[[ -b ${SRC} || -d ${SRC} || -f ${SRC} ]] || msg_exit "Invalid SRC=${SRC}, exiting with errno=1" 1
+[[ -b ${DST} || -c ${DST} ]] || msg_exit "Invalid DST=${DST}, exiting with errno=2" 2
 
 msrc=$(mktemp -p ${MKTEMP} -d)
 mdst=$(mktemp -p ${MKTEMP} -d)
