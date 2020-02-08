@@ -4,6 +4,7 @@
 DESCRIPTION = "CompuLab Stress Test Tool"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=396ed65bba4045e7a22bcdb2ae6901b8"
+MAINTAINER = "CompuLab <compulab@compulab.com>"
 
 PR = "r0"
 
@@ -44,4 +45,5 @@ FILES_${PN} = " \
 
 RDEPENDS_${PN} = "bash xz memtester"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
+RDEPENDS_${PN}_append = " ${@bb.utils.contains('MACHINE', 'cl-som-imx7', '', 'imx-gpu-viv-demos', d)}"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
