@@ -10,6 +10,8 @@ gpu_ia=${gpu_ia:-no}
 pid_bg=""
 
 tut=/opt/viv_samples/vdk/tutorial4_es20
+# exit if there is no such the file
+[[ -f ${tut} ]] || exit 0
 cd /opt/viv_samples/vdk
 
 for p in $(seq 0 ${gpu_count});do
