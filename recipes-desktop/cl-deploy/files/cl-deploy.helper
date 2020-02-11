@@ -1,0 +1,113 @@
+#!/bin/bash
+
+declare -A work=( [ia]=cl-deploy [na]=cl-deploy.work )
+
+usage() { 
+cat << EOF 1>&2
+Usage: $0
+Run w/out parameters makes it work in an interactive mode.
+Options:
+	[ -h ] print this help
+	[ -s <source> ] 
+		source: block device, directory, tarball, diskimage.
+	[ -d <destination> ]
+		destination: block device.
+	[ -l ] expand the latest partition of the destination.
+	[ -e ] emulation: create a command line for a non-interactive run.
+	[ -u <on|off>  ] 
+	[ -q ] quiet: Run a non-interactive mode.
+Examples:
+	block device -> block device
+	# source:      /dev/mmcblk2
+	# destination: /dev/mmcblk0
+	# Duplicates partition table
+	# expandes the latest partition till the end of the media
+	# copies the partition's conten one-by-one
+$0 -s /dev/mmcblk2 -d /dev/mmcblk0 -q
+
+	directory/tarball -> block device
+	# source: / or /path/to/rootfs.tar.bz2
+	# destination: /dev/mmcblk0
+	# Creates the CopmpuLab layout on the destination device
+	# 1-st boot partition   ~ [ 32M, 64M ]
+	# 2-nd rootfs partition ~ [ destination media size - boot partititon size ]
+	## mkfs.ext2 -L boot /dev/mmcblk0p1; mkfs.ext4 -L rootfs /dev/mmcblk0p2
+	## mkfdir /media/dst; mount /dev/mmcblk0p2 /media/dst
+	## mkdir /media/dst/boot;  mount /dev/mmcblk0p1 /media/dst/boot
+	## if source is a directory
+	## tar -C / -cpf - . | tar -C /media/dst -xf -
+$0 -s / - /dev/mmcblk0 -q
+
+	# if source is a tarball
+	## tar -C /media/dst -xjf /path/to/rootfs.tar.bz2
+$0 -s /path/to/rootfs.tar.bz -d /dev/mmcblk0 -q
+
+	disk image -> block device
+	# source: /path/to/disk.img.gz
+	# destination: /dev/sda
+	# Copies the entire image to the destination using a block copy 'dd'
+$0 -s /path/to/disk.img.gz -d /dev/sda -q
+EOF
+exit 1
+}
+
+while getopts ":s:d:u:qlhe" o ; do
+	case "${o}" in
+	s)
+		export SRC=${OPTARG}
+		;;
+	d)
+		export DST=${OPTARG}
+		;;
+	q)
+		# A non-interactive mode
+		# it is up to the user to provide SRC and DST
+		export QUIET='Yes'
+		;;
+	e)
+		# Emulation run: works in interactive mode
+		# asks for all parametres, prints the command line 
+		# for a non-interactive run and exits.
+		export EMUL='Yes'
+		export WORK=${work[na]}
+		;;
+	u)
+		u=${OPTARG}
+		[[ $u == 'on' || $u == 'off'  ]] || usage
+		[[ $u == 'on' ]] && export UDEV='on'
+		;;
+	l)
+		# Expand the destination last partition
+		export PLUS='+'
+		;;
+	h)
+		usage
+		;;
+	:)
+		echo Missing ${OPTARG} argument
+		usage
+		;;
+	?)
+		echo Invalid option ${OPTARG}
+		usage
+		;;
+	esac
+done
+shift $((OPTIND-1))
+
+WORK=${WORK:-${work[ia]}}
+
+source ${WORK}
+
+if [[ -n ${EMUL} ]];then
+cat << eom
+The currrent scenario can be carried out in a non-interactive mode:
+Helper way:
+	$0 -s ${SRC} -d ${DST} -q
+
+Worker way:
+	SRC=${SRC} DST=${DST} QUIET=Yes cl-deploy.work
+eom
+fi
+
+exit 0

@@ -418,6 +418,11 @@ fi
 [[ -b ${SRC} || -d ${SRC} || -f ${SRC} ]] || msg_exit "Invalid SRC=${SRC}, exiting with errno=1" 1
 [[ -b ${DST} || -c ${DST} ]] || msg_exit "Invalid DST=${DST}, exiting with errno=2" 2
 
+if [[ -n ${EMUL} ]];then
+# Does nothing, just returns the SRC and DST to the caller.
+[ $(basename -- $BASH_SOURCE) == $(basename -- $0) ] && exit || return
+fi
+
 msrc=$(mktemp -p ${MKTEMP} -d)
 mdst=$(mktemp -p ${MKTEMP} -d)
 

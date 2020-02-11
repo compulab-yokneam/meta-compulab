@@ -10,6 +10,7 @@ PR = "r2"
 SRC_URI = " \
 	file://cl-deploy \
 	file://cl-deploy.work \
+	file://cl-deploy.helper \
 	file://cl-deploy.mtd \
 	file://cl-deploy.desktop \
 	file://cl-deploy.png \
@@ -27,6 +28,7 @@ do_install() {
 	mkdir -p ${D}/usr/share/applications/
 	cp ${S}/cl-deploy ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.work ${D}/usr/local/bin/
+	cp ${S}/cl-deploy.helper ${D}/usr/local/bin/
 	[[ -f ${S}/cl-deploy.mtd ]] && cp ${S}/cl-deploy.mtd ${D}/usr/local/bin/
 	cp ${S}/cl-deploy.png ${D}/usr/share/applications/
 	cp ${S}/cl-deploy.desktop ${D}/usr/share/applications/
