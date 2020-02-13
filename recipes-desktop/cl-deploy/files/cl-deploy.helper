@@ -14,7 +14,7 @@ Options:
 		destination: block device.
 	[ -l ] expand the latest partition of the destination.
 	[ -e ] emulation: create a command line for a non-interactive run.
-	[ -u <on|off>  ] 
+	[ -u <on|off> ] Turn off a udev daemon or keep it working during the deployment process.
 	[ -q ] quiet: Run a non-interactive mode.
 Examples:
 	block device -> block device
@@ -22,7 +22,7 @@ Examples:
 	# destination: /dev/mmcblk0
 	# Duplicates partition table
 	# expandes the latest partition till the end of the media
-	# copies the partition's conten one-by-one
+	# copies the partition's content one-by-one
 $0 -s /dev/mmcblk2 -d /dev/mmcblk0 -q
 
 	directory/tarball -> block device
@@ -32,11 +32,11 @@ $0 -s /dev/mmcblk2 -d /dev/mmcblk0 -q
 	# 1-st boot partition   ~ [ 32M, 64M ]
 	# 2-nd rootfs partition ~ [ destination media size - boot partititon size ]
 	## mkfs.ext2 -L boot /dev/mmcblk0p1; mkfs.ext4 -L rootfs /dev/mmcblk0p2
-	## mkfdir /media/dst; mount /dev/mmcblk0p2 /media/dst
+	## mkdir /media/dst; mount /dev/mmcblk0p2 /media/dst
 	## mkdir /media/dst/boot;  mount /dev/mmcblk0p1 /media/dst/boot
 	## if source is a directory
 	## tar -C / -cpf - . | tar -C /media/dst -xf -
-$0 -s / - /dev/mmcblk0 -q
+$0 -s / -d /dev/mmcblk0 -q
 
 	# if source is a tarball
 	## tar -C /media/dst -xjf /path/to/rootfs.tar.bz2
