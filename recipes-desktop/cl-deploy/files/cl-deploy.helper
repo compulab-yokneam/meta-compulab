@@ -69,7 +69,6 @@ while getopts ":s:d:u:qlhe" o ; do
 		# asks for all parametres, prints the command line 
 		# for a non-interactive run and exits.
 		export EMUL='Yes'
-		export WORK=${work[na]}
 		;;
 	u)
 		u=${OPTARG}
