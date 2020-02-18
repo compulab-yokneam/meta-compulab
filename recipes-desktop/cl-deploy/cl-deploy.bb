@@ -4,6 +4,7 @@
 DESCRIPTION = "CompuLab Deployment Tool"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4a0e2a2916052068a420bbc50873f515"
+MAINTAINER = "Valentin Raevsky <valentin@compulab.com>"
 
 PR = "r2"
 
@@ -43,6 +44,6 @@ FILES_${PN} = " \
 	/usr/share/applications/* \
 "
 
-RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz e2fsprogs parted"
+RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux e2fsprogs parted"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"
