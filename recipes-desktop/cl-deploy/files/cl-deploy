@@ -1,7 +1,7 @@
 #!/bin/bash
 
 get_cmdline_device() {
-for var in $(cat /proc/cmdline);do [[ $var =~ "=" ]] && eval $var;done
+root=$(findmnt -o SOURCE -n /)
 [[ -b ${root} ]] && block_boot_dev=$(udevadm info -n ${root} | awk -F "block" '(/DEVPATH/)&&(split($2,a,"/"))&&($0="/dev/"a[2])')
 }
 
@@ -14,7 +14,7 @@ WORK=/usr/local/bin/cl-deploy.work
 
 get_cmdline_device
 export BOOT=${block_boot_dev}
-[[ -z "${SRC}" ]] && export SRC=${BOOT}
+[[ -z ${SRC} && -z ${EMUL} ]] && export SRC=${BOOT}
 export SCAN_ALL=0
 
 ${EXEC} ${WORK}
