@@ -300,6 +300,12 @@ eom
 exit $2
 }
 
+validate_devices() {
+[[ -b ${SRC} || -d ${SRC} || -f ${SRC} ]] || msg_exit "Invalid SRC=${SRC}, exiting with errno=1" 1
+[[ -b ${DST} || -c ${DST} ]] || msg_exit "Invalid DST=${DST}, exiting with errno=2" 2
+[[ ${DST} == ${BOOT} ]] && msg_exit "Invalid DST=${DST} is equal to BOOT=${BOOT}, exiting with errno=3" 3
+}
+
 select_directory() {
 	local DIALOG="Select a directory:"
 	_SELECT=$(${dialog_app} --backtitle "${DIALOG}" --dselect / 15 80 --stdout)
@@ -407,21 +413,23 @@ if [[ -z ${DST} ]];then
     exit 2
 fi
 
-[[ ${DST} =~ "mmc" || ${DST} =~ "loop" ]] && DPART='p' || DPART=''
-[[ ${SRC} =~ "mmc" || ${SRC} =~ "loop" ]] && SPART='p' || SPART=''
-
+# this is a special case when the destination provided only
 if [[ ${SRC} = "-" && ${LPLUS} = "+" && -n ${DST} ]]; then
 	last_part_x
 	exit 0
 fi
 
-[[ -b ${SRC} || -d ${SRC} || -f ${SRC} ]] || msg_exit "Invalid SRC=${SRC}, exiting with errno=1" 1
-[[ -b ${DST} || -c ${DST} ]] || msg_exit "Invalid DST=${DST}, exiting with errno=2" 2
+validate_devices
 
 if [[ -n ${EMUL} ]];then
 # Does nothing, just returns the SRC and DST to the caller.
 [ $(basename -- $BASH_SOURCE) == $(basename -- $0) ] && exit || return
 fi
+
+# if we got here then all paramteres are valid
+# last preparation before the start
+[[ ${DST} =~ "mmc" || ${DST} =~ "loop" ]] && DPART='p' || DPART=''
+[[ ${SRC} =~ "mmc" || ${SRC} =~ "loop" ]] && SPART='p' || SPART=''
 
 msrc=$(mktemp -p ${MKTEMP} -d)
 mdst=$(mktemp -p ${MKTEMP} -d)
