@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo 1 > /proc/sys/kernel/sysrq
+
+sync;sync;sync
+for cmd in s u b;do echo ${cmd} > /proc/sysrq-trigger ; done

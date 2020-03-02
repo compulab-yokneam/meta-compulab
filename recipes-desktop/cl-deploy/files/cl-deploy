@@ -1,19 +1,24 @@
 #!/bin/bash
 
-get_cmdline_device() {
-root=$(findmnt -o SOURCE -n /)
-[[ -b ${root} ]] && block_boot_dev=$(udevadm info -n ${root} | awk -F "block" '(/DEVPATH/)&&(split($2,a,"/"))&&($0="/dev/"a[2])')
-}
+CL_FUNCTIONS=/usr/share/cl-deploy/cl-functions.inc
 
-block_boot_dev=''
+if [[ ! -f ${CL_FUNCTIONS} ]];then
+cat << eof
+The package library file ${CL_FUNCTIONS} is not found.
+Reinstall the cl-deploy package.
+eof
+exit 3
+fi
+
+source ${CL_FUNCTIONS}
+
 WORK=/usr/local/bin/cl-deploy.work
 
 [[ ! -t 0 ]] && EXEC="xterm -e" || EXEC="source"
 # Prevent spanning another xterm if we in
 [[ ${TERM} = "xterm" ]] && EXEC="source"
 
-get_cmdline_device
-export BOOT=${block_boot_dev}
+export BOOT=$(get_root_device)
 [[ -z ${SRC} && -z ${EMUL} ]] && export SRC=${BOOT}
 export SCAN_ALL=0
 
