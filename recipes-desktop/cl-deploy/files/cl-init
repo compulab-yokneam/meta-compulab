@@ -39,11 +39,7 @@ return $res
 pre_main() {
 
 dmesg -D
-mount -t proc proc /proc
-mount -t sysfs sys /sys
-mount -t tmpfs tmp /run
-mkdir -p /run/systemd
-
+prepare_fs
 mount / -o remount,rw
 
 }

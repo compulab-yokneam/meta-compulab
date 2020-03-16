@@ -6,6 +6,15 @@ set -a
 
 WORK=/usr/local/bin/cl-deploy
 
+prepare_fs() {
+
+mount -t proc proc /proc
+mount -t sysfs sys /sys
+mount -t tmpfs tmp /run
+mkdir -p /run/systemd
+
+}
+
 error_exit() {
 cat << eof
 ${1}
