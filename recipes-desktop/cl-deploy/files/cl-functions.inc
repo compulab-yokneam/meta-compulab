@@ -23,7 +23,7 @@ exit $2
 }
 
 get_block_device() {
-# Assumes that the caller passes a correct partition device
+[[ -b ${1} ]] || return
 edev=${1}
 while :
 do
