@@ -23,9 +23,9 @@ done
 echo "Clean up keypair [OK]"
 
 # Clean up root
-for user_dir in /root /home/root;do
+for user_dir in /root /home/root /home/compulab;do
 [ -f ${user_dir}/.bash_history ] && ( : > ${user_dir}/.bash_history )
-for file in .ssh .e .config .cache .ccache .aiur .xsession-errors .xsession-errors.old .fluxbox .mplayer .kde .local .gtkrc-2.0 .lesshst .Xauthority .pki .chromium .viminfo
+for file in .ssh .e .config .cache .ccache .aiur .xsession-errors .xsession-errors.old .fluxbox .mplayer .kde .local .gtkrc-2.0 .lesshst .Xauthority .pki .chromium .viminfo .vim
 do
 [ -e ${user_dir}/${file} ] && ( rm -rf ${user_dir}/${file} )
 done
@@ -37,6 +37,9 @@ rm -rf /var/log
 install -d /var/log -m 0755
 
 echo "Clean up /var/log [OK]"
+
+rm -rf /var/cache/apt
+echo "Clean up /var/cache/apt [OK]"
 
 shutdown -P now
 
