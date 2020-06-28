@@ -41,6 +41,9 @@ echo "Clean up /var/log [OK]"
 rm -rf /var/cache/apt
 echo "Clean up /var/cache/apt [OK]"
 
-shutdown -P now
+[[ -n ${POFF} ]] && shutdown -P now
+cat << eof
+Set POFF=Yes for poweroff after cl-cleanup
+eof
 
 exit 0
