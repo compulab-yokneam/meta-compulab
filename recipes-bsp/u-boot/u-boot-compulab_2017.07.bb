@@ -17,4 +17,4 @@ S = "${WORKDIR}/git"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE_cl-som-imx7 = "cl-som-imx7"
+COMPATIBLE_MACHINE = "cl-som-imx7"
