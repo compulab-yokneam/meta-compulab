@@ -19,6 +19,7 @@ SRC_URI = " \
 	file://gpu \
 	file://opt \
 	file://work \
+	file://stress-ng \
 	file://COPYING \
 "
 
@@ -28,7 +29,7 @@ do_install() {
     install -d ${D}/opt/compulab/cl-stest/
 
     cp ${S}/cl-stest ${D}/opt/compulab/cl-stest/
-    for name in work gov buf mem cpu gpu opt;do
+    for name in work gov buf mem cpu gpu opt stress-ng;do
         cp ${S}/$name ${D}/opt/compulab/cl-stest/
     done
     chmod a+x ${D}/opt/compulab/cl-stest/*
@@ -43,7 +44,7 @@ FILES_${PN} = " \
 	/usr/share/applications/* \
 "
 
-RDEPENDS_${PN} = "bash xz memtester"
+RDEPENDS_${PN} = "bash xz memtester stress-ng"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('MACHINE', 'cl-som-imx7', '', 'imx-gpu-viv-demos', d)}"
 PACKAGE_ARCH = "${MACHINE_ARCH}"

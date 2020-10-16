@@ -1,0 +1,19 @@
+#!/bin/bash
+
+frac=${frac:-'4/5'}
+time=${time:-60}
+
+proc=$(grep -c processor /proc/cpuinfo)
+
+free=$(free -m | awk '/^Mem/&&($0=$4)')
+size=$(( ${free} * ${frac}/${proc} )) 
+
+while [ 1 ];do
+stress-ng --vm ${proc} --vm-bytes ${size}M --timeout ${time}s
+rc=$?
+echo "stress-ng: status: [ ${rc} ]"
+if [ ${rc} -ne 0 ];then
+	break
+fi
+sleep 5
+done
