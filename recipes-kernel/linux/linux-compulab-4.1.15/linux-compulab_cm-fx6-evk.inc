@@ -1,4 +1,4 @@
-do_configure_append () {
+do_configure_append_cm-fx6-evk () {
     oe_runmake cm_fx6_defconfig
 }
 
