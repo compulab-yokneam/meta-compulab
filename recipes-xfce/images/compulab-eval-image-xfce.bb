@@ -1,19 +1,42 @@
-DESCRIPTION = "CompuLab XFCE desktop demo image."
+DESCRIPTION = "A XFCE desktop demo image."
+
 LICENSE = "MIT"
 
-require recipes-fsl/images/fsl-image-qt5-validation-imx.bb
-
+inherit core-image
 inherit distro_features_check
-
-IMAGE_FEATURES_remove = "x11-sato"
 
 REQUIRED_DISTRO_FEATURES = "x11"
 
-CORE_IMAGE_BASE_INSTALL += "\
-    packagegroup-core-x11 \
-    packagegroup-xfce-base \
-    packagegroup-xfce-multimedia \
-    packagegroup-xfce-extended \
+IMAGE_FEATURES += " \
+    debug-tweaks \
+    tools-profile \
+    splash \
+    nfs-server \
+    nfs-client \
+    tools-debug \
+    ssh-server-dropbear \
+    tools-testapps \
+    hwcodecs \
+    x11-base \
+    dev-pkgs \
 "
 
-PACKAGE_EXCLUDE = "xfce-polkit"
+CORE_IMAGE_EXTRA_INSTALL += " \
+    packagegroup-core-x11 \
+    packagegroup-core-full-cmdline \
+    packagegroup-xfce-base \
+    packagegroup-xfce-extended \
+    packagegroup-xfce-multimedia \
+    xf86-video-fbdev \
+    xrdb \
+"
+CORE_IMAGE_EXTRA_INSTALL += " \
+    packagegroup-tools-bluetooth \
+    packagegroup-fsl-tools-audio \
+    packagegroup-fsl-tools-gpu \
+    packagegroup-fsl-tools-gpu-external \
+    packagegroup-fsl-tools-testapps \
+    packagegroup-fsl-tools-benchmark \
+    packagegroup-fsl-gstreamer1.0 \
+    packagegroup-fsl-gstreamer1.0-full \
+"
