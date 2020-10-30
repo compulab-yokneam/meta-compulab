@@ -60,7 +60,7 @@ fi
 
 EXTRA_INSTALL=" can-utils ntp dhcp-client memtester"
 EXTRA_INSTALL+=" cl-deploy cl-uboot cl-cleanup"
-declare -a bbmask=(recipes-security/optee-imx/optee-os-imx_git.bb recipes-browser/chromium/chromium_%.bbappend)
+declare -a bbmask=(recipes-security/optee-imx/optee-os-imx_git.bb recipes-browser/chromium/chromium_%.bbappend perf.bb)
 
 eval $(awk '(/^DISTRO_VERSION /)&&(gsub(/ /,""))' ../sources/poky/meta-poky/conf/distro/poky.conf)
 
@@ -77,7 +77,7 @@ case ${MACHINE} in
     tar -C ${meta_ti_dir} --transform='flags=r;s|uim_|uim-ti_|' -cf - recipes-connectivity/uim conf/layer.conf | tar -C ${meta_uim_dir} -xf -
     sed 's/compulab/uim/g' ${meta_cpl_dir}/conf/layer.conf > ${meta_uim_dir}/conf/layer.conf
     sed -i '$ a BBLAYERS += " ${BSPDIR}/sources/'${meta_uim_dir}' "' ${BBLAYERS_CONF}
-    EXTRA_INSTALL+=" uim-ti "
+    EXTRA_INSTALL+=" uim-sysfs "
     ;;
     cl-som-imx6|cm-fx6-evk)
     EXTRA_INSTALL+=" video-input u-boot-fw-utils"
