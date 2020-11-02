@@ -18,9 +18,7 @@ SRC_URI = " \
 	file://cl-init \
 	file://cl-reboot \
 	file://cl-auto.conf.header \
-	file://cl-auto.conf_cl-som-imx7 \
-	file://cl-auto.conf_cl-som-imx8 \
-	file://cl-auto.conf_ucm-imx8m-mini \
+	file://cl-auto.conf \
 	file://cl-auto.bashrc \
 	file://cl-auto.shell \
 	file://cl-functions.inc \
@@ -48,10 +46,8 @@ do_install() {
 	install -m 0644 ${S}/cl-deploy.png ${D}/usr/share/applications/
 	install -m 0644 ${S}/cl-deploy.desktop ${D}/usr/share/applications/
 	mkdir -p ${D}/usr/share/cl-deploy/
-	if [ -f ${S}/cl-auto.conf_${MACHINE} ];then
-	cat ${S}/cl-auto.conf.header ${S}/cl-auto.conf_${MACHINE} > ${S}/cl-auto.conf.sample
+	cat ${S}/cl-auto.conf.header ${S}/cl-auto.conf > ${S}/cl-auto.conf.sample
 	install -m 0644 ${S}/cl-auto.conf.sample ${D}/usr/share/cl-deploy/
-	fi
 	install -m 0644 ${S}/cl-auto.bashrc ${D}/usr/share/cl-deploy/
 	install -m 0644 ${S}/cl-functions.inc ${D}/usr/share/cl-deploy/
 	install -m 0644 ${S}/cl-auto.inc ${D}/usr/share/cl-deploy/
