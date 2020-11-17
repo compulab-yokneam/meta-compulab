@@ -1,0 +1,55 @@
+setenv kernel_file zImage
+setenv fdt_file imx6ul-sbc-imx6ul.dtb
+setenv fdt_wifi imx6ul-sbc-imx6ul-wilink.dtb
+setenv console ttymxc2,115200
+
+setenv setup_args 'setenv bootargs console=${console} root=${rootdev} rootwait rw'
+
+setenv setup_boot 'setenv bootlinux \"\
+	if load ${bootdev} ${bootdev_id} ${loadaddr} ${kernel_file}; \
+	then; \
+		if load ${bootdev} ${bootdev_id} ${fdt_addr} ${fdt_file}; \
+		then; \
+			run setup_args; \
+			echo "Booting " ${bootdev}"["${bootdev_id}"]=>"${kernel_file}":"${fdt_file}; \
+			bootz ${loadaddr} - ${fdt_addr}; \
+		fi; \
+	fi;\"'
+
+setenv emmc '\
+setenv bootdev mmc; \
+setenv bootdev_id 1; \
+setenv fdt_file ${fdt_wifi}; \
+setenv rootdev /dev/mmcblk1p2; \
+if mmc dev ${bootdev_id} && mmc rescan; \
+then; \
+	run setup_boot; \
+	run bootlinux; \
+fi;\'
+
+setenv mmc '\
+setenv bootdev mmc; \
+setenv bootdev_id 0; \
+setenv rootdev /dev/mmcblk0p2; \
+if mmc dev ${bootdev_id} && mmc rescan; \
+then; \
+	run setup_boot; \
+	run bootlinux; \
+fi;\'
+
+setenv usb '\
+setenv bootdev usb; \
+setenv bootdev_id 0; \
+setenv fdt_file ${fdt_wifi}; \
+setenv rootdev /dev/sda2; \
+if usb start && usb dev ${bootdev_id};\
+then; \
+	run setup_boot; \
+	run bootlinux; \
+fi;\'
+
+run usb
+run mmc
+run emmc
+
+echo "Invalid boot parameters: bootdev ${bootdev} bootdev_id ${bootdev_id} kernel ${kernel_file} fdt_file ${fdt_file} ..."
