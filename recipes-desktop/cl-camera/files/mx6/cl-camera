@@ -9,7 +9,7 @@ rm -rf ${PID_FILE}
 exit 0
 fi
 
-gst-launch-1.0 v4l2src device=/dev/video0 ! autovideosink &
+gst-launch-1.0 imxv4l2src device=/dev/video0 ! autovideosink &
 
 PID=$!
 echo ${PID} > ${PID_FILE}
