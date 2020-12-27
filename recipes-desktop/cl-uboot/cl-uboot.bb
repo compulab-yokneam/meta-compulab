@@ -32,5 +32,4 @@ FILES_${PN} = " \
 "
 
 RDEPENDS_${PN} = "bash pv dialog mtd-utils u-boot-compulab"
-RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"
