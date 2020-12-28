@@ -53,10 +53,16 @@ cat << eom
 eom
 
 # Clone partition table
+eval $(blkid -p ${SRC} | awk -F":" '$0=$2')
+if [ ${PTTYPE} == "gpt" ];then
 sfdisk --dump ${SRC} | sfdisk ${DST}
 # Get & Expand last partition
 last_part=$(sfdisk -l ${SRC} | awk -v var=${SRC}${SPART} ' END { gsub(var,"",$1); print $1 }')
 echo ",+" | sfdisk --no-reread --force -N ${last_part} ${DST}
+else
+sgdisk --backup=table ${SRC} && sgdisk --load-backup=table ${DST}
+fi
+
 partprobe ${DST}
 
 part_info=$(blkid ${SRC}* | awk -F":" -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&(gsub(/ /,";",$2))&&(gsub(/ /,"",$0))&&($0="part="$0)')
