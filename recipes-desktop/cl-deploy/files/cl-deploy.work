@@ -7,6 +7,7 @@ dialog_app=dialog
 [[ -n ${QUIET} ]] && dialog_app='true || '${dialog_app}
 [[ -n ${DEBUG} ]] && set -x
 
+CL_DEPLOY_MOD=/usr/local/bin/cl-deploy.mod
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
 MKTEMP=/var/run
@@ -54,18 +55,23 @@ eom
 
 # Clone partition table
 eval $(blkid -p ${SRC} | awk -F":" '$0=$2')
-if [ ${PTTYPE} == "gpt" ];then
+# As of now the sfdisk does the job
+# this is a fake if statetement
+# will be removed latter after
+# the full testing coverage
+if [ ${PTTYPE} == "exta_gpt" ];then
+sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
+else
 sfdisk --dump ${SRC} | sfdisk ${DST}
 # Get & Expand last partition
 last_part=$(sfdisk -l ${SRC} | awk -v var=${SRC}${SPART} ' END { gsub(var,"",$1); print $1 }')
 echo ",+" | sfdisk --no-reread --force -N ${last_part} ${DST}
-else
-sgdisk --backup=table ${SRC} && sgdisk --load-backup=table ${DST}
 fi
 
 partprobe ${DST}
 
-part_info=$(blkid ${SRC}* | awk -F":" -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&(gsub(/ /,";",$2))&&(gsub(/ /,"",$0))&&($0="part="$0)')
+# Don't take into account the main block device, only partitions.
+part_info=$(blkid ${SRC}${SPART}[1-8] | awk -F":" -v var=${SRC}${SPART} '($1~var)&&(gsub(var,"",$1))&&(gsub(/ /,";",$2))&&(gsub(/ /,"",$0))&&($0="part="$0)')
 
 for P in ${part_info};do
     eval ${P}
@@ -452,6 +458,8 @@ MESSAGE="Src: ${SRC} -> Dst: ${DST}\n\nAll data on ${DST} will be destroyed"
 ${dialog_app} --backtitle "${DIALOG}" --title " WARNING  " --yesno "${MESSAGE}" 10 80 || exit
 
 [[ ${DST} =~ "mtd" ]] && target_mtd_device || target_block_device
+
+[[ -e ${CL_DEPLOY_MOD} ]] && source ${CL_DEPLOY_MOD}
 
 ${SUCCESS_EXIT}
 

@@ -12,6 +12,7 @@ SRC_URI = " \
 	file://cl-deploy.work \
 	file://cl-deploy.helper \
 	file://cl-deploy.mtd \
+	file://cl-deploy.mod \
 	file://cl-deploy.desktop \
 	file://cl-deploy.png \
 	file://cl-auto \
@@ -34,28 +35,35 @@ SRC_URI_append_cl-som-imx6ul = " \
 S = "${WORKDIR}"
 
 do_install() {
-	mkdir -p ${D}/usr/local/bin/
-	mkdir -p ${D}/usr/share/applications/
-	install -m 0755 ${S}/cl-deploy ${D}/usr/local/bin/
-	install -m 0755 ${S}/cl-deploy.work ${D}/usr/local/bin/
-	install -m 0755 ${S}/cl-deploy.helper ${D}/usr/local/bin/
-	install -m 0755 ${S}/cl-auto ${D}/usr/local/bin/
-	install -m 0755 ${S}/cl-auto.shell ${D}/usr/local/bin/
-	install -m 0755 ${S}/cl-init ${D}/usr/local/bin/
-	install -m 0755 ${S}/cl-reboot ${D}/usr/local/bin/
-	install -m 0644 ${S}/cl-deploy.png ${D}/usr/share/applications/
-	install -m 0644 ${S}/cl-deploy.desktop ${D}/usr/share/applications/
-	mkdir -p ${D}/usr/share/cl-deploy/
+	install -d ${D}${prefix}/local/bin
+	install -d ${D}${datadir}/applications
+	install -d ${D}${datadir}/cl-deploy
+	install -d ${D}${sysconfdir}
+
+
+	install -m 0755 ${S}/cl-deploy ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/cl-deploy.work ${D}${prefix}/local/bin/
+	install -m 0644 ${S}/cl-deploy.mod ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/cl-deploy.helper ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/cl-auto ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/cl-auto.shell ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/cl-init ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/cl-reboot ${D}${prefix}/local/bin/
+	install -m 0644 ${S}/cl-deploy.png ${D}${datadir}/applications/
+	install -m 0644 ${S}/cl-deploy.desktop ${D}${datadir}/applications/
+
 	cat ${S}/cl-auto.conf.header ${S}/cl-auto.conf > ${S}/cl-auto.conf.sample
-	install -m 0644 ${S}/cl-auto.conf.sample ${D}/usr/share/cl-deploy/
-	install -m 0644 ${S}/cl-auto.bashrc ${D}/usr/share/cl-deploy/
-	install -m 0644 ${S}/cl-functions.inc ${D}/usr/share/cl-deploy/
-	install -m 0644 ${S}/cl-auto.inc ${D}/usr/share/cl-deploy/
-	install -m 0644 ${S}/cl-auto.notifier ${D}/usr/share/cl-deploy/
+
+	install -m 0644 ${S}/cl-auto.conf.sample ${D}${datadir}/cl-deploy/
+	install -m 0644 ${S}/cl-auto.conf.sample ${D}${sysconfdir}/cl-auto.conf
+	install -m 0644 ${S}/cl-auto.bashrc ${D}${datadir}/cl-deploy/
+	install -m 0644 ${S}/cl-functions.inc ${D}${datadir}/cl-deploy/
+	install -m 0644 ${S}/cl-auto.inc ${D}${datadir}/cl-deploy/
+	install -m 0644 ${S}/cl-auto.notifier ${D}${datadir}/cl-deploy/
 }
 
 do_mtd_copy() {
-	[ -f ${S}/cl-deploy.mtd ] && install -m 0755 ${S}/cl-deploy.mtd ${D}/usr/local/bin/
+	[ -f ${S}/cl-deploy.mtd ] && install -m 0755 ${S}/cl-deploy.mtd ${D}${prefix}/local/bin/
 }
 
 do_install_append_cm-fx6-evk() {
@@ -71,12 +79,13 @@ do_install_append_cl-som-imx7() {
 }
 
 do_install_append_cl-som-imx6ul() {
-	cp ${S}/cl-deploy.cl-som-imx6ul ${D}/usr/local/bin/cl-deploy.platform
+	cp ${S}/cl-deploy.cl-som-imx6ul ${D}${prefix}/local/bin/cl-deploy.platform
 }
 
 FILES_${PN} = " \
-	/usr/local/bin/* \
-	/usr/share/* \
+	${prefix}/local/bin/* \
+	${datadir}/* \
+	${sysconfdir}/* \
 "
 
 RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted gdisk"
