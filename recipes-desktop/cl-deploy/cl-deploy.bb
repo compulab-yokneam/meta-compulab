@@ -79,5 +79,5 @@ FILES_${PN} = " \
 	/usr/share/* \
 "
 
-RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted"
+RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted gdisk"
 PACKAGE_ARCH = "all"
