@@ -61,4 +61,12 @@ done
 
 }
 
+function update_uuid() {
+for dev in $(stat --format=%n ${DST}* ); do
+	dev=/sys/class/block/$(basename ${dev})
+	[[ -e ${dev}/partition ]] && sfdisk --part-uuid ${DST} $(cat ${dev}/partition) $(uuidgen -t)
+done
+}
+
+[[ -n ${UUU} ]] && update_uuid
 post_deploy
