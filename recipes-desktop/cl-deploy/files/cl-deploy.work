@@ -75,6 +75,7 @@ part_info=$(blkid ${SRC}${SPART}[1-8] | awk -F":" -v var=${SRC}${SPART} '($1~var
 
 for P in ${part_info};do
     eval ${P}
+    sfdisk --part-uuid ${DST} ${part} $(uuidgen -t)
     [[ ${TYPE} = "ext"* ]] && OPT=" -F" || OPT=""
     mkfs.${TYPE} ${OPT} ${DST}${DPART}${part}
     mount ${DST}${DPART}${part} ${mdst}
