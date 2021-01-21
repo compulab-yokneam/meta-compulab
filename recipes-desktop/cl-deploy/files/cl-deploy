@@ -14,9 +14,13 @@ source ${CL_FUNCTIONS}
 
 WORK=/usr/local/bin/cl-deploy.work
 
-[[ ! -t 0 ]] && EXEC="xterm -e" || EXEC="source"
-# Prevent spanning another xterm if we in
-[[ ${TERM} = "xterm" ]] && EXEC="source"
+[[ -t 0 ]] && EXEC="source" || for T in weston-terminal matchbox-terminal xterm; do
+command -v ${T} &>/dev/null
+	if [ $? -eq 0 ];then
+		export EXEC="${T} -e"
+		break
+	fi
+done
 
 export BOOT=$(get_root_device)
 [[ -z ${SRC} && -z ${EMUL} ]] && export SRC=${BOOT}
