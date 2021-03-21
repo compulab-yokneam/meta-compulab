@@ -1,11 +1,12 @@
 #!/bin/bash
 
 WORK=/usr/local/bin/cl-uboot.work
+declare -A term_opt=(['weston-terminal']='--shell' ['xterm']='-e')
 
 [[ -t 0 ]] && EXEC="source" || for T in weston-terminal matchbox-terminal xterm; do
 command -v ${T} &>/dev/null
 	if [ $? -eq 0 ];then
-		export EXEC="${T} -e"
+		export EXEC="${T} ${term_opt[${T}]}"
 		break
 	fi
 done
