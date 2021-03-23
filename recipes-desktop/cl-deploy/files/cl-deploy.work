@@ -82,7 +82,7 @@ for P in ${part_info};do
     TARGET=$(findmnt ${SRC}${SPART}${part} --output TARGET --noheadings)
     [[ -n ${TARGET} ]] && mount -B ${TARGET} ${msrc} || mount ${SRC}${SPART}${part} ${msrc}
     prompt="[ ${SRC}${SPART}${part} => ${DST}${DPART}${part} ]"
-    tar -C ${msrc} -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
+    tar -C ${msrc} --exclude=run/* -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
     umount ${msrc}
     umount ${mdst}
 done
@@ -193,7 +193,7 @@ eom
         if [[ $? -eq 0 ]];then
             mount ${DST}${DPART}${P} ${mdst}
             prompt="[ ${SRC}${SPART}${src_parts[P]} => ${DST}${DPART}${P} ]"
-            tar -C ${msrc} -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
+            tar -C ${msrc} --exclude=run/* -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
             umount ${mdst}
             umount ${msrc}
         else
