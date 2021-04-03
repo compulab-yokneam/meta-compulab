@@ -110,10 +110,17 @@ eom
     [[ ${tar_info} = gzip ]] && filter=z
     [[ ${tar_info} = xz ]] && filter=J
 
-    mount ${DST}${DPART}2 ${mdst}
-    prompt="[ ${SRC} => ${DST}${DPART}2 ]"
-    pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null
+    for _DST in ${DST}${DPART}*;do
+        _basename=$(basename ${_DST})
+        [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && continue
+        mount ${_DST} ${mdst}
+        prompt="[ ${SRC} => ${_DST} ]"
+        pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null
+        umount ${_DST}
+    done
 
+    # Copy boot content to the boot-partition
+    mount ${DST}${DPART}2 ${mdst}
     if [[ -d ${mdst}/boot ]];then
         local boot_dir=$(mktemp -p ${MKTEMP} -d)
         mount ${DST}${DPART}1 ${boot_dir}
@@ -183,29 +190,27 @@ eom
 
     create_cl_layout
 
-    declare -a src_parts=(: /boot /)
-    declare -a dst_parts='1 2'
-
-    for P in $dst_parts; do
-        # Source partition is not a directory, then skip it.
-        [[ ! -d ${SRC}${SPART}${src_parts[P]} ]] && continue
-        mount -B -o ro ${SRC}${SPART}${src_parts[P]} ${msrc}
-        if [[ $? -eq 0 ]];then
-            mount ${DST}${DPART}${P} ${mdst}
-            prompt="[ ${SRC}${SPART}${src_parts[P]} => ${DST}${DPART}${P} ]"
-            tar -C ${msrc} --exclude=run/* -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
-            umount ${mdst}
-            umount ${msrc}
-        else
-cat << eom
-
-    Non-mountable source ${SRC}${src_parts[P]} device
-    Skip it & Continue ...
-
-eom
-
-        fi
+    mount -B -o ro ${SRC}${SPART}/ ${msrc}
+    for _DST in ${DST}${DPART}*;do
+        _basename=$(basename ${_DST})
+        [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && continue
+        mount ${_DST} ${mdst}
+        prompt="[ ${SRC}${SPART} => ${_DST} ]"
+        tar -C ${msrc} --exclude=run/* -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
+        umount ${_DST}
     done
+    umount ${msrc}
+
+    # Copy boot content to the boot-partition
+    mount ${DST}${DPART}2 ${mdst}
+    if [[ -d ${mdst}/boot ]];then
+        local boot_dir=$(mktemp -p ${MKTEMP} -d)
+        mount ${DST}${DPART}1 ${boot_dir}
+        cp -a ${mdst}/boot/* ${boot_dir}
+        umount ${boot_dir}
+        rm -rf ${boot_dir}
+    fi
+    umount ${mdst}
 
 cat << eom
 
