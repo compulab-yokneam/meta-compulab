@@ -25,8 +25,8 @@ dst=$(basename ${DST})
 declare -A devarr=( [1]="/EFI/BOOT/grub.cfg" [2]="/etc/fstab" [3]="/etc/fstab" )
 declare -A modarr=( [1]="part1_mod" [2]="part23_mod" [3]="part23_mod" )
 declare -A artarr=( [1]="grub-editenv ${mpoint}/EFI/BOOT/grubenv create" )
-[[ ${dst} =~ "mmc" ]] && p="p" || p=""
-[[ ${src} =~ "mmc" ]] && _p="p" || _p=""
+[[ ${dst} =~ "mmc" || ${dst} =~ "loop" ]] && p="p" || p=""
+[[ ${src} =~ "mmc" || ${src} =~ "loop" ]] && _p="p" || _p=""
 
 for d in ${!devarr[@]};do
 
@@ -41,7 +41,7 @@ for d in ${!devarr[@]};do
         for _file in ${devarr[${d}]};do
 
             if [ -f ${mpoint}/${_file} ];then
-                sed -i "s/${src}${_p}/${dst}${p}/" ${mpoint}/${_file}
+                [[ -b ${src} ]] && sed -i "s/${src}${_p}/${dst}${p}/" ${mpoint}/${_file} || true
                 command=${modarr[${d}]}
                 [[ -n "${command}" ]] && ${command} ${mpoint}/${_file}
             fi
