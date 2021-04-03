@@ -11,6 +11,7 @@ SRC_URI = " \
 	file://cl-deploy \
 	file://cl-deploy.work \
 	file://cl-deploy.helper \
+	file://cl-deploy.layout \
 	file://cl-deploy.mtd \
 	file://cl-deploy.mod \
 	file://cl-deploy.desktop \
@@ -44,6 +45,7 @@ do_install() {
 	install -m 0755 ${S}/cl-deploy ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-deploy.work ${D}${prefix}/local/bin/
 	install -m 0644 ${S}/cl-deploy.mod ${D}${prefix}/local/bin/
+	install -m 0644 ${S}/cl-deploy.layout ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-deploy.helper ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-auto ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-auto.shell ${D}${prefix}/local/bin/
