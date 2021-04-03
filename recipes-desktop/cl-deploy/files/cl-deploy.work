@@ -13,7 +13,7 @@ CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
 CL_DEPLOY_LAYOUT=/usr/local/bin/cl-deploy.layout
 MKTEMP=/var/run
 
-declare -a sw_array='dialog pv bunzip2 gunzip xz sfdisk partprobe'
+declare -a sw_array='dialog pv bunzip2 gunzip xz sfdisk partprobe bc'
 
 validate_sw() {
 for sw in $sw_array; do
