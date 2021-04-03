@@ -10,6 +10,7 @@ dialog_app=dialog
 CL_DEPLOY_MOD=/usr/local/bin/cl-deploy.mod
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
+CL_DEPLOY_LAYOUT=/usr/local/bin/cl-deploy.layout
 MKTEMP=/var/run
 
 declare -a sw_array='dialog pv bunzip2 gunzip xz sfdisk partprobe'
@@ -188,6 +189,11 @@ cat << eom
 
 eom
 
+    if [[ -z ${PARTED} && -f ${CL_DEPLOY_LAYOUT} ]];then
+        image_file=${DST} root_fs=${SRC} root_cnt=${ROOT_CNT:-1} source ${CL_DEPLOY_LAYOUT}
+        PARTED=1
+    fi
+
     create_cl_layout
 
     mount -B -o ro ${SRC}${SPART}/ ${msrc}
@@ -220,6 +226,14 @@ eom
 }
 
 create_cl_layout() {
+    if [[ -n ${PARTED} ]];then
+        for _DST in ${DST}${DPART}*;do
+        _basename=$(basename ${_DST})
+        [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && label="boot" || label="rootfs"
+            mkfs.ext4 -F -L ${label} ${_DST}
+        done
+        return
+    fi
     # Boot partition size im MB
     local _size=32
     # Start offset 1M

@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# Constants
+image_file=${image_file:-$(mktemp --dry-run --tmpdir=/tmp/yebian --suffix=.img XXXX)}
+boot_off=${boot_off:-4}
+boot_size=${boot_size:-128}
+fs_type=${fs_type:-0x83}
+
+# variables
+root_size=${root_size:-1024}
+root_cnt=${root_cnt:-1}
+image_extra_size=${image_extra_size:-8}
+
+function calc_image_size() {
+    image_size=$(echo "( ${boot_off} + ${boot_size} + ${root_cnt} * ${root_size} ) + ${image_extra_size} " | bc)
+    export image_size=${image_size}
+}
+
+function creat_image_file() {
+    # image_file is a block device; validate it size and init 1-st 16*mega
+    if [[ -b ${image_file} ]];then
+        __image_size=$(($(cat /sys/class/block/$(basename ${image_file})/size)  >> 11 ))
+        if [[ ${image_size} -gt ${__image_size} ]];then
+cat << eof
+        Image ${image_file} size ${__image_size} is to small
+        Required size is ${image_size} in mega
+eof
+        exit
+        fi
+        sudo dd if=/dev/zero of=${image_file} bs=1M count=16
+        return
+    fi
+
+    # image_file is a file & does not exists; then: create its parent
+    if [[ ! -f ${image_file} ]];then
+        mkdir -p $(dirname ${image_file})
+	touch ${image_file}
+    fi
+    # image_file is a file & it exists; then: fill it with zero[image_size]
+    if [[ -f ${image_file} ]];then
+        dd if=/dev/zero of=${image_file} bs=1M count=${image_size}
+        return
+    fi
+}
+
+function creat_image_file_layout() {
+# image file & size must be valiadated by caller
+
+declare sfdisk=()
+
+# mega to block
+root_size_block=$((root_size << 11))
+ boot_off_block=$((boot_off  << 11))
+boot_size_block=$((boot_size << 11))
+
+boot_area="${boot_off_block},${boot_size_block},${fs_type}"
+root_end_block=$((boot_off_block+boot_size_block))
+
+sfdisk[0]=${boot_area}
+
+for i in $(seq 1 ${root_cnt});do
+    root_start_block=${root_end_block}
+    ((root_start_block++))
+    root_area="${root_start_block},${root_size_block},${fs_type}"
+    sfdisk[${i}]=${root_area}
+    root_end_block=$((root_start_block+root_size_block))
+done
+
+opt=" "
+for i in ${sfdisk[@]};do
+    cat <<< ${i} | sudo sfdisk --quiet --force -uS ${opt} ${image_file} 2>/dev/null
+    opt=" --append "
+done
+
+sudo sfdisk --list ${image_file}
+
+}
+
+function calc_rootfs_size() {
+    pad_size=${pad_size:-1536}
+    rootfs=$(readlink -f ${root_fs})
+    root_size=$(sudo du -sk ${rootfs} | awk '$0=$1')
+    root_size=$(echo "(((${root_size}/1024+${pad_size})/1024)*1024)" | bc)
+    export root_size=${root_size}
+}
+
+function rootfs_size_from_image_size() {
+    [[ -z ${image_size} ]] && return
+    root_size=$(echo "( ${image_size} - ${image_extra_size} - ${boot_off} - ${boot_size} ) / ${root_cnt}"  | bc)
+    export root_size=${root_size}
+}
+
+function main() {
+
+root_size=0 root_fs=${root_fs} calc_rootfs_size
+image_size=0 root_cnt=${root_cnt} root_size=${root_size} calc_image_size
+image_size=${image_size} image_file=${image_file} creat_image_file
+image_size=${image_size} image_file=${image_file} root_cnt=${root_cnt} root_size=${root_size} creat_image_file_layout
+
+}
+
+image_file=${image_file} root_fs=${root_fs} root_cnt=${root_cnt} main
