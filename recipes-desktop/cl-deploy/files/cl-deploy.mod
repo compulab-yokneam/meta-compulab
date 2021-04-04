@@ -15,6 +15,19 @@ sed -i "/^PARTUUID/d;" ${file}
 cat << eof >> ${file}
 PARTUUID=${PARTUUID}    /boot   auto    defaults,sync   0   2
 eof
+pdev=$( stat --format=%n ${DST}*${2} )
+eval $(blkid ${pdev} | awk -F":" '($0=$2)')
+cat << eof >> ${file}
+PARTUUID=${PARTUUID}    /   ${TYPE} errors=remount-ro   0   1
+eof
+}
+
+function part2_mod() {
+part23_mod ${1} 2
+}
+
+function part3_mod() {
+part23_mod ${1} 3
 }
 
 function post_deploy() {
@@ -22,11 +35,14 @@ function post_deploy() {
 mpoint=$(mktemp --dry-run)
 src=$(basename ${SRC})
 dst=$(basename ${DST})
+
+declare -A partdl=( [mmc]="p" [loo]="p" )
+_p=${partdl[${src:0:3}]}
+p=${partdl[${dst:0:3}]}
+
 declare -A devarr=( [1]="/EFI/BOOT/grub.cfg" [2]="/etc/fstab" [3]="/etc/fstab" )
-declare -A modarr=( [1]="part1_mod" [2]="part23_mod" [3]="part23_mod" )
+declare -A modarr=( [1]="part1_mod" [2]="part2_mod" [3]="part3_mod" )
 declare -A artarr=( [1]="grub-editenv ${mpoint}/EFI/BOOT/grubenv create" )
-[[ ${dst} =~ "mmc" || ${dst} =~ "loop" ]] && p="p" || p=""
-[[ ${src} =~ "mmc" || ${src} =~ "loop" ]] && _p="p" || _p=""
 
 for d in ${!devarr[@]};do
 
