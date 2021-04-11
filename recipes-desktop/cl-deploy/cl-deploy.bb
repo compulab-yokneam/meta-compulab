@@ -35,6 +35,8 @@ SRC_URI_append_cl-som-imx6ul = " \
 
 S = "${WORKDIR}"
 
+CL_DEPLOY_MOD = " ${@bb.utils.contains('BBFILE_COLLECTIONS', 'compulab-uefi', '1', '0', d)}"
+
 do_install() {
 	install -d ${D}${prefix}/local/bin
 	install -d ${D}${datadir}/applications
@@ -44,7 +46,9 @@ do_install() {
 
 	install -m 0755 ${S}/cl-deploy ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-deploy.work ${D}${prefix}/local/bin/
+	if [ ${CL_DEPLOY_MOD} -eq 1 ];then
 	install -m 0644 ${S}/cl-deploy.mod ${D}${prefix}/local/bin/
+	fi
 	install -m 0644 ${S}/cl-deploy.layout ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-deploy.helper ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-auto ${D}${prefix}/local/bin/
