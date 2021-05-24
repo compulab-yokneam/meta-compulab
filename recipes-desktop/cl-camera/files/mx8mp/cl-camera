@@ -9,28 +9,22 @@ rm -rf ${PID_FILE}
 exit 0
 fi
 
-if [ -d /sys/class/video4linux/video0 ];then
-SRC="v4l2src device=/dev/video0"
-eval $(udevadm info -ap /sys/devices/soc0 | awk '/=/' | sed 's/ATTR{\(.*\)}/\1/g;s/==/=/g')
-TEXT=${machine}
+CAMERA=${CAMERA:-video0}
+
+if [ -d /sys/class/video4linux/${CAMERA} ];then
+SRC="v4l2src device=/dev/${CAMERA}"
+eval $(udevadm info -ap /sys/devices/soc0 | awk '/machine/' | sed 's/ATTR{\(.*\)}/\1/g;s/==/=/g')
+export TEXT=${machine}
 OVERP=""
 else
-SRC="videotestsrc pattern=snow"
-TEXT="Make sure that the camera is connected to the board...."
+SRC="videotestsrc"
+export TEXT="Make sure that the camera is connected to the board...."
 OVERP="color=0 valignment=center halignment=left font-desc=Sans,48"
 fi
 
 SINK="waylandsink window-width=1280 window-height=720"
-gst-launch-1.0 ${SRC} !  "video/x-raw, framerate=(fraction)30/1" ! textoverlay text="'${TEXT}'" ${OVERP} ! ${SINK} &
-PID=$!
+gst-launch-1.0 ${SRC} ! 'video/x-raw,width=1280,height=720,format=NV12' ! textoverlay text="'${TEXT}'" ! ${SINK} &
 
-sleep 1
-# start another sink if wayland is not available
-
-if [[ ! -d /proc/${PID} ]];then
-SINK="autovideosink"
-gst-launch-1.0 ${SRC} !  "video/x-raw, framerate=(fraction)30/1" ! textoverlay text="'${TEXT}'" ${OVERP} ! ${SINK} &
 PID=$!
-fi
 
 echo ${PID} > ${PID_FILE}
