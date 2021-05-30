@@ -47,4 +47,5 @@ FILES_${PN} = " \
 RDEPENDS_${PN} = "bash xz memtester stress-ng"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 RDEPENDS_${PN}_append = " ${@bb.utils.contains('MACHINE', 'cl-som-imx7', '', 'imx-gpu-viv-demos', d)}"
+RDEPENDS_${PN}_remove_iot-gate-imx8 = "imx-gpu-viv-demos"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
