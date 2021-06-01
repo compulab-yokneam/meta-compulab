@@ -10,6 +10,7 @@ PR = "r1"
 SRC_URI = " \
 	file://cl-uboot \
 	file://cl-uboot.work \
+	file://cl-uboot.quiet \
 	file://cl-uboot.desktop \
 	file://cl-uboot.png \
 	file://COPYING \
@@ -22,6 +23,7 @@ do_install() {
 	mkdir -p ${D}/usr/share/applications/
 	cp ${S}/cl-uboot ${D}/usr/local/bin/
 	cp ${S}/cl-uboot.work ${D}/usr/local/bin/
+	cp ${S}/cl-uboot.quiet ${D}/usr/local/bin/
 	cp ${S}/cl-uboot.png ${D}/usr/share/applications/
 	cp ${S}/cl-uboot.desktop ${D}/usr/share/applications/
 }

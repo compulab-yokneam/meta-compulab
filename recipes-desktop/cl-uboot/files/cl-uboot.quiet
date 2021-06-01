@@ -1,0 +1,7 @@
+#!/bin/bash
+
+function dialog() {
+:
+}
+
+source /usr/local/bin/cl-uboot.work
