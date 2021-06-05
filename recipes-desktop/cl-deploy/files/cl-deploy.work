@@ -371,12 +371,13 @@ select_diskimage() {
 get_all_device() {
     local ignored=${1:--na-}
     local min_size_inb=${2:-2048}
-    local all_devs=$(ls /sys/class/block/*/size | awk -F"/" '((/mmc|sd/)&&($0=$5))')
+    local all_devs=$(ls /sys/class/block/*/size | awk -F"/" '((/mmc|sd|nvme/)&&($0=$5))')
     unset avail_devs; declare -a avail_devs
     local i=0
     for dev in ${all_devs};do
 	[[ -e /sys/class/block/${dev}/partition ]] && continue
-	block_dev=$(udevadm info -n "/dev/"${dev} | awk -F "block" '(/DEVPATH/)&&(split($2,a,"/"))&&($0=a[2])')
+	[[ ${dev} =~ "boot" ]] && continue
+	block_dev=$(udevadm info -n "/dev/"${dev} | awk -F"/" '(/DEVNAME/)&&($0=$NF)')
 	[[ ${ignore} =~ ${block_dev} ]] && continue
 	[[ ${avail_devs[@]} =~ ${block_dev} ]] && continue
 	avail_devs[${i}]="/dev/${block_dev} "
@@ -460,8 +461,12 @@ fi
 
 # if we got here then all paramteres are valid
 # last preparation before the start
-[[ ${DST} =~ "mmc" || ${DST} =~ "loop" ]] && DPART='p' || DPART=''
-[[ ${SRC} =~ "mmc" || ${SRC} =~ "loop" ]] && SPART='p' || SPART=''
+src=$(basename ${SRC})
+dst=$(basename ${DST})
+
+declare -A partdl=( [mmc]="p" [loo]="p" [nvm]="p" )
+SPART=${partdl[${src:0:3}]}
+DPART=${partdl[${dst:0:3}]}
 
 msrc=$(mktemp -p ${MKTEMP} -d)
 mdst=$(mktemp -p ${MKTEMP} -d)
