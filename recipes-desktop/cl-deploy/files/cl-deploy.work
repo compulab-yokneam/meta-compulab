@@ -7,6 +7,10 @@ dialog_app=dialog
 [[ -n ${QUIET} ]] && dialog_app='true || '${dialog_app}
 [[ -n ${DEBUG} ]] && set -x
 
+CL_DEPLOY_DIR=/usr/share/cl-deploy
+CL_DEPLOY_PRE=${CL_DEPLOY_DIR}/pre
+CL_DEPLOY_APP=${CL_DEPLOY_DIR}/app
+
 CL_DEPLOY_MOD=/usr/local/bin/cl-deploy.mod
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
@@ -405,6 +409,14 @@ get_all_device() {
     fi
 }
 
+cl_deploy_wrap() {
+if [ -d ${CL_DEPLOY_FOLDER} ]; then
+    for f in ${CL_DEPLOY_FOLDER}/* ; do
+        [[ ${f} ]] && source ${f} || true
+    done
+fi
+}
+
 # If source is provided by the caller,
 # then use it. Skip this select ${dialog_app}.
 if [[ -z ${SRC} ]];then
@@ -482,9 +494,13 @@ DIALOG="Start Deployment"
 MESSAGE="Src: ${SRC} -> Dst: ${DST}\n\nAll data on ${DST} will be destroyed"
 ${dialog_app} --backtitle "${DIALOG}" --title " WARNING  " --yesno "${MESSAGE}" 10 80 || exit
 
+CL_DEPLOY_FOLDER=${CL_DEPLOY_PRE} cl_deploy_wrap
+
 [[ ${DST} =~ "mtd" ]] && target_mtd_device || target_block_device
 
 [[ -e ${CL_DEPLOY_MOD} ]] && source ${CL_DEPLOY_MOD}
+
+CL_DEPLOY_FOLDER=${CL_DEPLOY_APP} cl_deploy_wrap
 
 ${SUCCESS_EXIT}
 

@@ -41,6 +41,8 @@ do_install() {
 	install -d ${D}${prefix}/local/bin
 	install -d ${D}${datadir}/applications
 	install -d ${D}${datadir}/cl-deploy
+	install -d ${D}${datadir}/cl-deploy/pre
+	install -d ${D}${datadir}/cl-deploy/app
 	install -d ${D}${sysconfdir}
 
 
