@@ -68,6 +68,17 @@ if [ ${PTTYPE} == "exta_gpt" ];then
 sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
 else
 sfdisk --dump ${SRC} | sfdisk ${DST}
+if [ $? -ne 0 ];then
+_src=$(basename ${SRC})
+_dst=$(basename ${DST})
+cat << eof
+Partition table dump error.
+Exit with an error.
+eof
+grep -ar . /sys/class/block/{${_src},${_dst}}/size
+exit 2
+fi
+
 # Get & Expand last partition
 last_part=$(sfdisk -l ${SRC} | awk -v var=${SRC}${SPART} ' END { gsub(var,"",$1); print $1 }')
 echo ",+" | sfdisk --no-reread --force -N ${last_part} ${DST}
