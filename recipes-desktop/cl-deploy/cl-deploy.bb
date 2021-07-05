@@ -26,6 +26,8 @@ SRC_URI = " \
 	file://cl-functions.inc \
 	file://cl-auto.inc \
 	file://cl-auto.notifier \
+	file://00_cl-deploy.pre \
+	file://00_cl-deploy.app \
 	file://COPYING \
 "
 
@@ -68,6 +70,13 @@ do_install() {
 	install -m 0644 ${S}/cl-functions.inc ${D}${datadir}/cl-deploy/
 	install -m 0644 ${S}/cl-auto.inc ${D}${datadir}/cl-deploy/
 	install -m 0644 ${S}/cl-auto.notifier ${D}${datadir}/cl-deploy/
+
+	for dest in pre app;do
+        for src_file in $(ls ${S}/*.${dest} 2>/dev/null);do
+            dest_file=$(basename ${src_file})
+            install -m 0644 ${src_file} ${D}${datadir}/cl-deploy/${dest}/${dest_file}
+        done
+	done
 }
 
 do_mtd_copy() {
