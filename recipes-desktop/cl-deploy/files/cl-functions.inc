@@ -51,7 +51,7 @@ local dev_name=${1}
 local part_num=${2}
 
 declare -A boot_id=( [mm]=mmc [sd]=usb )
-declare -A part_id=( [mm]=p [sd]='' )
+declare -A part_id=( [mm]=p [sd]='' [nv]=p [lo]=p )
 
 if [[ ! -b ${dev_name} ]];then
 error_exit "Invalid destination device ${dev_name}" 4
