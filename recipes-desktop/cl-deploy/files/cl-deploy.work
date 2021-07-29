@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 SRC=${SRC:=''}
 DST=${DST:=''}
 SCAN_ALL=${SCAN_ALL:=1}
@@ -366,7 +368,7 @@ exit $2
 validate_devices() {
 [[ -b ${SRC} || -d ${SRC} || -f ${SRC} ]] || msg_exit "Invalid SRC=${SRC}, exiting with errno=1" 1
 [[ -b ${DST} || -c ${DST} ]] || msg_exit "Invalid DST=${DST}, exiting with errno=2" 2
-[[ ${DST} == ${BOOT} ]] && msg_exit "Invalid DST=${DST} is equal to BOOT=${BOOT}, exiting with errno=3" 3
+[[ ${DST} != ${BOOT} ]] || msg_exit "Invalid DST=${DST} is equal to BOOT=${BOOT}, exiting with errno=3" 3
 }
 
 select_directory() {
