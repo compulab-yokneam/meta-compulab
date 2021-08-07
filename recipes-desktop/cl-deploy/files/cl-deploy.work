@@ -413,8 +413,7 @@ get_all_device() {
 	block_dev=$(udevadm info -n "/dev/"${dev} | awk -F"/" '(/DEVNAME/)&&($0=$NF)')
 	[[ ${ignore} =~ ${block_dev} ]] && continue
 	[[ ${avail_devs[@]} =~ ${block_dev} ]] && continue
-	avail_devs[${i}]="/dev/${block_dev} "
-	((i++))
+	avail_devs[$((i++))]="/dev/${block_dev} "
     done
     if [[ ${MTD} = 'YES' ]];then
         # Figure out whether an mtd device is available
