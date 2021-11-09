@@ -47,10 +47,7 @@ mount / -o remount,rw
 pre_main
 
 if main; then
-cat << eof
-	Rebooting in 3 seconds...
-eof
-	sleep 3
+	read -p "Remove the installation media & press Enter ..."
 else
 cat << eof
 	Could not issue the main().
