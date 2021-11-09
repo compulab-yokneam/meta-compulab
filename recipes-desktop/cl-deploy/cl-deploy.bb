@@ -38,6 +38,10 @@ SRC_URI_append_cl-som-imx6ul = " \
 S = "${WORKDIR}"
 
 CL_DEPLOY_MOD = " ${@bb.utils.contains('BBFILE_COLLECTIONS', 'compulab-uefi', '1', '0', d)}"
+# Some dsitro has a boot.src that evaluates whether the file rootfs://boot/auto exists and then
+# add init=/usr/local/bin/cl-inti to the kernel bootargs, that turns the media
+# into an autoinstaller.
+CL_DEPLOY_BF = "${@bb.utils.contains('CL_DEPLOY_AUTO', '1', 'auto', 'no-auto', d)}"
 
 do_install() {
 	install -d ${D}${prefix}/local/bin
@@ -77,6 +81,10 @@ do_install() {
             install -m 0644 ${src_file} ${D}${datadir}/cl-deploy/${dest}/${dest_file}
         done
 	done
+
+	touch ${S}/${CL_DEPLOY_BF}
+	install -d ${D}/boot
+	install -m 0644 ${S}/${CL_DEPLOY_BF} ${D}/boot/
 }
 
 do_mtd_copy() {
@@ -103,6 +111,7 @@ FILES_${PN} = " \
 	${prefix}/local/bin/* \
 	${datadir}/* \
 	${sysconfdir}/* \
+	/boot/* \
 "
 
 RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted gdisk uuid-runtime bc"
