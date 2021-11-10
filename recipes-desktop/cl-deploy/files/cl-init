@@ -23,6 +23,13 @@ reboot_cpl () {
   done
 }
 
+sync_cpl () {
+  sync;sync;sync
+  for cmd in s u;do
+  echo ${cmd} > /proc/sysrq-trigger
+  done
+}
+
 main () {
 
 if [ -x ${MAIN_CMD} ];then
@@ -47,7 +54,8 @@ mount / -o remount,rw
 pre_main
 
 if main; then
-	read -p "Remove the installation media & press Enter ..."
+	sync_cpl
+	dialog --title "Success" --ascii-lines --ok-label "Press Enter" --msgbox "Remove installation media & Press Enter" 7 50
 else
 cat << eof
 	Could not issue the main().
