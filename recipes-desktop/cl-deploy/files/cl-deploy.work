@@ -75,7 +75,7 @@ eval $(blkid --output export ${SRC})
 if [ ${PTTYPE} == "exta_gpt" ];then
 sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
 else
-sfdisk --dump ${SRC} | sfdisk ${DST} &>/dev/null || part_dump ${SRC} | sfdisk ${DST}
+part_dump ${SRC} | sfdisk ${DST} &>/dev/null
 if [ $? -ne 0 ];then
 _src=$(basename ${SRC})
 _dst=$(basename ${DST})
