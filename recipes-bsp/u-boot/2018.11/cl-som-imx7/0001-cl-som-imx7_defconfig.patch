@@ -1,0 +1,10 @@
+--- a/configs/cl-som-imx7_defconfig	2022-03-16 14:18:18.251685073 +0000
++++ b/configs/cl-som-imx7_defconfig	2022-03-16 14:18:23.111222784 +0000
+@@ -29,6 +29,7 @@
+ CONFIG_HUSH_PARSER=y
+ CONFIG_SYS_PROMPT="CL-SOM-iMX7 # "
+ CONFIG_CMD_BOOTZ=y
++# CONFIG_CMD_BOOTEFI_HELLO_COMPILE is not set
+ # CONFIG_CMD_IMI is not set
+ # CONFIG_CMD_XIMG is not set
+ CONFIG_CMD_GREPENV=y

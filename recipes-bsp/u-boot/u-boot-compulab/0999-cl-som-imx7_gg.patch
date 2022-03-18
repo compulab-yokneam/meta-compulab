@@ -1,0 +1,26 @@
+diff --git a/Makefile b/Makefile
+index 06ec9f14f0..b2531b06ed 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1023,6 +1023,9 @@ u-boot.imx: SPL u-boot.img FORCE
+ 	@dd if=SPL of=$@ bs=1K seek=0 conv=notrunc 2>/dev/null
+ 	@dd if=u-boot.img of=$@ bs=1K seek=63 conv=notrunc 2>/dev/null
+ 
++u-boot-initial-env:
++	touch u-boot-initial-env
++
+ OBJCOPYFLAGS_u-boot-with-spl.bin = -I binary -O binary \
+ 				   --pad-to=$(CONFIG_SPL_PAD_TO)
+ u-boot-with-spl.bin: spl/u-boot-spl.bin $(SPL_PAYLOAD) FORCE
+diff --git a/configs/cl-som-imx7_defconfig b/configs/cl-som-imx7_defconfig
+index a7b1b1d417..a26470418a 100644
+--- a/configs/cl-som-imx7_defconfig
++++ b/configs/cl-som-imx7_defconfig
+@@ -25,6 +25,7 @@ CONFIG_SPL_I2C_SUPPORT=y
+ CONFIG_HUSH_PARSER=y
+ CONFIG_SYS_PROMPT="CL-SOM-iMX7 # "
+ CONFIG_CMD_BOOTZ=y
++# CONFIG_CMD_BOOTEFI_HELLO_COMPILE is not set
+ # CONFIG_CMD_IMI is not set
+ # CONFIG_CMD_IMLS is not set
+ # CONFIG_CMD_XIMG is not set
