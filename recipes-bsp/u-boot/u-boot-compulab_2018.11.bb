@@ -8,7 +8,9 @@ LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a
 SRC_URI = "git://github.com/compulab/u-boot.git;branch=cl-som-imx7/hab;protocol=https"
 SRCREV = "c6217c2565a758fa20da658579f34a635c380078"
 
-require 2018.11/u-boot-compulab_cl-som-imx7.inc
+PR = "r1.2"
+
+require u-boot-compulab-2018.11/u-boot-compulab_cl-som-imx7.inc
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
