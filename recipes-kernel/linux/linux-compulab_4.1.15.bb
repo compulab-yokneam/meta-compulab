@@ -1,5 +1,4 @@
 require recipes-kernel/linux/linux-imx.inc
-require recipes-kernel/linux/linux-dtb.inc
 
 SUMMARY = "CompuLab 4.1.15 kernel"
 DESCRIPTION = "Linux kernel for CompuLab imx6(ul) boards."
