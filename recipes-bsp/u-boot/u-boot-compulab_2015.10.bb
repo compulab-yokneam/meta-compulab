@@ -5,7 +5,7 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=0507cd7da8e7ad6d6701926ec9b84c95"
 
 SECTION = "bootloader"
-PROVIDES = "u-boot"
+PROVIDES += "u-boot"
 
 SRCBRANCH = "master"
 SRCREV = "v2015.10"
@@ -15,6 +15,7 @@ SRC_URI[md5sum] = "fd8234c5b3a460430689848c1f16acef"
 SRC_URI += "file://0003-arm-imx6ul-add-u-boot-with-spl-cl.imx-target-for-cl-.patch \
 	file://Fix-the-compile-issue-under-gcc6.patch \
 	file://Fix-the-compile-issue-under-gcc7.patch \
+	file://Fix-the-compile-issue-under-gcc8.patch \
 "
 
 SRC_URI_append_cm-fx6-evk += " \
