@@ -12,7 +12,7 @@ SRCREV = "v2015.07-cm-fx6-3"
 SRC_URI = "https://github.com/utilite-computer/u-boot/archive/v2015.07-cm-fx6-3.zip"
 SRC_URI[md5sum] = "df76d5ae2436ea9c126ed769e060ebee"
 
-SRC_URI_append_cl-som-imx6 += " \
+SRC_URI:append:cl-som-imx6 += " \
 	file://cl_som_imx6_defconfig \
 	file://Fix-the-compile-issue-under-gcc6.patch \
 	file://Fix-the-compile-issue-under-gcc7.patch \

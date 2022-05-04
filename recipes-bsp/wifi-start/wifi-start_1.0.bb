@@ -28,9 +28,9 @@ INITSCRIPT_PARAMS = "start 2 3 4 5"
 
 S = "${WORKDIR}"
 
-ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash"
-FILES_${PN} += "${systemd_unitdir}/* ${sysconfdir}/* ${sbindir}/*"
+ALLOW_EMPTY:${PN} = "1"
+RDEPENDS:${PN} = "bash"
+FILES:${PN} += "${systemd_unitdir}/* ${sysconfdir}/* ${sbindir}/*"
 
 do_install () {
 
@@ -49,7 +49,7 @@ do_install () {
 
 }
 
-pkg_postinst_${PN} () {
+pkg_postinst:${PN} () {
 	if [ -n "$D" ]; then
 		OPTS="--root=$D"
 	fi
@@ -61,7 +61,7 @@ pkg_postinst_${PN} () {
 	fi
 }
 
-pkg_postrm_${PN} () {
+pkg_postrm:${PN} () {
 	if [ -n "$D" ]; then
 		OPTS="--root=$D"
 	fi

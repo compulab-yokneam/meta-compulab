@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
 SRC_URI =+ "file://fw_env.config"
 
@@ -7,7 +7,7 @@ do_compile () {
 	oe_runmake env
 }
 
-do_install_append () {
+do_install:append () {
 	install -d ${D}${sysconfdir}/${MACHINE}
 	install -m 0644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}/${MACHINE}/fw_env.config
 	ln -sf ${MACHINE}/fw_env.config ${D}${sysconfdir}/fw_env.config

@@ -1,8 +1,8 @@
-do_configure_append_cm-fx6-evk () {
+do_configure:append:cm-fx6-evk () {
     oe_runmake cm_fx6_defconfig
 }
 
-SRC_URI_append_cm-fx6-evk = " \
+SRC_URI:append:cm-fx6-evk = " \
 	file://cm-fx6-evk/0001-ARM-dts-update-support-for-cm-fx6.patch \
 	file://cm-fx6-evk/0002-ARM-i.MX6-cm-fx6-add-cm-fx6-platform-driver.patch \
 	file://cm-fx6-evk/0003-ARM-i.MX6-cm-fx6-Add-defconfig.patch \
@@ -45,4 +45,4 @@ SRC_URI_append_cm-fx6-evk = " \
 	file://cm-fx6-evk/0095-ARM-i.MX6-solo-Add-single-freq-option.patch \
 "
 
-SRC_URI_append_cm-fx6-evk += "${@bb.utils.contains('COMPULAB_FEATURES', 'user_space_governon', 'file://cm-fx6-evk/0094-cm-fx6-defconfig-CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPA.patch', '', d)}"
+SRC_URI:append:cm-fx6-evk += "${@bb.utils.contains('COMPULAB_FEATURES', 'user_space_governon', 'file://cm-fx6-evk/0094-cm-fx6-defconfig-CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPA.patch', '', d)}"

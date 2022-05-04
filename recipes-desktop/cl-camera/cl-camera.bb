@@ -24,9 +24,9 @@ do_install() {
 	install -m 0644 ${S}/cl-camera.desktop ${D}/usr/share/applications/
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
 	/usr \
 "
 
-ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash gstreamer1.0 gstreamer1.0-plugins-good"
+ALLOW_EMPTY:${PN} = "1"
+RDEPENDS:${PN} = "bash gstreamer1.0 gstreamer1.0-plugins-good"

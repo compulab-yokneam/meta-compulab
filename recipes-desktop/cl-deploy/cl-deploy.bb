@@ -31,7 +31,7 @@ SRC_URI = " \
 	file://COPYING \
 "
 
-SRC_URI_append_cl-som-imx6ul = " \
+SRC_URI:append:cl-som-imx6ul = " \
 	file://cl-deploy.cl-som-imx6ul \
 "
 
@@ -93,30 +93,30 @@ do_mtd_copy() {
 	fi
 }
 
-do_install_append_cm-fx6-evk() {
+do_install:append:cm-fx6-evk() {
 	do_mtd_copy
 }
 
-do_install_append_cl-som-imx6() {
+do_install:append:cl-som-imx6() {
 	do_mtd_copy
 }
 
-do_install_append_cl-som-imx7() {
+do_install:append:cl-som-imx7() {
 	do_mtd_copy
 }
 
-do_install_append_cl-som-imx6ul() {
+do_install:append:cl-som-imx6ul() {
 	if [[ -f ${S}/cl-deploy.cl-som-imx6ul ]];then
 		install -m 0644 ${S}/cl-deploy.cl-som-imx6ul ${D}${prefix}/local/bin/cl-deploy.platform
 	fi
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
 	${prefix}/local/bin/* \
 	${datadir}/* \
 	${sysconfdir}/* \
 	/boot/* \
 "
 
-RDEPENDS_${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted gdisk uuid-runtime bc"
+RDEPENDS:${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted gdisk uuid-runtime bc"
 PACKAGE_ARCH = "all"

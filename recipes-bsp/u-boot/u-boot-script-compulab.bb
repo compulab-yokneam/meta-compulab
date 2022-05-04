@@ -44,7 +44,7 @@ addtask deploy after do_install before do_build
 
 do_populate_sysroot[noexec] = "1"
 
-FILES_${PN} = "/boot"
+FILES:${PN} = "/boot"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(cm-fx6-evk|cl-som-imx6|cl-som-imx6ul)"

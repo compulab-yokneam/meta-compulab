@@ -1,4 +1,4 @@
-SRC_URI_append_cl-som-imx6ul += "file://cl-som-imx6ul/defconfig \
+SRC_URI:append:cl-som-imx6ul += "file://cl-som-imx6ul/defconfig \
 	file://cl-som-imx6ul/0001-ARM-i.MX6UL-dts-Add-initial-support-for-cl-som-imx6u.patch \
 	file://cl-som-imx6ul/0002-ARM-i.MX6UL-add-defconfig-for-cl-som-imx6ul.patch \
 	file://cl-som-imx6ul/0003-ARM-i.MX6UL-Add-cl-som-imx6ul-platform-driver.patch \

@@ -28,10 +28,10 @@ do_install() {
 	cp ${S}/cl-uboot.desktop ${D}/usr/share/applications/
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
 	/usr/local/bin/* \
 	/usr/share/applications/* \
 "
 
-RDEPENDS_${PN} = "bash pv dialog mtd-utils u-boot-compulab"
+RDEPENDS:${PN} = "bash pv dialog mtd-utils u-boot-compulab"
 PACKAGE_ARCH = "all"

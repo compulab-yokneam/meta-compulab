@@ -19,9 +19,9 @@ SRC_URI = "file://chromium.png \
 
 S = "${WORKDIR}"
 
-ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "bash"
-FILES_${PN} += "usr/share/compulab/*"
+ALLOW_EMPTY:${PN} = "1"
+RDEPENDS:${PN} = "bash"
+FILES:${PN} += "usr/share/compulab/*"
 
 do_install () {
 

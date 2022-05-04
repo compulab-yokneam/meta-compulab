@@ -16,7 +16,7 @@ UPSTREAM_CHECK_REGEX ?= "(?P<pver>\d+(\.\d+)+)\.tar"
 
 CFLAGS += "-Wall -Wextra -DVERSION='"$(VERSION)"'"
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${bindir}
     install -m 755 ${S}/stress-ng ${D}${bindir}/stress-ng
 }

@@ -19,7 +19,7 @@ do_install () {
     done
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
 	${FS_LOCATION}/* \
 "
 

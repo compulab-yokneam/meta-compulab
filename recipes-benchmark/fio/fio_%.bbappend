@@ -1,1 +1,1 @@
-RDEPENDS_${PN} += "fio-examples"
+RDEPENDS:${PN} += "fio-examples"

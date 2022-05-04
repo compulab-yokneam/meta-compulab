@@ -43,7 +43,7 @@ do_install() {
     fi
 }
 
-pkg_postinst_${PN} () {
+pkg_postinst:${PN} () {
 
     if [ -n "$D" ]; then
         OPTS="--root=$D"
@@ -60,14 +60,14 @@ pkg_postinst_${PN} () {
     fi
 }
 
-pkg_prerm_${PN} () {
+pkg_prerm:${PN} () {
 
     /usr/local/bin/cl-ap.work stop
     /usr/local/bin/cl-ap.work clean
 
 }
 
-pkg_postrm_${PN} () {
+pkg_postrm:${PN} () {
 
     if [ -n "$D" ]; then
         OPTS="--root=$D"
@@ -83,7 +83,7 @@ pkg_postrm_${PN} () {
 
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     /etc/init.d/* \
     /lib/systemd/system/* \
     /usr/local/bin/* \
@@ -91,6 +91,6 @@ FILES_${PN} = " \
     /usr/share/cl-ap/* \
 "
 
-RDEPENDS_${PN} = "dialog bash crda hostapd dnsmasq iptables"
-RDEPENDS_${PN}_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
+RDEPENDS:${PN} = "dialog bash crda hostapd dnsmasq iptables"
+RDEPENDS:${PN}:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
 PACKAGE_ARCH = "all"

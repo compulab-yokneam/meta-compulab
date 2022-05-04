@@ -24,10 +24,10 @@ do_install_cl-som-imx6() {
 	cp ${S}/video-input.desktop ${D}/usr/share/applications/
 }
 
-FILES_${PN}_cl-som-imx6 = " \
+FILES:${PN}_cl-som-imx6 = " \
 	/usr/local/bin/* \
 	/usr/share/applications/* \
 "
 
-ALLOW_EMPTY_${PN} = "1"
-RDEPENDS_${PN} = "gstreamer1.0 gstreamer1.0-plugins-good"
+ALLOW_EMPTY:${PN} = "1"
+RDEPENDS:${PN} = "gstreamer1.0 gstreamer1.0-plugins-good"

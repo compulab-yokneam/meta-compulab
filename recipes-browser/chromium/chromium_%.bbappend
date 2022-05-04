@@ -6,6 +6,6 @@ CHROMIUM_EXTRA_ARGS += "--ignore-gpu-blacklist --enable-gpu-rasterization --enab
 # Fixes gperf not found error
 DEPENDS += "gperf-native"
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 PNBLACKLIST[chromium]=""

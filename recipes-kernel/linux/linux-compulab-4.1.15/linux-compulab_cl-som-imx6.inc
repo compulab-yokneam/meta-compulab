@@ -1,4 +1,4 @@
-SRC_URI_append_cl-som-imx6 += "\ 
+SRC_URI:append:cl-som-imx6 += "\ 
 	file://cl-som-imx6/defconfig \
 	file://cm-fx6-evk/0001-ARM-dts-update-support-for-cm-fx6.patch \
 	file://cm-fx6-evk/0002-ARM-i.MX6-cm-fx6-add-cm-fx6-platform-driver.patch \
