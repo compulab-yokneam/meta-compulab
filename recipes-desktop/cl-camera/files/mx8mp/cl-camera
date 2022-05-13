@@ -1,30 +1,60 @@
 #!/bin/bash
 
 PID_FILE=/var/run/cl-camera.pid
+camera_stop() {
+    if [[ -f ${PID_FILE} ]];then
+        PID=$(cat ${PID_FILE})
+        kill -9 ${PID}
+        rm -rf ${PID_FILE}
+        exit 0
+    fi
+}
 
-if [[ -f ${PID_FILE} ]];then
-PID=$(cat ${PID_FILE})
-kill -9 ${PID}
-rm -rf ${PID_FILE}
-exit 0
-fi
+camera_start() {
+    if [ -d /sys/class/video4linux/${CAMERA} ];then
+        SRC="v4l2src device=/dev/${CAMERA}"
+        eval $(udevadm info -ap /sys/devices/soc0 | awk '/machine/' | sed 's/ATTR{\(.*\)}/\1/g;s/==/=/g')
+        export TEXT=${machine}
+        OVERP=""
+    else
+        SRC="videotestsrc"
+        export TEXT="Make sure that the camera is connected to the board...."
+        OVERP="color=0 valignment=center halignment=left font-desc=Sans,48"
+    fi
 
-CAMERA=${CAMERA:-video0}
+    camera_start_${MODE}
 
-if [ -d /sys/class/video4linux/${CAMERA} ];then
-SRC="v4l2src device=/dev/${CAMERA}"
-eval $(udevadm info -ap /sys/devices/soc0 | awk '/machine/' | sed 's/ATTR{\(.*\)}/\1/g;s/==/=/g')
-export TEXT=${machine}
-OVERP=""
-else
-SRC="videotestsrc"
-export TEXT="Make sure that the camera is connected to the board...."
-OVERP="color=0 valignment=center halignment=left font-desc=Sans,48"
-fi
+    PID=$!
+    echo ${PID} > ${PID_FILE}
+}
 
-SINK="waylandsink window-width=1280 window-height=720"
-gst-launch-1.0 ${SRC} ! 'video/x-raw,width=1280,height=720,format=NV12' ! textoverlay text="'${TEXT}'" ! ${SINK} &
+camera_start_stream() {
+    #SINK="waylandsink window-width=1280 window-height=720"
+    SINK="autovideosink"
+    ${GST} ${SRC} ! "video/x-raw,width=1280,height=720,format=${FORMAT}" ! textoverlay text="'${TEXT}'" ! ${SINK} &
+}
 
-PID=$!
+camera_start_image() {
+    local image_file="/tmp/singel_image_$(date +%F_%X | sed 's/[-:]//g').jpg"
+    ${GST} ${SRC} num-buffers=1 ! "video/x-raw,width=1280,height=720,format=${FORMAT}" ! jpegenc ! filesink location=${image_file}
+    ${GST} filesrc location=${image_file} ! jpegdec ! imagefreeze ! autovideosink &
+}
 
-echo ${PID} > ${PID_FILE}
+camera_get() {
+    CAMERA=$(for f in /dev/video*;do ( v4l2-ctl --info --device ${f} 2>/dev/null | grep -q "mxc-isi-cap" ) && echo $(basename ${f}) ; done)
+    CAMERA=${CAMERA:-fakecamera}
+    cat <<< ${CAMERA}
+}
+
+camera_main() {
+    camera_stop
+    CAMERA=$(camera_get)
+    CAMERA=${CAMERA} MODE=${MODE} camera_start
+}
+
+MODE=${MODE:-stream}
+[[ ${MODE} = 'stream' ]] || MODE=image
+FORMAT=${FORMAT:-NV12}
+GST="gst-launch-1.0 --no-position"
+
+camera_main
