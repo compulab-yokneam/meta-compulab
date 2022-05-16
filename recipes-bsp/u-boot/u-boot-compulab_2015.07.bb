@@ -40,4 +40,4 @@ SRC_URI_append_cl-som-imx6 += " \
 S = "${WORKDIR}/u-boot-2015.07-cm-fx6-3"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-COMPATIBLE_MACHINE = "(cl-som-imx6)"
+COMPATIBLE_MACHINE = "cl-som-imx6"

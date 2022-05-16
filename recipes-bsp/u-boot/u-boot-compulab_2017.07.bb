@@ -17,6 +17,6 @@ B = "${WORKDIR}/build"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-COMPATIBLE_MACHINE_cl-som-imx7 = "cl-som-imx7"
+COMPATIBLE_MACHINE = "cl-som-imx7"
 SECTION = "bootloader"
 PROVIDES += "u-boot"
