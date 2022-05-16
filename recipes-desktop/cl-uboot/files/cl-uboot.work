@@ -1,13 +1,14 @@
 #!/bin/bash
 
 file=/boot/u-boot.imx
-device=mtd0
+device=$(awk -F":" '(/\"uboot\"/)&&($0=$1)' /proc/mtd)
+device=${device:-mtd0}
 device_file=/dev/${device}
 offset=0x400
 line=$(seq 1 72 | awk '$0="-"' ORS="")
 
 mtd_unlock() {
-flash_unlock /dev/mtd2 0
+flash_unlock /dev/${device} 0
 }
 
 if [ ! -e "${file}" ]; then
