@@ -88,7 +88,7 @@ do_install() {
 }
 
 do_mtd_copy() {
-	if [[ -f ${S}/cl-deploy.mtd ]];then
+	if [ -f ${S}/cl-deploy.mtd ];then
 		install -m 0755 ${S}/cl-deploy.mtd ${D}${prefix}/local/bin/
 	fi
 }
@@ -106,7 +106,7 @@ do_install_append_cl-som-imx7() {
 }
 
 do_install_append_cl-som-imx6ul() {
-	if [[ -f ${S}/cl-deploy.cl-som-imx6ul ]];then
+	if [ -f ${S}/cl-deploy.cl-som-imx6ul ];then
 		install -m 0644 ${S}/cl-deploy.cl-som-imx6ul ${D}${prefix}/local/bin/cl-deploy.platform
 	fi
 }
