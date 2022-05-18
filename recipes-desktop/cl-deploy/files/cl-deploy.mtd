@@ -4,11 +4,11 @@ MTD_DEPLOY_STATUS=""
 
 zimage=zImage
 
-fdt_file_cl_som_imx6ul=imx6ul=imx6ul-sbc-imx6ul-wilink.dtb
+if [ -z ${fdt_file} ];then
 
+fdt_file_cl_som_imx6ul=imx6ul-sbc-imx6ul-wilink.dtb
 fdt_file_cl_som_imx6_qp=imx6qp-sbc-imx6-hdmi.dtb
 fdt_file_cl_som_imx6_q=imx6q-sbc-imx6-hdmi.dtb
-
 fdt_file_cm_fx6_evk_q=imx6q-sbc-fx6-hdmi.dtb
 fdt_file_cm_fx6_evk_dl=imx6dl-sbc-fx6-hdmi.dtb
 
@@ -22,6 +22,8 @@ fdt_file=''
 
 if [[ -z ${fdt_file} ]];then
 eval $(fw_printenv | awk -F"=" '(/dtb$/)&&($0="fdt_file="$2)')
+fi
+
 fi
 
 msrc=/tmp/src
@@ -63,17 +65,15 @@ _source_mount() {
 
     mkdir -p ${msrcboot} ${msrcroot}
 
-    ${DO_MOUNT} ${SRC}${SPART}${BOOT} ${msrcboot}; if [[ $? -ne 0 ]];then
+    ${DO_MOUNT} ${SRC}${SPART}${BOOT} ${msrcboot} && true || (
     DIALOG="Mount failed, device: ${SRC}${SPART}${BOOT}  ... "
     dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nPess any key to exit." 10 80
-    return
-    fi
+    return )
 
-    ${DO_MOUNT} ${SRC}${SPART}${ROOT} ${msrcroot}; if [[ $? -ne 0 ]];then
+    ${DO_MOUNT} ${SRC}${SPART}${ROOT} ${msrcroot} && true || (
     DIALOG="Mount failed, device: ${SRC}${SPART}${ROOT}  ... "
     dialog --backtitle "${DIALOG}" --title " WARNING " --msgbox "${DIALOG}\nPess any key to exit." 10 80
-    return
-    fi
+    return )
 
     if [[ ! -f ${msrcboot}/${zimage} || ! -f ${msrcboot}/${fdt_file} ]];then
     DIALOG="Kernel or device tree file is not found on the device: ${SRC}${SPART}${BOOT}  ... "
