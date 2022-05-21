@@ -65,7 +65,9 @@ for d in ${!devarr[@]};do
         done
 
         command=${artarr[${d}]}
-        [[ -n "${command}" ]] && ${command}
+        [[ -n "${command}" ]] && {
+	${command} &>/dev/null || true
+	}
 
         umount -l ${_dev}
 
