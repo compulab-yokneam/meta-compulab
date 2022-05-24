@@ -42,6 +42,28 @@ part_dump() {
     sfdisk --list --output Device,Start,End,Id ${dev} | awk '(/^\//)' | awk -v P=${P} '{ if (NR==P) { $3="" } ; print $2","$3","$4 }'
 }
 
+zap_device() {
+    local dev=${1}
+
+    sgdisk --help | grep -q "zap-all" && {
+        sgdisk --zap-all ${dev} && return || true
+    } || true
+
+    sgdisk --help | grep -q "zap" && {
+        sgdisk --zap ${dev} && return || true
+    } || true
+
+    # Issue a legacy dd-method if:
+    # 1) zap commands are not available
+    # 2) zap commands failed
+    dev=$(basename ${dev})
+    local count=2048
+    local offset="0 "$(( $(cat  /sys/class/block/${dev}/size) - ${count} ))
+    for _offest in ${offset};do
+        dd if=/dev/zero of=/dev/${dev} count=${count} seek=${_offset}
+    done
+}
+
 source_block_device() {
 
 # Make sure that the source device does not have
@@ -72,6 +94,7 @@ eval $(blkid --output export ${SRC})
 # this is a fake if statetement
 # will be removed latter after
 # the full testing coverage
+zap_device ${DST}
 if [ ${PTTYPE} == "exta_gpt" ];then
 sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
 else
