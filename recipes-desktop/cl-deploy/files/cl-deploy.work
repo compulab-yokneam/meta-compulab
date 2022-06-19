@@ -95,7 +95,7 @@ eval $(blkid --output export ${SRC})
 # will be removed latter after
 # the full testing coverage
 zap_device ${DST}
-if [ ${PTTYPE} == "exta_gpt" ];then
+if [ ${PTTYPE} == "gpt" ];then
 sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
 else
 part_dump ${SRC} | sfdisk ${DST} &>/dev/null
@@ -109,6 +109,7 @@ eof
 grep -ar . /sys/class/block/{${_src},${_dst}}/size
 exit 2
 fi
+fi
 
 # The Real job starts here
 sys_src=$(basename ${SRC})
@@ -117,7 +118,6 @@ sys_dst=$(basename ${DST})
 # Get & Expand last partition
 last_part=$(cat /sys/class/block/${sys_src}*/partition | tail -1)
 echo ",+" | sfdisk --no-reread --force -N ${last_part} ${DST}
-fi
 
 # Make the kernel apply the new layout
 partprobe ${DST}
