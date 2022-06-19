@@ -45,4 +45,4 @@ SRC_URI:append:cm-fx6-evk = " \
 	file://cm-fx6-evk/0095-ARM-i.MX6-solo-Add-single-freq-option.patch \
 "
 
-SRC_URI:append:cm-fx6-evk += "${@bb.utils.contains('COMPULAB_FEATURES', 'user_space_governon', 'file://cm-fx6-evk/0094-cm-fx6-defconfig-CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPA.patch', '', d)}"
+SRC_URI:append:cm-fx6-evk = "${@bb.utils.contains('COMPULAB_FEATURES', 'user_space_governon', 'file://cm-fx6-evk/0094-cm-fx6-defconfig-CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPA.patch', '', d)}"

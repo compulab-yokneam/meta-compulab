@@ -1,6 +1,6 @@
 FILESEXTRAPATHS:prepend:cl-som-imx6 := "${THISDIR}/compulab:"
 
-SRC_URI:append:cl-som-imx6 += " file://bt-start \
+SRC_URI:append:cl-som-imx6 = " file://bt-start \
 				file://fb-unblank \
 				file://buffdrop \
 				file://wifi-start \
