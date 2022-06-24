@@ -2,8 +2,9 @@
 # CompuLab Deployment Tool
 
 DESCRIPTION = "CompuLab Deployment Tool"
-LICENSE = "BSD"
+LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4a0e2a2916052068a420bbc50873f515"
+MAINTAINER = "CompuLab <compulab@compulab.com>"
 
 PR = "r3"
 

@@ -2,8 +2,9 @@
 # CompuLab U-Boot Tool
 
 DESCRIPTION = "CompuLab U-Boot Tool"
-LICENSE = "BSD"
+LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=258fbdf7b6336b41e0980f2046ff2ac0"
+MAINTAINER = "CompuLab <compulab@compulab.com>"
 
 PR = "r1"
 

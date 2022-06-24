@@ -2,8 +2,9 @@
 # command to display video input on the default videosink.
 
 DESCRIPTION = "Video Input Test"
-LICENSE = "BSD"
+LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=3af51c5f8b7ed40f288f000169a1595d"
+MAINTAINER = "CompuLab <compulab@compulab.com>"
 
 PR = "r1"
 

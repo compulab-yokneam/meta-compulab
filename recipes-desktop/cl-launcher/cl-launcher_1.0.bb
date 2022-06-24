@@ -2,8 +2,10 @@ SUMMARY = "CompuLab Weston Launcher init service"
 DESCRIPTION = "CompuLab Weston Launcher init service"
 SECTION = "base"
 
-LICENSE = "GPLv2"
+LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=5b7733d5d8ccd465235c379dbb5e3839"
+MAINTAINER = "CompuLab <compulab@compulab.com>"
+
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 PR = "r1"
 
