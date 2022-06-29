@@ -37,9 +37,11 @@ done
 validate_sw
 
 part_dump() {
-    local dev=${1}
-    local P=$(sfdisk --list ${dev} | awk '(/^\//)' | wc -l)
-    sfdisk --list --output Device,Start,End,Id ${dev} | awk '(/^\//)' | awk -v P=${P} '{ if (NR==P) { $3="" } ; print $2","$3","$4 }'
+    # This function ignores the passed parameters;
+    # uses the globals SRC and DST
+    local P=$(sfdisk --dump ${SRC} | awk 'END { print $1 }'); P=${P:(-1)}
+    sfdisk --dump ${SRC} | sed "/p${P}/d" | sfdisk ${DST}
+    sfdisk --dump ${SRC} | sed -n "/p${P}/p" | awk '($0=$4)' | sfdisk ${DST} --append
 }
 
 zap_device() {
@@ -98,7 +100,7 @@ zap_device ${DST}
 if [ ${PTTYPE} == "gpt" ];then
 sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
 else
-part_dump ${SRC} | sfdisk ${DST} &>/dev/null
+part_dump ${SRC} ${DST}
 if [ $? -ne 0 ];then
 _src=$(basename ${SRC})
 _dst=$(basename ${DST})
