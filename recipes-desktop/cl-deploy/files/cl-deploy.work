@@ -66,6 +66,8 @@ zap_device() {
     done
 }
 
+ext4opt=" -O ^64bit -O ^has_journal"
+
 source_block_device() {
 
 # Make sure that the source device does not have
@@ -136,6 +138,7 @@ for _src in /sys/class/block/${sys_src}*/partition;do
     eval $(blkid --output export ${_src})
 
     [[ ${TYPE} = "ext"* ]] && OPT=" -F" || OPT=""
+    [[ ${TYPE} = "ext4"* ]] && OPT+=" ${ext4opt}" || true
 
     # Format the destination that same as the source
     mkfs.${TYPE} ${OPT} ${_dst}
@@ -331,7 +334,7 @@ eosfdisk
 partprobe ${DST}
 
     mkfs.ext2 -F -L boot ${DST}${DPART}1
-    mkfs.ext4 -F -L rootfs ${DST}${DPART}2
+    mkfs.ext4 -F ${ext4opt} -L rootfs ${DST}${DPART}2
 }
 
 unmount_destination() {
