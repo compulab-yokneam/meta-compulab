@@ -499,7 +499,7 @@ if [[ -z ${DST} ]];then
     _SELECT=''
 
     for ign in ${SRC} ${BOOT}; do
-    ignore+=$([[ -b ${ign} ]] && basename ${ign})":"
+    ignore+=$([[ -b ${ign} ]] && basename ${ign} || echo :)
     done
 
     [[ -f ${CL_DEPLOY_MTD} ]] && MTD='YES' || MTD='NO'
