@@ -2,10 +2,10 @@ DESCRIPTION = "Flexible I/O tester examples"
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=39eac9f8f195f04c16966a9f5824e9ba"
 
-SRC_URI = "git://github.com/compulab-yokneam/fio-examples.git;protocol=https"
-SRCREV = "master"
+SRC_URI = "git://github.com/compulab-yokneam/fio-examples.git;protocol=https;branch=master"
 
-PR = "r0"
+PV = "1.0+git${SRCPV}"
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
