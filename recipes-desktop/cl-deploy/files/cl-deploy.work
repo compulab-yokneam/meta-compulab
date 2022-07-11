@@ -297,7 +297,7 @@ create_cl_layout() {
         for _DST in ${DST}${DPART}*;do
         _basename=$(basename ${_DST})
         [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && label="boot" || label="rootfs"
-            mkfs.ext4 -F -L ${label} ${_DST}
+            mkfs.ext4 -F ${ext4opt} -L ${label} ${_DST}
         done
         return
     fi
