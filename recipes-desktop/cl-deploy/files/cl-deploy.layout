@@ -22,7 +22,7 @@ function creat_image_file() {
         __image_size=$(($(cat /sys/class/block/$(basename ${image_file})/size)  >> 11 ))
         if [[ ${image_size} -gt ${__image_size} ]];then
 cat << eof
-        Image ${image_file} size ${__image_size} is to small
+        Image ${image_file} size ${__image_size} is too small
         Required size is ${image_size} in mega
 eof
         exit
