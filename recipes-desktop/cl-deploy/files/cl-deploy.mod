@@ -12,6 +12,7 @@ declare -A rootmntarr=( [rw]="errors=remount-ro,noatime" [ro]="ro" )
 function part23_mod() {
 
 local OPTIONS=${rootmntarr[${ROOTMODE}]}
+[[ ${ROOTMODE} = "ro" ]] && local dry_run="#" || local dry_run=""
 
 file=${1}
 pdev=$( stat --format=%n ${DST}*1 )
@@ -23,7 +24,7 @@ eof
 pdev=$( stat --format=%n ${DST}*${2} )
 eval $(blkid ${pdev} | awk -F":" '($0=$2)')
 cat << eof >> ${file}
-# PARTUUID=${PARTUUID}    /   ${TYPE} ${OPTIONS}   0   1
+${dry_run}PARTUUID=${PARTUUID}    /   ${TYPE} ${OPTIONS}   0   1
 eof
 }
 
@@ -73,12 +74,12 @@ eof
 
 function part2_mod() {
 part23_mod ${1}/etc/fstab 2
-[[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook
+[[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook || true
 }
 
 function part3_mod() {
 part23_mod ${1}/etc/fstab 3
-[[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook
+[[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook || true
 }
 
 function post_deploy() {
