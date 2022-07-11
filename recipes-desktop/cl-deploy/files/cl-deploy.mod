@@ -51,12 +51,12 @@ tmpfs         /run tmpfs  mode=0755,nodev,nosuid,strictatime 0  0
 # logs
 tmpfs        /var/log tmpfs   nosuid,nodev         0       0
 # lightdm
-tmpfs        /var/lib/lightdm/data tmpfs   nosuid,nodev         0       0
+tmpfs        /var/lib/lightdm tmpfs   nosuid,nodev         0       0
 # docker
 tmpfs        /var/lib/docker tmpfs   nosuid,nodev         0       0
 tmpfs        /var/lib/containerd tmpfs   nosuid,nodev         0       0
 eof
-	mkdir -p ${IMAGE_ROOTFS}/var/lib/docker ${IMAGE_ROOTFS}/var/lib/containerd ${IMAGE_ROOTFS}/var/lib/lightdm/data
+	mkdir -p ${IMAGE_ROOTFS}/var/lib/docker ${IMAGE_ROOTFS}/var/lib/containerd ${IMAGE_ROOTFS}/var/lib/lightdm
 	fi
 	# journald.conf modification
 	local JCONF=/etc/systemd/journald.conf
