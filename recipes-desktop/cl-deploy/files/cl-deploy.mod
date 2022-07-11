@@ -7,7 +7,7 @@ eval $(blkid ${pdev} | awk -F":" '($0=$2)')
 sed -i "s/\(^UUID\)=.*/\1=${UUID}/g;s/\(^PARTUUID\).*$/\1=${PARTUUID}/g" ${file}
 }
 
-declare -A rootmntarr=( [rw]="errors=remount-ro,noatime" [ro]="ro" )
+declare -A rootmntarr=( [rw]="errors=remount-ro,noatime,rw" [ro]="ro" )
 
 function part23_mod() {
 
