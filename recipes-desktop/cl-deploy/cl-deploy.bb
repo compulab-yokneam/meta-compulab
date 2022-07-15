@@ -38,7 +38,7 @@ SRC_URI:append:cl-som-imx6ul = " \
 
 S = "${WORKDIR}"
 
-CL_DEPLOY_MOD = " ${@bb.utils.contains('BBFILE_COLLECTIONS', 'compulab-uefi', '1', '0', d)}"
+CL_DEPLOY_MOD ?= "${@bb.utils.contains('BBFILE_COLLECTIONS', 'compulab-uefi', '1', '0', d)}"
 # Some dsitro has a boot.src that evaluates whether the file rootfs://boot/auto exists and then
 # add init=/usr/local/bin/cl-inti to the kernel bootargs, that turns the media
 # into an autoinstaller.
