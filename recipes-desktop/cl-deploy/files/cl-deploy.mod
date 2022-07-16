@@ -18,7 +18,7 @@ local OPTIONS=${rootmntarr[${ROOTMODE}]}
 file=${1}
 pdev=$( stat --format=%n ${DST}*1 )
 eval $(blkid ${pdev} | awk -F":" '($0=$2)')
-sed -i "/^PARTUUID/d;" ${file}
+sed -i "/^PARTUUID/d;/ \/ /d;" ${file}
 cat << eof >> ${file}
 PARTUUID=${PARTUUID}    /boot   auto    defaults,sync   0   2
 eof
@@ -27,6 +27,22 @@ eval $(blkid ${pdev} | awk -F":" '($0=$2)')
 cat << eof >> ${file}
 ${dry_run}PARTUUID=${PARTUUID}    /   ${TYPE} ${OPTIONS}   0   1
 eof
+}
+
+read_mostly_rootfs_hook () {
+	# /etc/fstab modificatio
+	local FSTAB=/etc/fstab
+	if [ -e ${IMAGE_ROOTFS}/${FSTAB} ]; then
+cat << eof >> ${IMAGE_ROOTFS}/${FSTAB}
+tmpfs        /tmp tmpfs  defaults              0  0
+tmpfs        /run tmpfs  mode=0755,nodev,nosuid,strictatime 0  0
+# logs
+tmpfs        /var/log tmpfs   nosuid,nodev         0       0
+eof
+	fi
+	# journald.conf modification
+	local JCONF=/etc/systemd/journald.conf
+	[[ -e ${IMAGE_ROOTFS}/${JCONF} ]] && sed -i 's/.*\(Storage\).*/\1=volatile/g' ${IMAGE_ROOTFS}/${JCONF}
 }
 
 read_only_rootfs_hook () {
@@ -47,8 +63,8 @@ read_only_rootfs_hook () {
 	local FSTAB=/etc/fstab
 	if [ -e ${IMAGE_ROOTFS}/${FSTAB} ]; then
 cat << eof >> ${IMAGE_ROOTFS}/${FSTAB}
-tmpfs         /tmp tmpfs  defaults              0  0
-tmpfs         /run tmpfs  mode=0755,nodev,nosuid,strictatime 0  0
+tmpfs        /tmp tmpfs  defaults              0  0
+tmpfs        /run tmpfs  mode=0755,nodev,nosuid,strictatime 0  0
 # logs
 tmpfs        /var/log tmpfs   nosuid,nodev         0       0
 # lightdm
@@ -76,7 +92,12 @@ eof
 function part23_mod_ext() {
 part23_mod ${1}/etc/fstab ${part}
 part1_mod ${1}/boot/EFI/BOOT/grub.cfg ${part}
-[[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook || true
+
+ischroot || return 0
+# to take on ROOTMODE evaluation in chroot environment only
+# while on the device leave it as is with all users' changes if any
+[[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook || IMAGE_ROOTFS=${1} read_mostly_rootfs_hook
+
 }
 
 function post_deploy() {
