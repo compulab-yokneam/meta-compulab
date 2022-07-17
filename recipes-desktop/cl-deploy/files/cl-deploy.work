@@ -39,9 +39,14 @@ validate_sw
 part_dump() {
     # This function ignores the passed parameters;
     # uses the globals SRC and DST
-    local P=$(sfdisk --dump ${SRC} | awk 'END { print $1 }'); P=${P:(-1)}
-    sfdisk --dump ${SRC} | sed "/p${P}/d" | sfdisk ${DST}
-    sfdisk --dump ${SRC} | sed -n "/p${P}/p" | awk '($0=$4)' | sfdisk ${DST} --append
+
+    # remove the last partition and the last-lba from the source dump;
+    # it allows dumping to a low-sized media;
+    # in this case it is up to the operator to handle: a not enough space failure.
+    sfdisk --dump ${SRC} | sed '$ d;/last-lba/d;' | sfdisk ${DST}
+    # append the source last partition to the dst with the open end block:
+    # to the end of the available disk's space.
+    sfdisk --list ${SRC} | awk 'END { print $2 }' | sfdisk ${DST} --append
 }
 
 zap_device() {
@@ -92,40 +97,29 @@ cat << eom
 
 eom
 
-# Clone partition table
-eval $(blkid --output export ${SRC})
-# As of now the sfdisk does the job
-# this is a fake if statetement
-# will be removed latter after
-# the full testing coverage
+# Clean up the destination 1-st
 zap_device ${DST}
-if [ ${PTTYPE} == "gpt" ];then
-sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
-else
+
+sys_src=$(basename ${SRC})
+sys_dst=$(basename ${DST})
+
+# Clone partition table
 part_dump ${SRC} ${DST}
 if [ $? -ne 0 ];then
-_src=$(basename ${SRC})
-_dst=$(basename ${DST})
 cat << eof
 Partition table dump error.
 Exit with an error.
 eof
-grep -ar . /sys/class/block/{${_src},${_dst}}/size
+grep -ar . /sys/class/block/{${sys_src},${sys_dst}}/size
 exit 2
 fi
-fi
-
-# The Real job starts here
-sys_src=$(basename ${SRC})
-sys_dst=$(basename ${DST})
-
-# Get & Expand last partition
-last_part=$(sed -n '$ p' /sys/class/block/${sys_src}*/partition)
-echo ",+" | sfdisk --no-reread --force -N ${last_part} ${DST}
 
 # Make the kernel apply the new layout
 partprobe ${DST}
 
+# The Real job starts here
+
+# Copy each $scr.$part -> $dst.$part
 for _src in /sys/class/block/${sys_src}*/partition;do
 
     part=$(cat ${_src})
