@@ -22,7 +22,7 @@ function creat_image_file() {
         __image_size=$(($(cat /sys/class/block/$(basename ${image_file})/size)  >> 11 ))
         if [[ ${image_size} -gt ${__image_size} ]];then
 cat << eof
-        Image ${image_file} size ${__image_size} is to small
+        Image ${image_file} size ${__image_size} is too small
         Required size is ${image_size} in mega
 eof
         exit
@@ -46,34 +46,28 @@ eof
 function creat_image_file_layout() {
 # image file & size must be valiadated by caller
 
-declare sfdisk=()
+label=${label:-gpt}
+declare sparted=()
 
-# mega to block
-root_size_block=$((root_size << 11))
- boot_off_block=$((boot_off  << 11))
-boot_size_block=$((boot_size << 11))
+unit="MB"
 
-boot_area="${boot_off_block},${boot_size_block},${fs_type}"
-root_end_block=$((boot_off_block+boot_size_block))
+boot_area="${boot_off}${unit} ${boot_size}${unit}"
+root_end=$((boot_off+boot_size))
 
-sfdisk[0]=${boot_area}
+sparted[0]=${boot_area}
 
 for i in $(seq 1 ${root_cnt});do
-    root_start_block=${root_end_block}
-    ((root_start_block++))
-    root_area="${root_start_block},${root_size_block},${fs_type}"
-    sfdisk[${i}]=${root_area}
-    root_end_block=$((root_start_block+root_size_block))
+    root_start=${root_end}
+    ((root_start++))
+    root_area="${root_start}${unit} ${root_size}${unit}"
+    sparted[${i}]=${root_area}
+    root_end=$((root_start+root_size))
 done
 
-opt=" "
-for i in ${sfdisk[@]};do
-    cat <<< ${i} | sudo sfdisk --quiet --force -uS ${opt} ${image_file} 2>/dev/null
-    opt=" --append "
+parted ${image_file} --script mklabel ${label}
+for i in ${!sparted[@]};do
+    parted ${image_file} --script mkpart primary ext4 ${sparted[${i}]}
 done
-
-sudo sfdisk --list ${image_file}
-
 }
 
 function calc_rootfs_size() {

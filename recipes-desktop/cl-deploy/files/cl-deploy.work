@@ -37,9 +37,16 @@ done
 validate_sw
 
 part_dump() {
-    local dev=${1}
-    local P=$(sfdisk --list ${dev} | awk '(/^\//)' | wc -l)
-    sfdisk --list --output Device,Start,End,Id ${dev} | awk '(/^\//)' | awk -v P=${P} '{ if (NR==P) { $3="" } ; print $2","$3","$4 }'
+    # This function ignores the passed parameters;
+    # uses the globals SRC and DST
+
+    # remove the last partition and the last-lba from the source dump;
+    # it allows dumping to a low-sized media;
+    # in this case it is up to the operator to handle: a not enough space failure.
+    sfdisk --dump ${SRC} | sed '$ d;/last-lba/d;' | sfdisk ${DST}
+    # append the source last partition to the dst with the open end block:
+    # to the end of the available disk's space.
+    sfdisk --list ${SRC} | awk 'END { print $2 }' | sfdisk ${DST} --append
 }
 
 zap_device() {
@@ -63,6 +70,8 @@ zap_device() {
         dd if=/dev/zero of=/dev/${dev} count=${count} seek=${_offset}
     done
 }
+
+ext4opt=" -O ^64bit -O ^has_journal"
 
 source_block_device() {
 
@@ -88,40 +97,29 @@ cat << eom
 
 eom
 
-# Clone partition table
-eval $(blkid --output export ${SRC})
-# As of now the sfdisk does the job
-# this is a fake if statetement
-# will be removed latter after
-# the full testing coverage
+# Clean up the destination 1-st
 zap_device ${DST}
-if [ ${PTTYPE} == "exta_gpt" ];then
-sgdisk --replicate=${DST} ${SRC} && sgdisk --randomize-guids ${DST}
-else
-part_dump ${SRC} | sfdisk ${DST} &>/dev/null
+
+sys_src=$(basename ${SRC})
+sys_dst=$(basename ${DST})
+
+# Clone partition table
+part_dump ${SRC} ${DST}
 if [ $? -ne 0 ];then
-_src=$(basename ${SRC})
-_dst=$(basename ${DST})
 cat << eof
 Partition table dump error.
 Exit with an error.
 eof
-grep -ar . /sys/class/block/{${_src},${_dst}}/size
+grep -ar . /sys/class/block/{${sys_src},${sys_dst}}/size
 exit 2
-fi
-
-# The Real job starts here
-sys_src=$(basename ${SRC})
-sys_dst=$(basename ${DST})
-
-# Get & Expand last partition
-last_part=$(cat /sys/class/block/${sys_src}*/partition | tail -1)
-echo ",+" | sfdisk --no-reread --force -N ${last_part} ${DST}
 fi
 
 # Make the kernel apply the new layout
 partprobe ${DST}
 
+# The Real job starts here
+
+# Copy each $scr.$part -> $dst.$part
 for _src in /sys/class/block/${sys_src}*/partition;do
 
     part=$(cat ${_src})
@@ -134,6 +132,7 @@ for _src in /sys/class/block/${sys_src}*/partition;do
     eval $(blkid --output export ${_src})
 
     [[ ${TYPE} = "ext"* ]] && OPT=" -F" || OPT=""
+    [[ ${TYPE} = "ext4"* ]] && OPT+=" ${ext4opt}" || true
 
     # Format the destination that same as the source
     mkfs.${TYPE} ${OPT} ${_dst}
@@ -292,7 +291,7 @@ create_cl_layout() {
         for _DST in ${DST}${DPART}*;do
         _basename=$(basename ${_DST})
         [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && label="boot" || label="rootfs"
-            mkfs.ext4 -F -L ${label} ${_DST}
+            mkfs.ext4 -F ${ext4opt} -L ${label} ${_DST}
         done
         return
     fi
@@ -329,7 +328,7 @@ eosfdisk
 partprobe ${DST}
 
     mkfs.ext2 -F -L boot ${DST}${DPART}1
-    mkfs.ext4 -F -L rootfs ${DST}${DPART}2
+    mkfs.ext4 -F ${ext4opt} -L rootfs ${DST}${DPART}2
 }
 
 unmount_destination() {
@@ -499,7 +498,7 @@ if [[ -z ${DST} ]];then
     _SELECT=''
 
     for ign in ${SRC} ${BOOT}; do
-    ignore+=$([[ -b ${ign} ]] && basename ${ign} || echo :)
+    ignore+=$([[ -b ${ign} ]] && basename ${ign})":"
     done
 
     [[ -f ${CL_DEPLOY_MTD} ]] && MTD='YES' || MTD='NO'

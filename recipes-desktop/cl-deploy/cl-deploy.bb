@@ -2,8 +2,9 @@
 # CompuLab Deployment Tool
 
 DESCRIPTION = "CompuLab Deployment Tool"
-LICENSE = "BSD"
+LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4a0e2a2916052068a420bbc50873f515"
+MAINTAINER = "CompuLab <compulab@compulab.com>"
 
 PR = "r3"
 
@@ -37,7 +38,7 @@ SRC_URI_append_cl-som-imx6ul = " \
 
 S = "${WORKDIR}"
 
-CL_DEPLOY_MOD = " ${@bb.utils.contains('BBFILE_COLLECTIONS', 'compulab-uefi', '1', '0', d)}"
+CL_DEPLOY_MOD ?= "${@bb.utils.contains('BBFILE_COLLECTIONS', 'compulab-uefi', '1', '0', d)}"
 # Some dsitro has a boot.src that evaluates whether the file rootfs://boot/auto exists and then
 # add init=/usr/local/bin/cl-inti to the kernel bootargs, that turns the media
 # into an autoinstaller.
@@ -88,7 +89,7 @@ do_install() {
 }
 
 do_mtd_copy() {
-	if [ -f ${S}/cl-deploy.mtd ];then
+	if [[ -f ${S}/cl-deploy.mtd ]];then
 		install -m 0755 ${S}/cl-deploy.mtd ${D}${prefix}/local/bin/
 	fi
 }
@@ -106,7 +107,7 @@ do_install_append_cl-som-imx7() {
 }
 
 do_install_append_cl-som-imx6ul() {
-	if [ -f ${S}/cl-deploy.cl-som-imx6ul ];then
+	if [[ -f ${S}/cl-deploy.cl-som-imx6ul ]];then
 		install -m 0644 ${S}/cl-deploy.cl-som-imx6ul ${D}${prefix}/local/bin/cl-deploy.platform
 	fi
 }
