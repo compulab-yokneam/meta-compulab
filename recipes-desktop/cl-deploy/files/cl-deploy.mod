@@ -91,7 +91,7 @@ eof
 
 function part23_mod_ext() {
 part23_mod ${1}/etc/fstab ${part}
-part1_mod ${1}/boot/EFI/BOOT/grub.cfg ${part}
+[[ ! -f ${1}/boot/EFI/BOOT/grub.cfg ]] || part1_mod ${1}/boot/EFI/BOOT/grub.cfg ${part}
 
 ischroot || return 0
 # to take on ROOTMODE evaluation in chroot environment only
