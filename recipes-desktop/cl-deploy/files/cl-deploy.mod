@@ -20,7 +20,7 @@ pdev=$( stat --format=%n ${DST}*1 )
 eval $(blkid ${pdev} | awk -F":" '($0=$2)')
 sed -i "/^PARTUUID/d;/ \/ /d;" ${file}
 cat << eof >> ${file}
-PARTUUID=${PARTUUID}    /boot   auto    defaults,sync   0   2
+PARTUUID=${PARTUUID}    /boot/efi   auto    defaults,sync   0   2
 eof
 pdev=$( stat --format=%n ${DST}*${2} )
 eval $(blkid ${pdev} | awk -F":" '($0=$2)')
