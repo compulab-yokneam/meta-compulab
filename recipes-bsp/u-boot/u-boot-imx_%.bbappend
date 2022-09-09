@@ -5,3 +5,11 @@ SRC_URI_append += " \
 do_configure_append () {
     cp -fv ${WORKDIR}/compulab.bmp ${S}/tools/logos/
 }
+
+do_install_append_cl-som-imx7 () {
+    install -d ${D}/${sysconfdir}
+    install -m 0644 ${S}/tools/env/fw_env.${MACHINE}.config  ${D}/${sysconfdir}/fw_env.config
+    ln -sf ${UBOOT_INITIAL_ENV}-${MACHINE}-${PV}-${PR} ${D}/${sysconfdir}/u-boot-initial-env
+}
+
+FILES:${PN}-env += "/etc/*"
