@@ -6,9 +6,9 @@ LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/gpl-2.0.txt;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 SRC_URI = "git://github.com/compulab/u-boot.git;branch=cl-som-imx7/hab;protocol=https"
-SRCREV = "c6217c2565a758fa20da658579f34a635c380078"
+SRCREV = "490ad3b1b7a1bd64827effff4f31d0ae9caae944"
 
-PR = "r1.2"
+PR = "r1.3"
 
 require u-boot-compulab-2018.11/u-boot-compulab_cl-som-imx7.inc
 
