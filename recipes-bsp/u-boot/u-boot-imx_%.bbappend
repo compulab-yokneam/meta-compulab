@@ -12,4 +12,4 @@ do_install_append_cl-som-imx7 () {
     ln -sf ${UBOOT_INITIAL_ENV}-${MACHINE}-${PV}-${PR} ${D}/${sysconfdir}/u-boot-initial-env
 }
 
-FILES:${PN}-env += "/etc/*"
+FILES_${PN}-env += "/etc/*"
