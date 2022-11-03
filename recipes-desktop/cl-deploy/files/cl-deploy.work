@@ -543,7 +543,7 @@ SUCCESS_EXIT=success_exit
 
 if [ -z ${UDEV}  ];then
 [ -f /etc/init.d/udev ] && /etc/init.d/udev stop
-pidof systemctl >/dev/null && systemctl stop systemd-udevd*
+pidof systemd >/dev/null && systemctl stop systemd-udevd*
 fi
 
 DIALOG="Start Deployment"
