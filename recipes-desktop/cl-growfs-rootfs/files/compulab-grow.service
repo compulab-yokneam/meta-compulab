@@ -1,0 +1,10 @@
+[Unit]
+Description=CompuLab service to grow rootfs partition size
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/bin/compulab-resize-part.sh
+
+[Install]
+WantedBy=multi-user.target
