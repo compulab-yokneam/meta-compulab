@@ -1,0 +1,10 @@
+[Unit]
+Description=CompuLab ssh-keygen service
+
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/bin/compulab-ssh-init.sh
+
+[Install]
+WantedBy=multi-user.target
