@@ -43,6 +43,6 @@ pkg_postinst_ontarget:${PN} () {
     systemctl --system enable cl-growfs-rootfs.service
 }
 
-pkg_prerm_ontarget:${PN} () {
+pkg_prerm:${PN} () {
     systemctl --system disable cl-growfs-rootfs.service
 }
