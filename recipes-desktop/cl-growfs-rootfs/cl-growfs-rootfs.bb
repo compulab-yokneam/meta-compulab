@@ -9,12 +9,12 @@ RDEPENDS:${PN}:append = " bash parted "
 SRC_URI:append = " \
     file://COPYING \
     file://compulab-resize-part.sh \
-    file://compulab-grow.service \
+    file://cl-growfs-rootfs.service \
 "
 
 FILES:${PN}:append = " \
-    ${bindir}/compulab-resize-part.sh \
-    ${systemd_unitdir}/system/compulab-grow.service \
+    ${bindir}/* \
+    ${systemd_unitdir}/* \
 "
 
 S = "${WORKDIR}"
@@ -33,19 +33,16 @@ do_install() {
     install -m 0755 ${WORKDIR}/compulab-resize-part.sh ${D}/${bindir}/compulab-resize-part.sh
 
     install -d ${D}/${systemd_unitdir}/system
-    install -m 644 ${WORKDIR}/compulab-grow.service ${D}/${systemd_unitdir}/system/
+    install -m 644 ${WORKDIR}/${BPN}.service ${D}/${systemd_unitdir}/system/
+
+    install -d ${D}${systemd_unitdir}/system/multi-user.target.wants
+    ln -sf ../${BPN}.service ${D}${systemd_unitdir}/system/multi-user.target.wants/${BPN}.service
 }
 
-pkg_postinst:${PN} () {
-    if [ -z $D ]; then
-        D="/"
-    fi
-    systemctl enable compulab-grow.service
+pkg_postinst_ontarget:${PN} () {
+    systemctl --system enable cl-growfs-rootfs.service
 }
 
-pkg_prerm:${PN} () {
-    if [ -z $D ]; then
-        D="/"
-    fi
-    systemctl disable compulab-grow.service
+pkg_prerm_ontarget:${PN} () {
+    systemctl --system disable cl-growfs-rootfs.service
 }
