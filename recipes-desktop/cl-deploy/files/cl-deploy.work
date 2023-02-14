@@ -71,7 +71,7 @@ zap_device() {
     done
 }
 
-ext4opt=" -O ^64bit -O ^has_journal"
+ext4opt=" -O 64bit -O has_journal"
 
 source_block_device() {
 
