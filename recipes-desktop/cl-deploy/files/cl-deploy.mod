@@ -13,7 +13,17 @@ declare -A rootmntarr=( [rw]="errors=remount-ro,noatime,rw" [ro]="ro" )
 function part23_mod() {
 
 local OPTIONS=${rootmntarr[${ROOTMODE}]}
-[[ ${ROOTMODE} = "ro" ]] && local dry_run="#" || local dry_run=""
+
+local dry_run=""
+
+if [[ ${ROOTMODE} = "ro" ]];then
+    dry_run="#"
+else
+    if [[ -f /etc/fstab ]];then
+        root_line=$(awk '!/^#/&&/\/ /' /etc/fstab)
+        [[ ! -z ${root_line:-""} ]] || dry_run="#"
+    fi
+fi
 
 file=${1}
 pdev=$( stat --format=%n ${DST}*1 )
