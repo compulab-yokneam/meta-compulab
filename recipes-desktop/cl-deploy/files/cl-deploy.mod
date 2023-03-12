@@ -12,17 +12,20 @@ declare -A rootmntarr=( [rw]="errors=remount-ro,noatime,rw" [ro]="ro" )
 
 function part23_mod() {
 
-local OPTIONS=${rootmntarr[${ROOTMODE}]}
-
-local dry_run=""
-
-if [[ ${ROOTMODE} = "ro" ]];then
-    dry_run="#"
-else
-    if [[ -f /etc/fstab ]];then
-        root_line=$(awk '!/^#/&&/\/ /' /etc/fstab)
-        [[ ! -z ${root_line:-""} ]] || dry_run="#"
+if [[ -n ${ENABLE_ROOTMODE:-""} ]];then
+    local OPTIONS=${rootmntarr[${ROOTMODE}]}
+    local dry_run=""
+    if [[ ${ROOTMODE} = "ro" ]];then
+        dry_run="#"
+    else
+        if [[ -f /etc/fstab ]];then
+            root_line=$(awk '!/^#/&&/\/ /' /etc/fstab)
+            [[ ! -z ${root_line:-""} ]] || dry_run="#"
+        fi
     fi
+else
+    local OPTIONS=${rootmntarr["rw"]}
+    local dry_run=""
 fi
 
 file=${1}
@@ -104,10 +107,13 @@ part23_mod ${1}/etc/fstab ${part}
 [[ ! -f ${1}/boot/EFI/BOOT/grub.cfg ]] || part1_mod ${1}/boot/EFI/BOOT/grub.cfg ${part}
 
 ischroot || return 0
-# to take on ROOTMODE evaluation in chroot environment only
-# while on the device leave it as is with all users' changes if any
-[[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook || IMAGE_ROOTFS=${1} read_mostly_rootfs_hook
-
+if [[ -n ${ENABLE_ROOTMODE:-""} ]];then
+    # to take on ROOTMODE evaluation in chroot environment only
+    # while on the device leave it as is with all users' changes if any
+    [[ ${ROOTMODE} = "ro" ]] && IMAGE_ROOTFS=${1} read_only_rootfs_hook || IMAGE_ROOTFS=${1} read_mostly_rootfs_hook
+else
+    IMAGE_ROOTFS=${1} read_mostly_rootfs_hook
+fi
 }
 
 function post_deploy() {
@@ -166,6 +172,9 @@ for i in  /sys/class/block/$(basename ${DST})*;do
 done
 }
 
-ROOTMODE=${ROOTMODE:-rw}
+ENABLE_ROOTMODE=${ENABLE_ROOTMODE:-""}
+if [[ -n ${ENABLE_ROOTMODE:-""} ]];then
+    ROOTMODE=${ROOTMODE:-rw}
+fi
 update_uuid
 post_deploy
