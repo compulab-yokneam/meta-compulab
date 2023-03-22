@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PATH=${PATH}":/usr/local/bin"
 CL_FUNCTIONS=/usr/share/cl-deploy/cl-functions.inc
 if [[ ! -f ${CL_FUNCTIONS} ]];then
 cat << eof
