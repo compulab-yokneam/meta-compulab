@@ -15,6 +15,8 @@ SRC_URI = " \
 	file://cl-deploy.layout \
 	file://cl-deploy.mtd \
 	file://cl-deploy.mod \
+	file://cl-deploy.yocto.mod \
+	file://cl-deploy.debian.mod \
 	file://cl-deploy.desktop \
 	file://cl-deploy.png \
 	file://cl-auto \
@@ -57,6 +59,8 @@ do_install() {
 	install -m 0755 ${S}/cl-deploy.work ${D}${prefix}/local/bin/
 	if [ ${CL_DEPLOY_MOD} -eq 1 ];then
 	install -m 0644 ${S}/cl-deploy.mod ${D}${prefix}/local/bin/
+	install -m 0644 ${S}/cl-deploy.debian.mod ${D}${prefix}/local/bin/
+	install -m 0644 ${S}/cl-deploy.yocto.mod ${D}${prefix}/local/bin/
 	fi
 	install -m 0644 ${S}/cl-deploy.layout ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-deploy.helper ${D}${prefix}/local/bin/
