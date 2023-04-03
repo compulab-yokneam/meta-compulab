@@ -21,10 +21,11 @@ mount -B /sys ${mpoint}/sys
 CR_CONF=/tmp/grub-mkconfig.sh
 MK_CONF=${mpoint}/${CR_CONF}
 
-grub-editenv ${mpoint}/boot/efi/EFI/BOOT/grubenv create
+grub-editenv ${mpoint}/boot/grub/grubenv create
 cat << eof | tee /dev/null ${MK_CONF}
-grub-mkconfig -o /boot/efi/EFI/BOOT/grub.cfg
-grub-mkconfig -o /boot/efi/EFI/BOOT/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg
+command cl-grub-mkimage 2>/dev/null || true
 eof
 
 chmod a+x ${MK_CONF}
@@ -33,6 +34,8 @@ chroot ${mpoint} ${CR_CONF}
 umount ${mpoint}/sys
 umount ${mpoint}/proc
 umount ${mpoint}/dev
+# Remove grub folder from the boot partition
+rm -rf ${mpoint}/boot/efi/grub
 umount ${mpoint}/boot/efi
 umount ${mpoint}
 }
