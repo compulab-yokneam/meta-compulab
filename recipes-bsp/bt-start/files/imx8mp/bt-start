@@ -1,0 +1,97 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:		bt-start
+# Required-Start:	$syslog
+# Required-Stop:	$syslog
+# Default-Start:	2 3 4 5
+# Default-Stop:
+# Short-Description:	CompuLab bt-start
+### END INIT INFO
+
+# Get the SOM model name
+TTY=ttymxc0
+
+bluetooth_init() {
+	# Wait for the mwifi_sdio to load the firmware file
+	# if mlan0 iface created, then the driver is up & running
+	while [ ! -e /sys/class/net/mlan0 ];do
+	sleep 1
+	done
+	hciattach /dev/${TTY} any -s 115200 115200 flow dtron
+	sleep .5
+	hciconfig hci0 up
+	sleep .5
+	hcitool -i hci0 cmd 0x3f 0x0009 0xc0 0xc6 0x2d 0x00
+	sleep .5
+	killall hciattach
+	sleep .5
+	:
+}
+
+bluetooth_kill() {
+	pkill -9 hciattach
+}
+
+bluetooth_stop() {
+	if [[ ! -d  /sys/class/tty/${TTY}/hci0 ]]
+	then
+cat << eom
+	The Device already stopped.
+	Exiting ....
+eom
+	exit 0
+	fi
+	bluetooth_kill
+}
+
+bluetooth_attach() {
+	hciattach /dev/${TTY} any -s 3000000 3000000 flow dtron
+	hciconfig hci0 up
+}
+
+bluetooth_up() {
+	[[ -d  /sys/class/tty/${TTY}/hci0 ]] && hciconfig hci0 up
+}
+
+bluetooth_status() {
+	local mess="connected"
+	[[ ! -d  /sys/class/tty/${TTY}/hci0 ]] && mess="dis"${mess}
+cat << eom
+	Device hci0 is ${mess}
+eom
+}
+
+bluetooth_start() {
+	if [[ -d  /sys/class/tty/${TTY}/hci0 ]]
+	then
+cat << eom
+	The Device already started.
+	Exiting ....
+eom
+	exit 0
+	fi
+
+	bluetooth_init
+	bluetooth_attach
+	bluetooth_up
+}
+
+case "$1" in
+start)
+	bluetooth_start
+	;;
+stop)
+	bluetooth_stop
+	;;
+status)
+	bluetooth_status
+	;;
+*)
+cat << eom
+	Usage: $0 {start|stop|status}
+eom
+	exit 1
+esac
+
+exit 0
