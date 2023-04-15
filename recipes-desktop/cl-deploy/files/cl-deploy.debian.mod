@@ -13,6 +13,7 @@ root_dev=/dev/${dst}${p}2
 mkdir -p ${mpoint}
 
 mount ${root_dev} ${mpoint}
+mkdir -p ${mpoint}/boot/efi
 mount ${boot_dev} ${mpoint}/boot/efi
 mount -B /dev  ${mpoint}/dev
 mount -B /proc ${mpoint}/proc
