@@ -69,6 +69,6 @@ echo ${part}
 
 line() { local len=${1:-60}; printf '%*s\n' ${len} '' | tr ' ' - ; }
 
-exec 5> "$(dirname "$(mktemp --dry)")/$(basename "$0").log"
+exec 5> /tmp/$(basename "$0").$$.log
 BASH_XTRACEFD="5"
 set -x
