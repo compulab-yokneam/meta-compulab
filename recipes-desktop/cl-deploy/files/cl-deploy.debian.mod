@@ -24,6 +24,8 @@ MK_CONF=${mpoint}/${CR_CONF}
 
 grub-editenv ${mpoint}/boot/grub/grubenv create
 cat << eof | tee /dev/null ${MK_CONF}
+#!/bin/bash -x
+
 cd /boot
 for image in Image-*;do
 ln -sf \${image} kernel-\${image/Image-/};
