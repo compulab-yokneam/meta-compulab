@@ -41,7 +41,7 @@ camera_start_image() {
 }
 
 camera_get() {
-    CAMERA=$(for f in /dev/video*;do ( v4l2-ctl --info --device ${f} 2>/dev/null | grep -q "mxc-isi-cap" ) && echo $(basename ${f}) ; done)
+    CAMERA=$(for f in /dev/video*;do [[ $(v4l2-ctl --info --device ${f} | awk '($0 ~ /VIV/ || $0 ~ /mxc-isi-cap/ ) && ($0=$NF)') ]] && echo $(basename ${f}) ; done)
     CAMERA=${CAMERA:-fakecamera}
     cat <<< ${CAMERA}
 }
