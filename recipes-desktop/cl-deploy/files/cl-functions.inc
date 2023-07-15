@@ -69,6 +69,8 @@ echo ${part}
 
 line() { local len=${1:-60}; printf '%*s\n' ${len} '' | tr ' ' - ; }
 
+if [[ $(who -r) ]];then
 exec 5> /tmp/$(basename "$0").$$.log
 BASH_XTRACEFD="5"
+fi
 set -x
