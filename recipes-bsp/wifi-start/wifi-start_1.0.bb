@@ -2,7 +2,7 @@ SUMMARY = "Murata WiFi Start Script"
 DESCRIPTION = "initscript to set up the Murata WiFi."
 SECTION = "base"
 
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=751419260aa954499f7abaabaa882bbe"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 PR = "r1"

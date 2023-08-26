@@ -1,5 +1,5 @@
 DESCRIPTION = "Flexible I/O tester examples"
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=39eac9f8f195f04c16966a9f5824e9ba"
 
 SRC_URI = "git://github.com/compulab-yokneam/fio-examples.git;protocol=https;branch=master"
