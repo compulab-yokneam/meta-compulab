@@ -79,7 +79,7 @@ else
 	res=1
 fi
 
-[[ ${res} -eq 0 ]] || error_exit "${exit_msg}" ${res} && okay_exit
+[[ ${res} -eq 0 ]] && okay_exit || error_exit "${exit_msg}" ${res}
 }
 
 usage() {
