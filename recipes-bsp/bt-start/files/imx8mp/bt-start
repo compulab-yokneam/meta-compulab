@@ -10,6 +10,16 @@
 ### END INIT INFO
 
 # Get the SOM model name
+m=$(udevadm info -ap  /sys/devices/soc0 | awk -F"==" '(/machine/)&&($0=$2)')
+case "${m}" in
+*SOM*)
+	break;
+	;;
+*)
+	exit 0
+	;;
+esac
+
 TTY=ttymxc0
 
 bluetooth_init() {
