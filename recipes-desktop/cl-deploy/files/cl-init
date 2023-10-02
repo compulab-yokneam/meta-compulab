@@ -31,6 +31,13 @@ sync_cpl () {
   done
 }
 
+poweroff_cpl () {
+  sync;sync;sync
+  for cmd in s u o;do
+  echo ${cmd} > /proc/sysrq-trigger
+  done
+}
+
 main () {
 
 if [ -x ${MAIN_CMD} ];then
