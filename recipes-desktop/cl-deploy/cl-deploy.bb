@@ -6,7 +6,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4a0e2a2916052068a420bbc50873f515"
 MAINTAINER = "CompuLab <compulab@compulab.com>"
 
-PR = "r3"
+PR = "r4"
 
 SRC_URI = " \
 	file://cl-deploy \
@@ -22,6 +22,7 @@ SRC_URI = " \
 	file://cl-auto \
 	file://cl-init \
 	file://cl-reboot \
+	file://cl-poff \
 	file://cl-auto.conf.header \
 	file://cl-auto.conf \
 	file://cl-auto.bashrc \
@@ -68,6 +69,7 @@ do_install() {
 	install -m 0755 ${S}/cl-auto.shell ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-init ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-reboot ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/cl-poff ${D}${prefix}/local/bin/
 	install -m 0644 ${S}/cl-deploy.png ${D}${datadir}/applications/
 	install -m 0644 ${S}/cl-deploy.desktop ${D}${datadir}/applications/
 
