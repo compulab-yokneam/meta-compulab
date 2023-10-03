@@ -8,10 +8,29 @@ WORK=/usr/local/bin/cl-deploy
 
 prepare_fs() {
 
+[[ $(who -r | wc -l) = 0 ]] || return
+
 mount -t proc proc /proc
 mount -t sysfs sys /sys
 mount -t tmpfs tmp /run
 mkdir -p /run/systemd
+
+post_main() {
+        reboot_cpl
+}
+}
+
+pre_main() {
+
+dmesg -D
+prepare_fs
+mount / -o remount,rw
+
+}
+
+post_main() {
+
+true
 
 }
 
@@ -66,6 +85,31 @@ fi
 
 echo ${part}
 }
+
+reboot_cpl () {
+  sync;sync;sync
+  for cmd in s u b;do
+  echo ${cmd} > /proc/sysrq-trigger
+  done
+}
+
+sync_cpl () {
+return
+  sync;sync;sync
+  for cmd in s u;do
+  echo ${cmd} > /proc/sysrq-trigger
+  done
+}
+
+poweroff_cpl () {
+  sync;sync;sync
+  for cmd in s u o;do
+  echo ${cmd} > /proc/sysrq-trigger
+  done
+}
+
+declare -x dry_run="no"
+declare -xi dry_run_res=0
 
 line() { local len=${1:-60}; printf '%*s\n' ${len} '' | tr ' ' - ; }
 

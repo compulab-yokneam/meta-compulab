@@ -22,7 +22,19 @@ get_mode() {
 
 get_auto_device() {
 dev_name=$(get_root_device)
-echo ${dev_name}
+echo -n ${dev_name}
+}
+
+toggle_dr() {
+    [[ ${dry_run:-"no"} = "no" ]] && export dry_run="yes" || export dry_run="no"
+}
+
+toggle_dr_res() {
+    [[ ${dry_run_res:-0} -eq 0  ]] && dry_run_res=1 || dry_run_res=0
+}
+
+get_dr() {
+    [[ ${dry_run} = "yes" ]]  && echo -n ${dry_run}"=${dry_run_res} " || echo -n ${dry_run}
 }
 
 usage () {
@@ -32,8 +44,11 @@ cat << eof
      M -- Modify ${conf} file
      C -- Copy ${sample} file to /etc/cl-auto.conf
      G -- Start autoinstaller now
+     U -- Toggle dry run
      X -- Exit cl-auto.shell
      B -- Fast reboot
+     O -- Poweroff
+
 
 Conf file:
 $(show_conf)
@@ -41,7 +56,7 @@ $(show_conf)
 eof
 }
 
-PS1='$(usage)\n\nautoinstaller ( device: $(get_auto_device) ;  boot mode : $(get_mode) ) > '
+PS1='$(usage)\n\nautoinstaller ( device: $(get_auto_device) ;  boot mode : $(get_mode) ; dry run : $(get_dr)) > '
 set -m
 
 alias G='cl-auto'
@@ -53,3 +68,6 @@ alias C='cl-auto -c'
 alias M='vi ${conf}'
 alias X='exit'
 alias B='cl-reboot'
+alias O='cl-poff'
+alias U='toggle_dr'
+alias UU='toggle_dr_res'

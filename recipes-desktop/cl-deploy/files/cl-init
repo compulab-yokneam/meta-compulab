@@ -17,27 +17,6 @@ set -m
 rcfile=/usr/share/cl-deploy/cl-auto.bashrc
 MAIN_CMD=/usr/local/bin/cl-auto
 
-reboot_cpl () {
-  sync;sync;sync
-  for cmd in s u b;do
-  echo ${cmd} > /proc/sysrq-trigger
-  done
-}
-
-sync_cpl () {
-  sync;sync;sync
-  for cmd in s u;do
-  echo ${cmd} > /proc/sysrq-trigger
-  done
-}
-
-poweroff_cpl () {
-  sync;sync;sync
-  for cmd in s u o;do
-  echo ${cmd} > /proc/sysrq-trigger
-  done
-}
-
 main () {
 
 if [ -x ${MAIN_CMD} ];then
@@ -49,14 +28,6 @@ else
 fi
 
 return $res
-}
-
-pre_main() {
-
-dmesg -D
-prepare_fs
-mount / -o remount,rw
-
 }
 
 pre_main
@@ -72,4 +43,4 @@ eof
 	bash --rcfile ${rcfile}
 fi
 
-reboot_cpl
+post_main

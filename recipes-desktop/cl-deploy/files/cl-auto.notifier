@@ -1,13 +1,19 @@
 # cl-auto.notifier
 
+dry_run_notifier() {
+	dialog --ok-label ${dry_run_status} --timeout ${timeout} --title "Dry run sample notifier ${timeout} seconds" --msgbox ${dry_run_status} 5 60
+}
+
 external_okay_exit() {
 cat << eof
 Issuing ${FUNCNAME[0]} with $@
 eof
+[[ ${dry_run} = "yes" ]] && dry_run_status=${FUNCNAME[0]} dry_run_notifier
 }
 
 external_error_exit() {
 cat << eof
 Issuing ${FUNCNAME[0]} with $@
 eof
+[[ ${dry_run} = "yes" ]] && dry_run_status=${FUNCNAME[0]} dry_run_notifier
 }
