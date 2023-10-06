@@ -9,14 +9,7 @@ PR = "r1"
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-# As the recipe doesn't inherit systemd.bbclass, we need to set this variable
-# manually to avoid unnecessary postinst/preinst generated.
-python __anonymous() {
-    if not bb.utils.contains('DISTRO_FEATURES', 'sysvinit', True, False, d):
-        d.setVar("INHIBIT_UPDATERCD_BBCLASS", "1")
-}
-
-inherit update-rc.d systemd
+inherit systemd
 
 SRC_URI = "file://bt-start \
 	   file://bt-start.service \
@@ -24,7 +17,6 @@ SRC_URI = "file://bt-start \
 
 SERVICE_NAME = "bt-start.service"
 INITSCRIPT_NAME = "bt-start"
-INITSCRIPT_PARAMS = "start 2 3 4 5"
 
 S = "${WORKDIR}"
 
@@ -53,22 +45,12 @@ pkg_postinst:${PN} () {
 	if [ -n "$D" ]; then
 		OPTS="--root=$D"
 	fi
-	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
-		systemctl $OPTS enable bt-start.service
-	fi
-	if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
-		update-rc.d $OPTS bt-start defaults
-	fi
+	systemctl $OPTS enable bt-start.service
 }
 
 pkg_postrm:${PN} () {
 	if [ -n "$D" ]; then
 		OPTS="--root=$D"
 	fi
-	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
-		systemctl $OPTS disable bt-start.service
-	fi
-	if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
-		update-rc.d $OPTS bt-start remove
-	fi
+	systemctl $OPTS disable bt-start.service
 }
