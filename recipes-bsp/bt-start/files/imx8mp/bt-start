@@ -13,7 +13,6 @@
 m=$(udevadm info -ap  /sys/devices/soc0 | awk -F"==" '(/machine/)&&($0=$2)')
 case "${m}" in
 *SOM*)
-	break;
 	;;
 *)
 	exit 0
