@@ -327,15 +327,9 @@ partprobe ${DST}
 }
 
 unmount_destination() {
-    local _arg=$(awk -v var=${DST} '{ ($0~var)&&(P=$1" "P) } END { print P }' /proc/mounts)
-    if [[ -n ${_arg} ]];then
-        umount ${_arg} &>/dev/null
-        [[ $? -eq 0 ]] && return
-
-        local DIALOG="Destination device ${DST} unmount failed:"
-        ${dialog_app} --backtitle "${DIALOG}" --title " WARNING: Exiting " --msgbox "${DIALOG}" 10 80
-        exit
-    fi
+    # There is nothing to think about;
+    # Issue a force unmount
+    umount -l ${DST}${DPART}* &>/dev/null || true
 }
 
 target_block_device() {
