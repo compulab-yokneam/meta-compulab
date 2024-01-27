@@ -182,16 +182,13 @@ eom
     done
 
     # Copy boot content to the boot-partition
-    mount ${DST}${DPART}2 ${mdst}
-    if [[ -d ${mdst}/boot ]];then
-        local boot_dir=$(mktemp -p ${MKTEMP} -d)
-        mount ${DST}${DPART}1 ${boot_dir}
-        cp -a ${mdst}/boot/* ${boot_dir}
-        umount ${boot_dir}
-        rm -rf ${boot_dir}
+    mount ${DST}${DPART}2 ${msrc}
+    if [[ -d ${msrc}/boot ]];then
+        mount ${DST}${DPART}1 ${mdst}
+        cp -a ${msrc}/boot/* ${mdst}
+        umount ${mdst}
     fi
-
-    umount ${mdst}
+    umount ${msrc}
 
 cat << eom
 
@@ -269,15 +266,13 @@ eom
     umount ${msrc}
 
     # Copy boot content to the boot-partition
-    mount ${DST}${DPART}2 ${mdst}
-    if [[ -d ${mdst}/boot ]];then
-        local boot_dir=$(mktemp -p ${MKTEMP} -d)
-        mount ${DST}${DPART}1 ${boot_dir}
-        cp -a ${mdst}/boot/* ${boot_dir}
-        umount ${boot_dir}
-        rm -rf ${boot_dir}
+    mount ${DST}${DPART}2 ${msrc}
+    if [[ -d ${msrc}/boot ]];then
+        mount ${DST}${DPART}1 ${mdst}
+        cp -a ${msrc}/boot/* ${mdst}
+        umount ${mdst}
     fi
-    umount ${mdst}
+    umount ${msrc}
 
 cat << eom
 
