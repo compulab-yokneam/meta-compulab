@@ -3,7 +3,7 @@ DESCRIPTION = "A XFCE desktop demo image."
 LICENSE = "MIT"
 
 inherit core-image
-inherit distro_features_check
+inherit features_check
 
 REQUIRED_DISTRO_FEATURES = "x11"
 
@@ -32,7 +32,7 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 "
 CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-tools-bluetooth \
-    packagegroup-fsl-tools-audio \
+    packagegroup-imx-tools-audio \
     packagegroup-fsl-tools-gpu \
     packagegroup-fsl-tools-gpu-external \
     packagegroup-fsl-tools-testapps \
