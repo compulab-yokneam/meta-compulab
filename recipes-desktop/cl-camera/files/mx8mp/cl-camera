@@ -13,8 +13,7 @@ camera_stop() {
 camera_start() {
     if [ -d /sys/class/video4linux/${CAMERA} ];then
         SRC="v4l2src device=/dev/${CAMERA}"
-        eval $(udevadm info -ap /sys/devices/soc0 | awk '/machine/' | sed 's/ATTR{\(.*\)}/\1/g;s/==/=/g')
-        export TEXT=${machine}
+        export TEXT=$( cat /proc/device-tree/product-name; cat <<< " "${CAMERA} )
         OVERP=""
     else
         SRC="videotestsrc"
@@ -29,9 +28,13 @@ camera_start() {
 }
 
 camera_start_stream() {
-    #SINK="waylandsink window-width=1280 window-height=720"
+    SINK="waylandsink window-width=1280 window-height=720"
     SINK="autovideosink"
-    ${GST} ${SRC} ! "video/x-raw,width=1280,height=720,format=${FORMAT}" ! textoverlay text="'${TEXT}'" ! ${SINK} &
+    GST_COMMAND="${GST} ${SRC} ! "video/x-raw,width=1280,height=720,format=${FORMAT}" ! clockoverlay ! textoverlay text=\"${TEXT}\" ! ${SINK}"
+cat << eof | tee /tmp/camera_start_stream.cmd > /dev/null
+${GST_COMMAND}
+eof
+    ${GST_COMMAND} &
 }
 
 camera_start_image() {
@@ -41,20 +44,30 @@ camera_start_image() {
 }
 
 camera_get() {
-    CAMERA=$(for f in /dev/video*;do [[ $(v4l2-ctl --info --device ${f} | awk '($0 ~ /VIV/ || $0 ~ /mxc-isi-cap/ ) && ($0=$NF)') ]] && echo $(basename ${f}) ; done)
-    CAMERA=${CAMERA:-fakecamera}
-    cat <<< ${CAMERA}
+    local _CAMERA=( $(for f in /dev/video*;do [[ $(v4l2-ctl --info --device ${f} | awk '($0 ~ /VIV/ || $0 ~ /mxc-isi-cap/ ) && ($0=$NF)') ]] && echo $(basename ${f}) ; done; cat <<< " fakecamera") )
+cat << eof
+Available sensors and commands:
+------------------------------
+eof
+    for c in ${!_CAMERA[@]};do
+    [[ ${c} -eq ${sensor} ]] && default="*" || default=""
+cat << eom
+	$c ${_CAMERA[$c]}; sensor=$c cl-camera ${default}
+eom
+    done
+    export CAMERA=${_CAMERA[${sensor}]}
 }
 
 camera_main() {
     camera_stop
-    CAMERA=$(camera_get)
+    camera_get
     CAMERA=${CAMERA} MODE=${MODE} camera_start
 }
 
 MODE=${MODE:-stream}
 [[ ${MODE} = 'stream' ]] || MODE=image
 FORMAT=${FORMAT:-NV12}
+sensor=${sensor:-0}
 GST="gst-launch-1.0 --no-position"
 
 camera_main
