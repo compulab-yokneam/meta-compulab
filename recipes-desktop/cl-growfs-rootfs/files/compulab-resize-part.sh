@@ -5,6 +5,8 @@ set -e
 # All sizes are in blocks of 512 bytes
 
 root_device=$(basename $(findmnt / --noheadings --output SOURCE))
+[[ -b /dev/${root_device} ]] || exit 0
+
 part2resize=${part2resize:-${root_device: -1}}
 
 LINUX_STORAGE_DEVICE=/dev/$(basename $(dirname /sys/block/*/${root_device}))
