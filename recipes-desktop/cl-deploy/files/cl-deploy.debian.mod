@@ -31,8 +31,8 @@ for image in Image-*;do
 ln -sf \${image} kernel-\${image/Image-/};
 done
 cd -
-grub-mkconfig -o /boot/grub/grub.cfg
-grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /boot/grub/grub.cfg 2>/dev/null || true
+grub-mkconfig -o /boot/grub/grub.cfg 2>/dev/null || true
 command cl-grub-mkimage 2>/dev/null || true
 eof
 
@@ -48,4 +48,4 @@ umount ${mpoint}/boot/efi
 umount ${mpoint}
 }
 
-post_deploy
+command -v grub-mkconfig 2>/dev/null && post_deploy || true
