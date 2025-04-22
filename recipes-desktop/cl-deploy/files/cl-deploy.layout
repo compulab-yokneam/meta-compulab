@@ -71,10 +71,10 @@ done
 }
 
 function calc_rootfs_size() {
-    pad_size=${pad_size:-1536}
+    pad_size=${pad_size:-1.5}
     rootfs=$(readlink -f ${root_fs})
     root_size=$(sudo du -sk ${rootfs} | awk '$0=$1')
-    root_size=$(echo "(((${root_size}/1024+${pad_size})/1024)*1024)" | bc)
+    root_size=$(echo "(${root_size}*${pad_size}/1024)" | bc)
     export root_size=${root_size}
 }
 
