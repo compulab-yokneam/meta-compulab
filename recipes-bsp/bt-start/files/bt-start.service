@@ -1,5 +1,6 @@
 [Unit]
 Description=CompuLab BLueThooth Start Script
+After=network.target
 
 [Service]
 Type=forking
