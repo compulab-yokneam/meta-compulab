@@ -48,6 +48,6 @@ echo "w" | fdisk ${LINUX_STORAGE_DEVICE} &> /dev/null || true
 
 # parted -s ${LINUX_STORAGE_DEVICE} resizepart ${part2resize} 100%
 echo "Yes" | parted ---pretend-input-tty ${LINUX_STORAGE_DEVICE} resizepart ${part2resize} 100% || true
-resize2fs /dev/${root_device}
+command -v resize2fs &>/dev/null && resize2fs /dev/${root_device} || true
 
 /lib/systemd/systemd-growfs /
