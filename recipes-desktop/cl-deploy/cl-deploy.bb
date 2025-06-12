@@ -9,6 +9,8 @@ MAINTAINER = "CompuLab <compulab@compulab.com>"
 PR = "r4"
 
 SRC_URI = " \
+	file://backup.sh  \
+	file://restore.sh \
 	file://cl-deploy \
 	file://cl-deploy.work \
 	file://cl-deploy.helper \
@@ -55,6 +57,8 @@ do_install() {
 	install -d ${D}${datadir}/cl-deploy/app
 	install -d ${D}${sysconfdir}
 
+	install -m 0755 ${S}/backup.sh ${D}${prefix}/local/bin/
+	install -m 0755 ${S}/restore.sh ${D}${prefix}/local/bin/
 
 	install -m 0755 ${S}/cl-deploy ${D}${prefix}/local/bin/
 	install -m 0755 ${S}/cl-deploy.work ${D}${prefix}/local/bin/
