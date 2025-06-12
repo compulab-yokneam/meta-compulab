@@ -18,6 +18,6 @@ for _dev in ${device}*;do
 	if [[ ${TYPE} = swap ]];then
 		touch ${_part}.${TYPE}.${UUID}.partclone.lz4
 	else
-		partclone.${TYPE} -c -s ${dev} -o - | lz4c -c9 - > ${_part}.${TYPE}.${UUID}.partclone.lz4
+		partclone.${TYPE} -F -c -s ${dev} -o - | lz4c -c9 - > ${_part}.${TYPE}.${UUID}.partclone.lz4
 	fi
 done
