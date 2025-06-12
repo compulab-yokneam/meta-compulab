@@ -11,8 +11,8 @@ deploy_layout() {
 
     devname=$(basename ${device})
     [[ ${devname:0:2} = "sd" ]] && p="" || p="p"
-    [[ ${devname:0:2} = "lo" ]] && p="" || p="p"
-    [[ ${devname:0:2} = "mm" ]] && p="" || p="p"
+    [[ ${devname:0:2} = "lo" ]] && p="p" || p=""
+    [[ ${devname:0:2} = "mm" ]] && p="p" || p=""
 
     if [[ ! -f ${src}/disk.layout ]];then
         echo "Error: disk.layout is missing ..."
