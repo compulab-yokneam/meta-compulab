@@ -50,6 +50,13 @@ deploy_layout() {
             echo "Error: deployment ( ${image} -> ${target}${p}${num} )  error=${rc}"
             return ${rc}
         fi
+        fsck -y ${target}${p}${num} &>/dev/null || true
+        set -e
+        mkdir -p /tmp/${target}${p}${num}
+        mount -o ro ${target}${p}${num} /tmp/${target}${p}${num}
+        umount ${target}${p}${num}
+        rm -rf /tmp/${target}${p}${num}
+        set +e
     done
     return 0
 }
