@@ -8,7 +8,8 @@ uid=$(id -u)
 [[ -n ${device:-""} ]] || exit 2
 [[ -b ${device:-""} ]] || exit 3
 
-sfdisk -d ${device} | awk '!/last-lba|^device:/' > disk.layout
+sfdisk --dump ${device} | awk '!/last-lba|^device:/' > disk.layout
+sfdisk --disk-id ${device} > disk.id
 
 for _dev in ${device}*;do
 	eval $(blkid $_dev | awk -F":" '($0="dev="$1" "$2)';)

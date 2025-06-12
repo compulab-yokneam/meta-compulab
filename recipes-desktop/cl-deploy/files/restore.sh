@@ -29,6 +29,9 @@ deploy_layout() {
     local part_num=${part_dev#${target}${p}}
     parted -s ${target} resizepart ${part_num} 100%
 
+    # Restore disk-id UUID if possible
+    [[ ! -f ${src}/disk.id ]] && sfdisk --disk-id ${target} $(cat ${src}/disk.id)
+
     # Copy data
 
     for image in ${src}/part*;do
@@ -44,11 +47,9 @@ deploy_layout() {
         fi
         lz4cat ${image} | partclone.restore -d -s - -o ${target}${p}${num} || rc=$?
         if [[ ${rc} -ne 0 ]];then
-            echo "Error: xoption_deploy( ${image} -> ${target}${p}${num} )  error=${rc}"
+            echo "Error: deployment ( ${image} -> ${target}${p}${num} )  error=${rc}"
             return ${rc}
         fi
-	[[ ${type} = "ext4" ]] && resize2fs -p -f ${target}${p}${num} || true
-	[[ ${type} = "ntfs" ]] && ntfsresize -f   ${target}${p}${num} || true
     done
     return 0
 }
