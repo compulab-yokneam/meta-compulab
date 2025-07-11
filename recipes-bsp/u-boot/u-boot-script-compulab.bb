@@ -2,7 +2,7 @@ LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://README;md5=2456088a0455a82ac9e16b007de97c03"
 DEPENDS = "u-boot-mkimage-native"
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit deploy
 

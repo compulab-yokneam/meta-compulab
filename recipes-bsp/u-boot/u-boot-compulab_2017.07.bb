@@ -12,8 +12,8 @@ PR = "r1.9.1"
 
 require u-boot-compulab-2017.07/u-boot-compulab_cl-som-imx7.inc
 
-S = "${WORKDIR}/git"
-B = "${WORKDIR}/build"
+S = "${UNPACKDIR}/git"
+B = "${UNPACKDIR}/build"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 

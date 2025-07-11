@@ -19,7 +19,7 @@ FILES:${PN}:append = " \
     ${systemd_unitdir}/system/compulab-ssh-init.service \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 do_configure() {
 	:
@@ -32,11 +32,11 @@ do_compile() {
 do_install() {
 
     install -d -m 755 ${D}${bindir}
-    install -m 0755 ${WORKDIR}/compulab-ssh-init.sh ${D}/${bindir}/compulab-ssh-init.sh
-    install -m 0755 ${WORKDIR}/compulab-ssh-purge.sh ${D}/${bindir}/compulab-ssh-purge.sh
+    install -m 0755 ${UNPACKDIR}/compulab-ssh-init.sh ${D}/${bindir}/compulab-ssh-init.sh
+    install -m 0755 ${UNPACKDIR}/compulab-ssh-purge.sh ${D}/${bindir}/compulab-ssh-purge.sh
 
     install -d ${D}/${systemd_unitdir}/system
-    install -m 644 ${WORKDIR}/compulab-ssh-init.service ${D}/${systemd_unitdir}/system/
+    install -m 644 ${UNPACKDIR}/compulab-ssh-init.service ${D}/${systemd_unitdir}/system/
 }
 
 pkg_postinst:${PN} () {

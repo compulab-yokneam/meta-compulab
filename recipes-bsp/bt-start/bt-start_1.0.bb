@@ -18,7 +18,7 @@ SRC_URI = "file://bt-start \
 SERVICE_NAME = "bt-start.service"
 INITSCRIPT_NAME = "bt-start"
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 ALLOW_EMPTY:${PN} = "1"
 RDEPENDS:${PN} = "bash"
@@ -27,7 +27,7 @@ FILES:${PN} += "${systemd_unitdir}/* ${sysconfdir}/* ${sbindir}/*"
 do_install () {
 
     install -d ${D}${sbindir}
-    install -m 0755 ${WORKDIR}/${INITSCRIPT_NAME} ${D}${sbindir}
+    install -m 0755 ${UNPACKDIR}/${INITSCRIPT_NAME} ${D}${sbindir}
 
     if ${@bb.utils.contains('DISTRO_FEATURES','sysvinit','true','false',d)}; then
             install -d ${D}${sysconfdir}/init.d
@@ -36,7 +36,7 @@ do_install () {
 
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         install -d ${D}${systemd_unitdir}/system
-        install -m 644 ${WORKDIR}/${SERVICE_NAME} ${D}/${systemd_unitdir}/system/
+        install -m 644 ${UNPACKDIR}/${SERVICE_NAME} ${D}/${systemd_unitdir}/system/
     fi
 
 }

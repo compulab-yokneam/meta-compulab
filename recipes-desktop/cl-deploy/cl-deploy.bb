@@ -43,7 +43,7 @@ SRC_URI:append:cl-som-imx6ul = " \
 	file://cl-deploy.cl-som-imx6ul \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 CL_DEPLOY_MOD ?= "${@bb.utils.contains('BBFILE_COLLECTIONS', 'compulab-uefi', '1', '0', d)}"
 # Some dsitro has a boot.src that evaluates whether the file rootfs://boot/auto exists and then

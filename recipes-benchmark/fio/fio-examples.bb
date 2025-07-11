@@ -7,7 +7,7 @@ SRC_URI = "git://github.com/compulab-yokneam/fio-examples.git;protocol=https;bra
 PV = "1.0+git${SRCPV}"
 SRCREV = "${AUTOREV}"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 FS_LOCATION = "/unit_tests/fio-examples"
 

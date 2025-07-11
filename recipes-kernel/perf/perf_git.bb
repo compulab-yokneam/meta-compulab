@@ -15,7 +15,7 @@ PROVIDES = "virtual/perf"
 
 inherit linux-kernel-base kernel-arch kernelsrc
 
-S = "${WORKDIR}/${BP}"
+S = "${UNPACKDIR}/${BP}"
 
 do_compile() {
 	:

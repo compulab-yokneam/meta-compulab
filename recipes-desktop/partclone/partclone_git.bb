@@ -12,7 +12,7 @@ SRC_URI = "git://github.com/Thomas-Tsai/partclone.git;protocol=https;branch=mast
 PV = "0.3.37+git"
 SRCREV = "ee7762663b28b64ef4921f8d1bafb28050e02dc5"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 # NOTE: unable to map the following pkg-config dependencies: fuse libntfs-3g
 #       (this is based on recipes that have previously been built and packaged)

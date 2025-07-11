@@ -15,7 +15,7 @@ SRC_URI = " \
 	file://COPYING \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 do_install() {
 	install -d ${D}/usr/local/bin/

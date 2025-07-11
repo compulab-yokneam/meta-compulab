@@ -37,7 +37,7 @@ SRC_URI:append:cl-som-imx6 = " \
 	file://0020-arm-mx6-cl-som-imx6-change-boot-device-order.patch \
 "
 
-S = "${WORKDIR}/u-boot-2015.07-cm-fx6-3"
+S = "${UNPACKDIR}/u-boot-2015.07-cm-fx6-3"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 COMPATIBLE_MACHINE = "(cl-som-imx6)"

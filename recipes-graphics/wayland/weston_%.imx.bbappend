@@ -7,7 +7,7 @@ SRC_URI:append = " \
 
 do_install:append() {
     WESTON_INI_DEST_DIR=${D}${sysconfdir}/xdg/weston
-    cat ${WORKDIR}/weston.ini-launcher >> ${WESTON_INI_DEST_DIR}/weston.ini
+    cat ${UNPACKDIR}/weston.ini-launcher >> ${WESTON_INI_DEST_DIR}/weston.ini
 
     mode=$(awk '(/^\[shell\]/)&&($0="insert")' ${WESTON_INI_DEST_DIR}/weston.ini)
     if [ -z ${mode} ];then
@@ -15,7 +15,7 @@ do_install:append() {
     fi
     sed -i '/^\[shell\]/ a panel-position=bottom' ${WESTON_INI_DEST_DIR}/weston.ini
 
-    cat ${WORKDIR}/weston.ini-plus >> ${WESTON_INI_DEST_DIR}/weston.ini
+    cat ${UNPACKDIR}/weston.ini-plus >> ${WESTON_INI_DEST_DIR}/weston.ini
 }
 
 RDEPENDS:${PN} += "cl-launcher"
