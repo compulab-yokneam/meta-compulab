@@ -260,7 +260,7 @@ eom
         [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && continue
         mount ${_DST} ${mdst}
         prompt="[ ${SRC}${SPART} => ${_DST} ]"
-        tar -C ${msrc} --exclude=run/* -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
+        tar -C ${msrc} --exclude=var/log/* --exclude=tmp/* --exclude=run/* -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
         umount ${_DST}
     done
     umount ${msrc}
