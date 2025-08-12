@@ -58,7 +58,7 @@ sparted[0]=${boot_area}
 
 for i in $(seq 1 ${root_cnt});do
     root_start=${root_end}
-    ((root_start++))
+    root_start=$(( $(( $((${root_start} + 3)) / 4 )) * 4 ))
     root_area="${root_start}${unit} ${root_size}${unit}"
     sparted[${i}]=${root_area}
     root_end=$((root_start+root_size))
