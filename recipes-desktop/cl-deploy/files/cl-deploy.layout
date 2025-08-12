@@ -70,6 +70,14 @@ for i in ${!sparted[@]};do
 done
 }
 
+function calc_boot_size() {
+    boot_pad_size=${boot_pad_size:-1.2}
+    rootfs=$(readlink -f ${root_fs})
+    boot_size=$(sudo du -sk ${rootfs}/boot | awk '$0=$1')
+    boot_size=$(echo "(${boot_size}*${boot_pad_size}/1024)" | bc)
+    export boot_size=${boot_size}
+}
+
 function calc_rootfs_size() {
     pad_size=${pad_size:-1.05}
     rootfs=$(readlink -f ${root_fs})
@@ -86,6 +94,7 @@ function rootfs_size_from_image_size() {
 
 function main() {
 
+boot_size=0 root_fs=${root_fs} calc_boot_size
 root_size=0 root_fs=${root_fs} calc_rootfs_size
 image_size=0 root_cnt=${root_cnt} root_size=${root_size} calc_image_size
 image_size=${image_size} image_file=${image_file} creat_image_file
