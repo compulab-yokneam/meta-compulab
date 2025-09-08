@@ -16,7 +16,6 @@ CL_DEPLOY_APP=${CL_DEPLOY_DIR}/app
 CL_DEPLOY_MOD=/usr/local/bin/cl-deploy.mod
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
-CL_DEPLOY_LAYOUT=/usr/local/bin/cl-deploy.layout
 MKTEMP=/var/run
 
 declare -a sw_array='dialog pv bunzip2 gunzip xz sfdisk partprobe bc'
@@ -239,6 +238,13 @@ case $arc in
 esac
 }
 
+rsync_error() {
+    for _m in ${@};do
+        umount -l ${_m} || true
+    done
+    exit 22
+}
+
 source_directory() {
 cat << eom
 
@@ -247,12 +253,11 @@ cat << eom
 
 eom
 
-    if [[ -z ${PARTED} && -f ${CL_DEPLOY_LAYOUT} ]];then
-        image_file=${DST} root_fs=${SRC} root_cnt=${ROOT_CNT:-1} source ${CL_DEPLOY_LAYOUT}
-        PARTED=1
-    fi
+    # Calculate the boot folder size allign +16M
+    _size=$(du -sm /boot | awk '$0=$1')
+    _size=$(( (( (( ${_size} + 32 )) / 16 )) * 16 ))
 
-    create_cl_layout
+    _size=${_size} create_cl_layout
 
     mount -B -o ro ${SRC}${SPART}/ ${msrc}
     for _DST in ${DST}${DPART}*;do
@@ -260,7 +265,7 @@ eom
         [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && continue
         mount ${_DST} ${mdst}
         prompt="[ ${SRC}${SPART} => ${_DST} ]"
-        tar -C ${msrc} --exclude=var/log/* --exclude=tmp/* --exclude=run/* -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null
+        rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/* ${msrc}/* ${mdst} || rsync_error ${msrc} ${mdst}
         umount ${_DST}
     done
     umount ${msrc}
@@ -269,7 +274,7 @@ eom
     mount ${DST}${DPART}2 ${msrc}
     if [[ -d ${msrc}/boot ]];then
         mount ${DST}${DPART}1 ${mdst}
-        cp -a ${msrc}/boot/* ${mdst}
+        rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/* ${msrc}/boot/* ${mdst} || rsync_error ${msrc} ${mdst}
         umount ${mdst}
     fi
     umount ${msrc}
@@ -282,30 +287,10 @@ eom
 }
 
 create_cl_layout() {
-    if [[ -n ${PARTED} ]];then
-        for _DST in ${DST}${DPART}*;do
-        _basename=$(basename ${_DST})
-        [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && label="boot" || label="rootfs"
-            mkfs.ext4 -F ${ext4opt} -L ${label} ${_DST}
-        done
-        return
-    fi
-    # Boot partition size im MB
-    local _size=32
-    # Start offset 1M
-    local _start=4
-    local soc=$(udevadm info -ap /sys/devices/soc0 | awk -F"\"" '(/soc_id/)&&($0=tolower($2))')
-    # mx8 soc must have 8M offset in order to provide a room for the u-boot environment
-    # storred at 4M offest
-    # increased boot partition size as well (the same as in the yocto machine conf file)
-    case $soc in
-        i.mx8mq|i.mx8mm)
-        _start=8
-        _size=64
-        ;;
-        *)
-        ;;
-    esac
+
+    # Boot partition size/start im MB
+    _size=${_size:-32}
+    _start=${_start:-4}
 
     local _start1=0
 
