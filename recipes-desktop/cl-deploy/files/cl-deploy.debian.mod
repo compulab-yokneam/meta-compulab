@@ -1,3 +1,5 @@
+#!/bin/bash -xe
+
 function post_deploy() {
 
 mpoint=$(mktemp --dry-run)
@@ -27,7 +29,7 @@ cat << eof | tee /dev/null ${MK_CONF}
 #!/bin/bash -x
 
 cd /boot
-for image in Image-*;do
+for image in \$(ls | awk '/Image/');do
 ln -sf \${image} kernel-\${image/Image-/};
 done
 cd -
