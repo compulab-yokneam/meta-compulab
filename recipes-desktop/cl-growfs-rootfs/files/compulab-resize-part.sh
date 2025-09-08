@@ -46,8 +46,13 @@ fi
 # this is OK (MBR systems don't have a backup header), always return true. 
 echo "w" | fdisk ${LINUX_STORAGE_DEVICE} &> /dev/null || true
 
+# preserve the disk_id before the actual resize
+disk_id=$(sfdisk --disk-id ${LINUX_STORAGE_DEVICE})
 # parted -s ${LINUX_STORAGE_DEVICE} resizepart ${part2resize} 100%
 echo "Yes" | parted ---pretend-input-tty ${LINUX_STORAGE_DEVICE} resizepart ${part2resize} 100% || true
 command -v resize2fs &>/dev/null && resize2fs /dev/${root_device} || true
 
 /lib/systemd/systemd-growfs /
+
+# Restore the disk id
+sfdisk --disk-id ${LINUX_STORAGE_DEVICE} ${disk_id}
