@@ -134,5 +134,5 @@ FILES:${PN} = " \
 	/boot/* \
 "
 
-RDEPENDS:${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted gdisk uuid-runtime bc"
+RDEPENDS:${PN} = "bash pv dialog file gzip bzip2 dosfstools util-linux xz-utils e2fsprogs parted gdisk uuid-runtime bc tar rsync"
 PACKAGE_ARCH = "all"

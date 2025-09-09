@@ -141,7 +141,7 @@ for _src in /sys/class/block/${sys_src}*/partition;do
     [[ -n ${TARGET} ]] && mount -B ${TARGET} ${msrc} || mount ${_src} ${msrc}
 
     prompt="[ ${_src} => ${_dst} ]"
-    rc=0; ( tar -C ${msrc} -cf - . 2>/dev/null | pv -N "${prompt}"| tar -C ${mdst} -xf - 2>/dev/null ) || rc=$?
+    rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/lost+found/* ${msrc}/* ${mdst} || rsync_error ${msrc} ${mdst}
 
     umount ${msrc}
     umount ${mdst}
@@ -176,7 +176,7 @@ eom
         [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && continue
         mount ${_DST} ${mdst}
         prompt="[ ${SRC} => ${_DST} ]"
-        pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null
+        pv ${SRC} | tar -C ${mdst} -x${filter}f - 2>/dev/null || rsync_error ${mdst}
         umount ${_DST}
     done
 
@@ -260,9 +260,9 @@ eom
     _size=${_size} create_cl_layout
 
     mount -B -o ro ${SRC}${SPART}/ ${msrc}
-    for _DST in ${DST}${DPART}*;do
+    for _DST in ${DST}${DPART}[2-9];do
         _basename=$(basename ${_DST})
-        [[ $(cat /sys/class/block/${_basename}/partition) -eq 1 ]] && continue
+        [[ -f /sys/class/block/${_basename}/partition ]] || continue
         mount ${_DST} ${mdst}
         prompt="[ ${SRC}${SPART} => ${_DST} ]"
         rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/* ${msrc}/* ${mdst} || rsync_error ${msrc} ${mdst}
