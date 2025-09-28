@@ -17,6 +17,7 @@ CL_DEPLOY_MOD=/usr/local/bin/cl-deploy.mod
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
 MKTEMP=/var/run
+RSYNC_COMMAND="rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/*"
 
 declare -a sw_array='dialog pv bunzip2 gunzip xz sfdisk partprobe bc'
 
@@ -136,12 +137,17 @@ for _src in /sys/class/block/${sys_src}*/partition;do
     # Format the destination that same as the source
     mkfs.${TYPE} ${OPT} ${_dst}
 
+    # Take the destination partition iformation
+    # set the sync flags accordingly
+    eval $(blkid --output export ${_dst})
+    [[ ${TYPE} = "vfat" ]] && rsync_opt=" --no-owner --no-perms --no-g" || rsync_opt=" "
+
     mount ${_dst} ${mdst}
     TARGET=$(findmnt ${_src} --output TARGET --noheadings || true)
     [[ -n ${TARGET} ]] && mount -B ${TARGET} ${msrc} || mount ${_src} ${msrc}
 
     prompt="[ ${_src} => ${_dst} ]"
-    rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/lost+found/* ${msrc}/* ${mdst} || rsync_error ${msrc} ${mdst}
+    ${RSYNC_COMMAND} ${rsync_opt} ${msrc}/* ${mdst} || rsync_error ${msrc} ${mdst}
 
     umount ${msrc}
     umount ${mdst}
@@ -263,9 +269,11 @@ eom
     for _DST in ${DST}${DPART}[2-9];do
         _basename=$(basename ${_DST})
         [[ -f /sys/class/block/${_basename}/partition ]] || continue
+        eval $(blkid --output export ${_DST})
+        [[ ${TYPE} = "vfat" ]] && rsync_opt=" --no-owner --no-perms --no-g" || rsync_opt=" "
         mount ${_DST} ${mdst}
         prompt="[ ${SRC}${SPART} => ${_DST} ]"
-        rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/* ${msrc}/* ${mdst} || rsync_error ${msrc} ${mdst}
+        ${RSYNC_COMMAND} ${rsync_opt} ${msrc}/* ${mdst} || rsync_error ${msrc} ${mdst}
         umount ${_DST}
     done
     umount ${msrc}
@@ -273,8 +281,10 @@ eom
     # Copy boot content to the boot-partition
     mount ${DST}${DPART}2 ${msrc}
     if [[ -d ${msrc}/boot ]];then
+        eval $(blkid --output export ${DST}${DPART}2)
+        [[ ${TYPE} = "vfat" ]] && rsync_opt=" --no-owner --no-perms --no-g" || rsync_opt=" "
         mount ${DST}${DPART}1 ${mdst}
-        rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/* ${msrc}/boot/* ${mdst} || rsync_error ${msrc} ${mdst}
+        ${RSYNC_COMMAND} ${rsync_opt} ${msrc}/boot/* ${mdst} || rsync_error ${msrc} ${mdst}
         umount ${mdst}
     fi
     umount ${msrc}
