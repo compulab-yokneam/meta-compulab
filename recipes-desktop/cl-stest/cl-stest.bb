@@ -49,4 +49,5 @@ RDEPENDS:${PN}:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm'
 RDEPENDS:${PN}:append = " ${@bb.utils.contains('MACHINE', 'cl-som-imx7', '', 'imx-gpu-viv-demos', d)}"
 RDEPENDS:${PN}:remove:iot-gate-imx8 = "imx-gpu-viv-demos"
 RDEPENDS:${PN}:remove:cl-som-imx6ul = "imx-gpu-viv-demos"
+RDEPENDS:${PN}:remove:mx95-nxp-bsp = "imx-gpu-viv-demos"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
