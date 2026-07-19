@@ -17,7 +17,7 @@ CL_DEPLOY_MOD=/usr/local/bin/cl-deploy.mod
 CL_DEPLOY_MTD=/usr/local/bin/cl-deploy.mtd
 CL_DEPLOY_PLATFORM=/usr/local/bin/cl-deploy.platform
 MKTEMP=/var/run
-RSYNC_COMMAND="rsync --info=progress2 -aHAX --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/*"
+RSYNC_COMMAND="rsync --info=progress2 -aHAXS --stats --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/var/log/* --exclude=/mnt/* --exclude=/media/* --exclude=/lost+found/*"
 
 declare -a sw_array='dialog pv bunzip2 gunzip xz sfdisk partprobe bc'
 
