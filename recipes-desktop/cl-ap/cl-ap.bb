@@ -94,4 +94,4 @@ FILES:${PN} = " \
 
 RDEPENDS:${PN} = "dialog bash crda hostapd dnsmasq iptables"
 RDEPENDS:${PN}:append = " ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'xterm', '', d)}"
-PACKAGE_ARCH = "all"
+inherit allarch

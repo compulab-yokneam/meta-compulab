@@ -35,4 +35,4 @@ FILES:${PN} = " \
 "
 
 RDEPENDS:${PN} = "bash pv dialog mtd-utils u-boot-compulab"
-PACKAGE_ARCH = "all"
+inherit allarch
