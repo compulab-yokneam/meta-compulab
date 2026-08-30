@@ -43,7 +43,7 @@ part_dump() {
     # remove the last partition and the last-lba from the source dump;
     # it allows dumping to a low-sized media;
     # in this case it is up to the operator to handle: a not enough space failure.
-    sfdisk --dump ${SRC} | sed '$ d;/last-lba/d;' | sfdisk ${DST}
+    sfdisk --dump ${SRC} | awk '!/last-lba|label-id/' | sed '$d' | sfdisk ${DST}
     # append the source last partition to the dst with the open end block:
     # to the end of the available disk's space.
     sfdisk --list ${SRC} | awk 'END { print $2 }' | sfdisk ${DST} --append
