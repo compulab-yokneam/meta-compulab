@@ -44,7 +44,7 @@ camera_start_image() {
 }
 
 camera_get() {
-    local _CAMERA=( $(for f in /dev/video*;do [[ $(v4l2-ctl --info --device ${f} | awk '($0 ~ /VIV/ || $0 ~ /mxc-isi-cap/ ) && ($0=$NF)') ]] && echo $(basename ${f}) ; done; cat <<< " fakecamera") )
+    local _CAMERA=( $(for f in /dev/video*;do [[ $(v4l2-ctl --info --device ${f} | awk '($0 ~ /VIV/ || $0 ~ /mxc-isi/ ) && ($0=$NF)') ]] && echo $(basename ${f}) ; done; cat <<< " fakecamera") )
 cat << eof
 Available sensors and commands:
 ------------------------------
